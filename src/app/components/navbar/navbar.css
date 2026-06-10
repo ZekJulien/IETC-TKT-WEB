@@ -1,0 +1,197 @@
+:host {
+  --nav-rail: 70px;
+  --nav-expanded: 248px;
+  --gutter: 13px;
+  /* Délai avant expansion/repli : évite le flicker quand le curseur traverse */
+  --hover-delay: 0.12s;
+
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: block;
+  flex-shrink: 0;
+  width: var(--nav-rail);
+  height: 100dvh;
+}
+
+/* Le rail occupe la place dans le layout ; le menu déployé passe en
+   surcouche au-dessus du contenu, sans jamais le pousser. */
+.nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: var(--nav-rail);
+  height: 100dvh;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
+  border-right: 1px solid var(--paper-edge);
+  transition:
+    width var(--speed-base) var(--ease-out) var(--hover-delay),
+    box-shadow var(--speed-base) ease var(--hover-delay);
+}
+
+:host(:hover) .nav,
+.nav:has(:focus-visible) {
+  width: var(--nav-expanded);
+  box-shadow: var(--shadow-md);
+}
+
+/* Les libellés n'apparaissent qu'une fois le menu déployé */
+.label {
+  opacity: 0;
+  transition: opacity var(--speed-fast) ease var(--hover-delay);
+}
+
+:host(:hover) .label,
+.nav:has(:focus-visible) .label {
+  opacity: 1;
+}
+
+/* ---- Marque ---- */
+.nav__top {
+  display: flex;
+  align-items: center;
+  padding: 18px 17px 14px;
+}
+
+.nav__brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.nav__mark {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  box-shadow: var(--shadow-accent), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+
+.nav__mark svg {
+  rotate: -8deg;
+}
+
+.nav__wordmark {
+  display: flex;
+  flex-direction: column;
+  line-height: var(--leading-tight);
+}
+
+.nav__title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+}
+
+.nav__subtitle {
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* ---- Liens ---- */
+.nav__list {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0 var(--gutter);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.nav__list li {
+  position: relative;
+}
+
+.nav__list a {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 9px 12px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  color: var(--ink-soft);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  transition:
+    background-color var(--speed-fast) ease,
+    color var(--speed-fast) ease;
+}
+
+.nav__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--ink-faint);
+  transition: color var(--speed-fast) ease;
+}
+
+.nav__list a:hover {
+  background: var(--ink-ghost);
+  color: var(--ink);
+}
+
+.nav__list a:hover .nav__icon {
+  color: var(--ink-soft);
+}
+
+.nav__list a.is-active {
+  background: var(--accent-tint);
+  color: var(--accent-deep);
+  font-weight: var(--weight-semibold);
+}
+
+.nav__list a.is-active .nav__icon {
+  color: var(--accent);
+}
+
+/* Barre indicatrice du lien actif, affleurant le bord gauche */
+.nav__list li:has(> a.is-active)::before {
+  content: '';
+  position: absolute;
+  left: calc(-1 * var(--gutter));
+  top: 50%;
+  translate: 0 -50%;
+  width: 3px;
+  height: 20px;
+  border-radius: 0 var(--radius-full) var(--radius-full) 0;
+  background: var(--accent);
+}
+
+/* ---- Entrée en scène ---- */
+@media (prefers-reduced-motion: no-preference) {
+  .nav__top,
+  .nav__list {
+    animation: nav-in 0.5s var(--ease-out) backwards;
+  }
+
+  .nav__list {
+    animation-delay: 0.06s;
+  }
+
+  @keyframes nav-in {
+    from {
+      opacity: 0;
+      translate: -8px 0;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+}

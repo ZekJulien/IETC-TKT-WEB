@@ -1,0 +1,123 @@
+/* ============================================================
+   TKT Helpdesk — Design system global
+   Toutes les couleurs, typos, tailles, espacements, rayons et
+   ombres de l'app vivent ici. Les composants consomment var(--*).
+   ============================================================ */
+
+:root {
+  /* ---- Typographie ---- */
+  --font-ui: 'Schibsted Grotesk', system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque', var(--font-ui);
+
+  --text-xs: 0.69rem;   /* 11px — labels de section, kbd */
+  --text-sm: 0.81rem;   /* 13px — texte secondaire */
+  --text-base: 0.875rem;/* 14px — texte UI courant */
+  --text-md: 1rem;      /* 16px — corps de page */
+  --text-lg: 1.125rem;  /* 18px — sous-titres */
+  --text-xl: 1.375rem;  /* 22px — titres de page */
+  --text-2xl: 1.75rem;  /* 28px — grands titres */
+
+  --weight-regular: 450;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --tracking-wide: 0.12em; /* labels uppercase */
+  --leading-tight: 1.2;
+  --leading-normal: 1.55;
+
+  /* ---- Couleurs : neutres papier chaud ---- */
+  --bg: #f1efea;          /* fond de page */
+  --surface: #ffffff;      /* cartes, panneaux */
+  --paper: #fcfbf9;        /* sidebar, surfaces douces */
+  --paper-deep: #f7f5f0;
+  --paper-edge: #e6e2d8;   /* bordures hairline */
+
+  /* ---- Couleurs : encre ---- */
+  --ink: #1c2025;
+  --ink-soft: #4f555d;
+  --ink-faint: #878d95;
+  --ink-ghost: rgba(28, 32, 37, 0.05); /* hover neutre */
+
+  /* ---- Accent : vert sapin ---- */
+  --accent: #0e8467;
+  --accent-deep: #0a5f4b;
+  --accent-tint: #e2f0e9;
+
+  /* ---- Signal : ambre (badges, alertes douces) ---- */
+  --amber: #9a4d0b;
+  --amber-tint: #f8e9d4;
+  --amber-bright: #f59e0b;
+
+  /* ---- Sémantique tickets ---- */
+  --danger: #c2362b;
+  --danger-tint: #fbe7e4;
+  --success: var(--accent);
+  --success-tint: var(--accent-tint);
+
+  /* ---- Espacements ---- */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.5rem;   /* 24px */
+  --space-6: 2rem;     /* 32px */
+  --space-7: 3rem;     /* 48px */
+
+  /* ---- Rayons ---- */
+  --radius-sm: 7px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-full: 999px;
+
+  /* ---- Ombres ---- */
+  --shadow-xs: 0 1px 4px rgba(28, 32, 37, 0.06);
+  --shadow-sm: 0 2px 6px rgba(28, 32, 37, 0.08);
+  --shadow-md: 0 4px 12px rgba(28, 32, 37, 0.12);
+  --shadow-accent: 0 3px 8px -2px rgba(10, 95, 75, 0.45);
+
+  /* ---- Transitions ---- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --speed-fast: 0.14s;
+  --speed-base: 0.22s;
+}
+
+/* ---- Reset minimal ---- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: var(--font-ui);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  line-height: var(--leading-tight);
+  margin: 0;
+}
+
+button {
+  font: inherit;
+}
+
+a {
+  color: var(--accent-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
