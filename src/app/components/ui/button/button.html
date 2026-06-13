@@ -1,0 +1,10 @@
+<button
+  [type]="type()"
+  [class]="'btn btn--' + variant()"
+  [disabled]="disabled() || loading()"
+>
+  @if (loading()) {
+    <span class="btn__spinner" aria-hidden="true"></span>
+  }
+  <span class="btn__label"><ng-content /></span>
+</button>
