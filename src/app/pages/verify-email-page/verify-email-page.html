@@ -1,0 +1,27 @@
+<app-auth-shell tagline="verifyEmailPage.tagline">
+  <div class="verify">
+    <span class="verify__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="m3 7 9 6 9-6" />
+      </svg>
+    </span>
+
+    <h1 class="verify__title">{{ 'verifyEmailPage.title' | translate }}</h1>
+
+    <p class="verify__text">
+      @if (email()) {
+        {{ 'verifyEmailPage.textWithEmail' | translate: { email: email() } }}
+      } @else {
+        {{ 'verifyEmailPage.text' | translate }}
+      }
+    </p>
+    <p class="verify__hint">{{ 'verifyEmailPage.hint' | translate }}</p>
+
+    <div class="verify__actions">
+      <app-button variant="ghost" [disabled]="true">{{ 'verifyEmailPage.resend' | translate }}</app-button>
+    </div>
+
+    <p class="verify__back"><a [routerLink]="['/', AppRoute.Register]">{{ 'verifyEmailPage.back' | translate }}</a></p>
+  </div>
+</app-auth-shell>

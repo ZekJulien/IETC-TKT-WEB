@@ -1,0 +1,11 @@
+<div class="field" [class.field--error]="showError">
+  @if (labelText) {
+    <label class="field__label" [attr.for]="forId() || null">{{ labelText }}</label>
+  }
+  <div class="field__control">
+    <ng-content />
+  </div>
+  @if (showError && message) {
+    <p class="field__error" role="alert">{{ message }}</p>
+  }
+</div>
