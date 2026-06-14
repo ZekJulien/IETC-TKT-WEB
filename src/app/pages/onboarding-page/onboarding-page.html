@@ -1,0 +1,154 @@
+<app-auth-shell tagline="onboardingPage.tagline">
+  <div class="onb">
+    <app-stepper [steps]="steps" [current]="stepIndex" />
+
+    @if (store.error(); as error) {
+      <div class="onb__alert" role="alert">{{ error }}</div>
+    }
+
+    @switch (store.step()) {
+      @case (OnboardingStep.Choice) {
+        <header class="onb__head">
+          <h1 class="onb__title">{{ 'onboardingPage.choice.title' | translate }}</h1>
+          <p class="onb__sub">{{ 'onboardingPage.choice.subtitle' | translate }}</p>
+        </header>
+
+        <div class="onb__choices">
+          <button type="button" class="choice" (click)="store.go(OnboardingStep.CreateCompany)">
+            <span class="choice__icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 21h18" />
+                <path d="M5 21V7l8-4v18" />
+                <path d="M19 21V11l-6-4" />
+              </svg>
+            </span>
+            <span class="choice__title">{{
+              'onboardingPage.choice.create.title' | translate
+            }}</span>
+            <span class="choice__desc">{{ 'onboardingPage.choice.create.desc' | translate }}</span>
+          </button>
+
+          <button type="button" class="choice" (click)="store.go(OnboardingStep.JoinInvitation)">
+            <span class="choice__icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <path d="M19 8v6" />
+                <path d="M22 11h-6" />
+              </svg>
+            </span>
+            <span class="choice__title">{{ 'onboardingPage.choice.join.title' | translate }}</span>
+            <span class="choice__desc">{{ 'onboardingPage.choice.join.desc' | translate }}</span>
+          </button>
+        </div>
+      }
+
+      @case (OnboardingStep.CreateCompany) {
+        <header class="onb__head">
+          <h1 class="onb__title">{{ 'onboardingPage.create.title' | translate }}</h1>
+          <p class="onb__sub">{{ 'onboardingPage.create.subtitle' | translate }}</p>
+        </header>
+
+        <form class="onb__form" [formGroup]="companyForm" (ngSubmit)="submitCompany()" novalidate>
+          <app-form-field
+            label="onboardingPage.create.nameLabel"
+            [control]="companyForm.controls.companyName"
+            forId="onb-name"
+          >
+            <app-input
+              inputId="onb-name"
+              formControlName="companyName"
+              autocomplete="organization"
+              [placeholder]="'onboardingPage.create.namePlaceholder' | translate"
+            />
+          </app-form-field>
+
+          <app-form-field
+            label="onboardingPage.create.slugLabel"
+            [control]="companyForm.controls.companySlug"
+            forId="onb-slug"
+          >
+            <app-input
+              inputId="onb-slug"
+              formControlName="companySlug"
+              autocomplete="off"
+              [placeholder]="'onboardingPage.create.slugPlaceholder' | translate"
+            />
+          </app-form-field>
+
+          <p class="onb__preview">
+            <span class="onb__preview-label">{{
+              'onboardingPage.create.previewLabel' | translate
+            }}</span>
+            <span class="onb__preview-url">
+              {{ 'onboardingPage.create.previewBase' | translate
+              }}<strong>{{
+                companyForm.controls.companySlug.value ||
+                  ('onboardingPage.create.slugFallback' | translate)
+              }}</strong>
+            </span>
+          </p>
+
+          <div class="onb__actions">
+            <app-button type="button" variant="ghost" (click)="store.go(OnboardingStep.Choice)">
+              {{ 'onboardingPage.back' | translate }}
+            </app-button>
+            <app-button type="submit" variant="primary" [loading]="store.loading()">
+              {{ 'onboardingPage.create.submit' | translate }}
+            </app-button>
+          </div>
+        </form>
+      }
+
+      @case (OnboardingStep.JoinInvitation) {
+        <header class="onb__head">
+          <h1 class="onb__title">{{ 'onboardingPage.join.title' | translate }}</h1>
+          <p class="onb__sub">{{ 'onboardingPage.join.subtitle' | translate }}</p>
+        </header>
+
+        <form
+          class="onb__form"
+          [formGroup]="invitationForm"
+          (ngSubmit)="submitInvitation()"
+          novalidate
+        >
+          <app-form-field
+            label="onboardingPage.join.codeLabel"
+            [control]="invitationForm.controls.invitationCode"
+            forId="onb-code"
+          >
+            <app-input
+              inputId="onb-code"
+              formControlName="invitationCode"
+              autocomplete="off"
+              [placeholder]="'onboardingPage.join.codePlaceholder' | translate"
+            />
+          </app-form-field>
+
+          <div class="onb__actions">
+            <app-button type="button" variant="ghost" (click)="store.go(OnboardingStep.Choice)">
+              {{ 'onboardingPage.back' | translate }}
+            </app-button>
+            <app-button type="submit" variant="primary" [loading]="store.loading()">
+              {{ 'onboardingPage.join.submit' | translate }}
+            </app-button>
+          </div>
+        </form>
+      }
+    }
+  </div>
+</app-auth-shell>
