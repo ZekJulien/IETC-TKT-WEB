@@ -1,17 +1,23 @@
 import { Routes } from '@angular/router';
 import { AppRoute } from './app-route';
 import { Layout } from './components/layout/layout';
-import { authGuard } from './guards/auth';
+import { authGuard, guestGuard } from './guards/auth';
 
 export const routes: Routes = [
   {
     path: AppRoute.Register,
+    canActivate: [guestGuard],
     loadComponent: () => import('./pages/register-page/register-page').then((m) => m.RegisterPage),
   },
   {
     path: AppRoute.VerifyEmail,
     loadComponent: () =>
       import('./pages/verify-email-page/verify-email-page').then((m) => m.VerifyEmailPage),
+  },
+  {
+    path: AppRoute.Login,
+    canActivate: [guestGuard],
+    loadComponent: () => import('./pages/login-page/login-page').then((m) => m.LoginPage),
   },
   {
     path: AppRoute.Onboarding,
@@ -30,5 +36,9 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
       },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: AppRoute.Dashboard,
   },
 ];

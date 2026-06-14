@@ -1,9 +1,9 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { finalize } from 'rxjs';
+import { Observable, finalize, map, shareReplay, throwError } from 'rxjs';
 import { AppRoute } from '../../app-route';
 import { AuthService } from '../../api/auth';
-import { RegisterRequest } from '../../models/auth';
+import { LoginRequest, RegisterRequest } from '../../models/auth';
 import { SessionStore } from './session-store';
 
 @Injectable({
@@ -16,6 +16,8 @@ export class AuthStore {
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+
+  private refreshInFlight: Observable<string> | null = null;
 
   register(payload: RegisterRequest): void {
     this.loading.set(true);
@@ -52,5 +54,52 @@ export class AuthStore {
           this.error.set(err.message);
         },
       });
+  }
+
+  login(payload: LoginRequest): void {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.api
+      .login(payload)
+      .pipe(finalize(() => this.loading.set(false)))
+      .subscribe({
+        next: (tokens) => {
+          this.session.setSession(tokens.accessToken, tokens.refreshToken);
+          this.router.navigate(['/', AppRoute.Dashboard]);
+        },
+        error: (err: Error) => {
+          this.error.set(err.message);
+        },
+      });
+  }
+
+  logout(): void {
+    this.session.clear();
+    this.router.navigate(['/', AppRoute.Login]);
+  }
+
+  refreshTokens(): Observable<string> {
+    if (this.refreshInFlight) {
+      return this.refreshInFlight;
+    }
+
+    const refreshToken = this.session.refreshToken();
+    if (!refreshToken) {
+      return throwError(() => new Error());
+    }
+
+    this.refreshInFlight = this.api.refresh(refreshToken).pipe(
+      map((tokens) => {
+        this.session.setSession(tokens.accessToken, tokens.refreshToken);
+        return tokens.accessToken;
+      }),
+      finalize(() => {
+        this.refreshInFlight = null;
+      }),
+      shareReplay(1),
+    );
+
+    return this.refreshInFlight;
   }
 }

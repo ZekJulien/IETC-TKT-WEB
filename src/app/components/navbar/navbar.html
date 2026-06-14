@@ -1,4 +1,4 @@
-<nav class="nav">
+<nav class="nav" [class.is-expanded]="menuOpen()">
   <div class="nav__top">
     <a class="nav__brand" routerLink="/" title="TKT Helpdesk">
       <span class="nav__mark" aria-hidden="true">
@@ -29,4 +29,53 @@
       </a>
     </li>
   </ul>
+
+  <div class="nav__account">
+    @if (menuOpen()) {
+      <div class="nav__menu" role="menu">
+        <button class="nav__menu-item" type="button" role="menuitem" (click)="logout()">
+          <svg
+            class="nav__menu-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" x2="9" y1="12" y2="12" />
+          </svg>
+          <span>{{ 'navbar.logout' | translate }}</span>
+        </button>
+      </div>
+    }
+
+    <button
+      class="nav__account-btn"
+      type="button"
+      [class.is-open]="menuOpen()"
+      [attr.aria-label]="'navbar.menu' | translate"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="toggleMenu($event)"
+    >
+      <span class="nav__avatar" aria-hidden="true">{{ initials() }}</span>
+      <span class="nav__account-name label">{{
+        displayName() || ('navbar.account' | translate)
+      }}</span>
+      <svg
+        class="nav__account-caret label"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m18 15-6-6-6 6" />
+      </svg>
+    </button>
+  </div>
 </nav>
