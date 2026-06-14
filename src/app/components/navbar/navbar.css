@@ -33,7 +33,8 @@
 }
 
 :host(:hover) .nav,
-.nav:has(:focus-visible) {
+.nav:has(:focus-visible),
+.nav.is-expanded {
   width: var(--nav-expanded);
   box-shadow: var(--shadow-md);
 }
@@ -45,7 +46,8 @@
 }
 
 :host(:hover) .label,
-.nav:has(:focus-visible) .label {
+.nav:has(:focus-visible) .label,
+.nav.is-expanded .label {
   opacity: 1;
 }
 
@@ -171,6 +173,115 @@
   height: 20px;
   border-radius: 0 var(--radius-full) var(--radius-full) 0;
   background: var(--accent);
+}
+
+/* ---- Compte ---- */
+.nav__account {
+  position: relative;
+  margin-top: auto;
+  padding: var(--gutter);
+  border-top: 1px solid var(--paper-edge);
+}
+
+.nav__account-btn {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 7px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--speed-fast) ease,
+    border-color var(--speed-fast) ease;
+}
+
+.nav__account-btn:hover {
+  background: var(--ink-ghost);
+}
+
+:host(:hover) .nav__account-btn,
+.nav:has(:focus-visible) .nav__account-btn,
+.nav__account-btn.is-open {
+  border-color: var(--paper-edge);
+  background: var(--surface);
+}
+
+.nav__avatar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  box-shadow: var(--shadow-accent), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+
+.nav__account-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+}
+
+.nav__account-caret {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--ink-faint);
+}
+
+.nav__menu {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: calc(100% - var(--space-2));
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  background: var(--surface);
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  z-index: 50;
+}
+
+.nav__menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 9px 11px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--danger);
+  font-size: var(--text-base);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--speed-fast) ease;
+}
+
+.nav__menu-item:hover {
+  background: var(--danger-tint);
+}
+
+.nav__menu-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 /* ---- Entrée en scène ---- */
