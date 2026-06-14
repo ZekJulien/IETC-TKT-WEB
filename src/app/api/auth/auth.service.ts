@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { ConfirmEmailResponse, RegisterRequest } from '../../models/auth';
+import { AuthTokens, ConfirmEmailResponse, LoginRequest, RegisterRequest } from '../../models/auth';
 
 @Injectable({
   providedIn: 'root',
@@ -19,5 +19,13 @@ export class AuthService {
     return this.http.get<ConfirmEmailResponse>(`${this.apiUrl}/auth/confirm-email`, {
       params: { token },
     });
+  }
+
+  login(payload: LoginRequest): Observable<AuthTokens> {
+    return this.http.post<AuthTokens>(`${this.apiUrl}/auth/login`, payload);
+  }
+
+  refresh(refreshToken: string): Observable<AuthTokens> {
+    return this.http.post<AuthTokens>(`${this.apiUrl}/auth/refresh`, { refreshToken });
   }
 }
