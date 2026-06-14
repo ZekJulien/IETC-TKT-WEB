@@ -1,0 +1,46 @@
+<section class="dash">
+  <h1 class="dash__title">{{ 'dashboardPage.title' | translate }}</h1>
+
+  @if (store.loading()) {
+    <p class="dash__muted">{{ 'dashboardPage.loading' | translate }}</p>
+  } @else if (store.error(); as error) {
+    <div class="dash__alert" role="alert">{{ error }}</div>
+  } @else if (store.me(); as me) {
+    <div class="dash__card">
+      <p class="dash__card-label">{{ 'dashboardPage.meLabel' | translate }}</p>
+
+      <dl class="dash__list">
+        <div class="dash__row">
+          <dt>{{ 'dashboardPage.email' | translate }}</dt>
+          <dd>{{ me.email }}</dd>
+        </div>
+        <div class="dash__row">
+          <dt>{{ 'dashboardPage.emailConfirmed' | translate }}</dt>
+          <dd>{{ (me.emailConfirmed ? 'dashboardPage.yes' : 'dashboardPage.no') | translate }}</dd>
+        </div>
+        <div class="dash__row">
+          <dt>{{ 'dashboardPage.onboardingRequired' | translate }}</dt>
+          <dd>
+            {{ (me.onboardingRequired ? 'dashboardPage.yes' : 'dashboardPage.no') | translate }}
+          </dd>
+        </div>
+        <div class="dash__row">
+          <dt>{{ 'dashboardPage.memberships' | translate }}</dt>
+          <dd>
+            @if (me.memberships.length) {
+              <ul class="dash__memberships">
+                @for (m of me.memberships; track m.companyId) {
+                  <li>
+                    <code>{{ m.companyId }}</code> — {{ m.role }}
+                  </li>
+                }
+              </ul>
+            } @else {
+              {{ 'dashboardPage.noMembership' | translate }}
+            }
+          </dd>
+        </div>
+      </dl>
+    </div>
+  }
+</section>
