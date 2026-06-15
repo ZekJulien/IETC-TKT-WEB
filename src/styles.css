@@ -55,6 +55,12 @@
   --success: var(--accent);
   --success-tint: var(--accent-tint);
 
+  /* ---- Rôles : bleu (agent) et violet (membre) ---- */
+  --info: #355e9e;
+  --info-tint: #e6ecf7;
+  --violet: #6b4e96;
+  --violet-tint: #ece6f5;
+
   /* ---- Espacements ---- */
   --space-1: 0.25rem;  /* 4px */
   --space-2: 0.5rem;   /* 8px */

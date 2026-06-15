@@ -28,3 +28,13 @@
   color: var(--danger);
   background: var(--danger-tint);
 }
+
+.badge--info {
+  color: var(--info);
+  background: var(--info-tint);
+}
+
+.badge--violet {
+  color: var(--violet);
+  background: var(--violet-tint);
+}
