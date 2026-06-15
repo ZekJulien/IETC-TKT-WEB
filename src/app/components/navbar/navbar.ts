@@ -1,9 +1,20 @@
-import { Component, HostListener, computed, inject, signal } from '@angular/core';
+import { Component, HostListener, Signal, computed, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AppRoute } from '../../app-route';
+import { TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
+import { CompanyRole, INVITER_ROLES } from '../../models/companies';
 import { AccountStore } from '../../state/account';
 import { AuthStore } from '../../state/auth';
+
+type NavIcon = 'dashboard' | 'members';
+
+interface NavItem {
+  route: string;
+  labelKey: TranslationKey;
+  icon: NavIcon;
+  show: Signal<boolean>;
+}
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +25,6 @@ import { AuthStore } from '../../state/auth';
 export class Navbar {
   private readonly account = inject(AccountStore);
   private readonly auth = inject(AuthStore);
-  protected readonly AppRoute = AppRoute;
 
   protected readonly menuOpen = signal(false);
 
@@ -22,6 +32,27 @@ export class Navbar {
   protected readonly initials = computed(
     () => (this.account.me()?.email ?? '').charAt(0).toUpperCase() || '?',
   );
+
+  protected readonly canManageMembers = computed(() =>
+    (this.account.me()?.memberships ?? []).some((m) =>
+      INVITER_ROLES.includes(m.role as CompanyRole),
+    ),
+  );
+
+  protected readonly navItems: NavItem[] = [
+    {
+      route: AppRoute.Dashboard,
+      labelKey: 'navbar.dashboard',
+      icon: 'dashboard',
+      show: signal(true),
+    },
+    {
+      route: AppRoute.Members,
+      labelKey: 'navbar.members',
+      icon: 'members',
+      show: this.canManageMembers,
+    },
+  ];
 
   protected toggleMenu(event: MouseEvent): void {
     event.stopPropagation();
