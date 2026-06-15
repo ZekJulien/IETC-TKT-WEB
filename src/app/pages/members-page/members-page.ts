@@ -4,9 +4,9 @@ import { MemberList } from '../../components/member-list/member-list';
 import { Button } from '../../components/ui/button/button';
 import { Modal } from '../../components/ui/modal/modal';
 import { TranslatePipe } from '../../i18n/translate-pipe';
-import { CompanyRole, INVITER_ROLES } from '../../models/companies';
-import { AccountStore } from '../../state/account';
+import { INVITER_ROLES } from '../../models/companies';
 import { MembersStore } from '../../state/companies';
+import { TenantStore } from '../../state/tenant';
 
 @Component({
   selector: 'app-members-page',
@@ -15,17 +15,16 @@ import { MembersStore } from '../../state/companies';
   styleUrl: './members-page.css',
 })
 export class MembersPage {
-  private readonly account = inject(AccountStore);
+  private readonly tenant = inject(TenantStore);
   protected readonly members = inject(MembersStore);
 
   protected readonly open = signal(false);
 
-  private readonly inviterMembership = computed(() =>
-    this.account.me()?.memberships.find((m) => INVITER_ROLES.includes(m.role as CompanyRole)),
-  );
-
-  protected readonly companyId = computed(() => this.inviterMembership()?.companyId ?? null);
-  protected readonly canInvite = computed(() => this.companyId() !== null);
+  protected readonly companyId = computed(() => this.tenant.activeCompanyId());
+  protected readonly canInvite = computed(() => {
+    const role = this.tenant.activeRole();
+    return role !== null && INVITER_ROLES.includes(role);
+  });
 
   protected readonly seatsUsed = computed(
     () => this.members.activeMembers() + this.members.pendingInvitations(),
@@ -38,10 +37,6 @@ export class MembersPage {
     const max = this.members.maxUsers();
     return max > 0 && this.seatsUsed() >= max;
   });
-
-  constructor() {
-    this.account.loadMe();
-  }
 
   protected openModal(): void {
     this.open.set(true);

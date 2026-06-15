@@ -34,6 +34,7 @@
 
 :host(:hover) .nav,
 .nav:has(:focus-visible),
+.nav:has(.switcher.is-open),
 .nav.is-expanded {
   width: var(--nav-expanded);
   box-shadow: var(--shadow-md);
@@ -47,6 +48,7 @@
 
 :host(:hover) .label,
 .nav:has(:focus-visible) .label,
+.nav:has(.switcher.is-open) .label,
 .nav.is-expanded .label {
   opacity: 1;
 }
@@ -177,10 +179,13 @@
 
 /* ---- Compte ---- */
 .nav__account {
-  position: relative;
   margin-top: auto;
   padding: var(--gutter);
   border-top: 1px solid var(--paper-edge);
+}
+
+.nav__account-control {
+  position: relative;
 }
 
 .nav__account-btn {
@@ -244,9 +249,9 @@
 
 .nav__menu {
   position: absolute;
-  left: var(--gutter);
-  right: var(--gutter);
-  bottom: calc(100% - var(--space-2));
+  left: 0;
+  right: 0;
+  bottom: calc(100% + 6px);
   display: flex;
   flex-direction: column;
   padding: 6px;

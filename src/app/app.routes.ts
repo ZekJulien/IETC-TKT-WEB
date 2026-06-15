@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AppRoute } from './app-route';
 import { Layout } from './components/layout/layout';
 import { authGuard, guestGuard } from './guards/auth';
+import { tenantGuard } from './guards/tenant';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,12 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/maintenance/maintenance').then((m) => m.Maintenance),
   },
   {
+    path: AppRoute.SelectCompany,
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/tenant-selection/tenant-selection').then((m) => m.TenantSelection),
+  },
+  {
     path: AppRoute.Onboarding,
     canActivate: [authGuard],
     loadComponent: () =>
@@ -32,7 +39,7 @@ export const routes: Routes = [
   {
     path: '',
     component: Layout,
-    canActivate: [authGuard],
+    canActivate: [authGuard, tenantGuard],
     children: [
       { path: '', redirectTo: AppRoute.Dashboard, pathMatch: 'full' },
       {
