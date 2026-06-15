@@ -5,7 +5,11 @@ export const membersPage = {
   loading: 'Chargement des membres…',
   empty: 'Aucun membre à afficher.',
   filter: 'Filtrer…',
-  count: '{count} membre(s)',
+  quota: {
+    label: '{used} / {max} sièges',
+    title: 'Sièges occupés (membres actifs)',
+    full: 'Quota atteint',
+  },
   columns: {
     name: 'Nom',
     email: 'Email',

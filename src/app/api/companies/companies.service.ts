@@ -2,13 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { PagedResult } from '../../models/paged-result';
 import {
   ChangeMemberRoleResponse,
   CompanyRole,
   InviteMemberRequest,
   InviteMemberResponse,
-  Member,
+  MemberListResponse,
   MemberStatusResponse,
 } from '../../models/companies';
 
@@ -33,14 +32,14 @@ export class CompaniesService {
     );
   }
 
-  listMembers(companyId: string, params: ListMembersParams = {}): Observable<PagedResult<Member>> {
+  listMembers(companyId: string, params: ListMembersParams = {}): Observable<MemberListResponse> {
     let httpParams = new HttpParams();
     for (const [key, value] of Object.entries(params)) {
       if (value !== undefined) {
         httpParams = httpParams.set(key, value);
       }
     }
-    return this.http.get<PagedResult<Member>>(`${this.apiUrl}/companies/${companyId}/members`, {
+    return this.http.get<MemberListResponse>(`${this.apiUrl}/companies/${companyId}/members`, {
       params: httpParams,
     });
   }

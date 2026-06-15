@@ -3,6 +3,7 @@ export * from './invite-mode';
 export * from './invite-member-request';
 export * from './invite-member-response';
 export * from './member';
+export * from './member-list-response';
 export * from './change-member-role-request';
 export * from './change-member-role-response';
 export * from './set-member-status-request';

@@ -15,6 +15,8 @@ export class MembersStore {
   readonly error = signal<string | null>(null);
   readonly members = signal<Member[]>([]);
   readonly total = signal(0);
+  readonly activeMembers = signal(0);
+  readonly maxUsers = signal(0);
   readonly actionError = signal<string | null>(null);
   readonly busyAccountId = signal<string | null>(null);
 
@@ -29,6 +31,8 @@ export class MembersStore {
         next: (page) => {
           this.members.set(page.items);
           this.total.set(page.total);
+          this.activeMembers.set(page.activeMembers);
+          this.maxUsers.set(page.maxUsers);
         },
         error: (err: Error) => {
           this.error.set(err.message);
@@ -63,6 +67,7 @@ export class MembersStore {
       .subscribe({
         next: (res) => {
           this.patchMember(res.accountId, { isActive: res.isActive });
+          this.activeMembers.update((n) => Math.max(0, n + (res.isActive ? 1 : -1)));
         },
         error: (err: Error) => {
           this.actionError.set(err.message);

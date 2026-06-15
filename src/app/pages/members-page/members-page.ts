@@ -27,6 +27,15 @@ export class MembersPage {
   protected readonly companyId = computed(() => this.inviterMembership()?.companyId ?? null);
   protected readonly canInvite = computed(() => this.companyId() !== null);
 
+  protected readonly quotaRatio = computed(() => {
+    const max = this.members.maxUsers();
+    return max > 0 ? Math.min(1, this.members.activeMembers() / max) : 0;
+  });
+  protected readonly quotaFull = computed(() => {
+    const max = this.members.maxUsers();
+    return max > 0 && this.members.activeMembers() >= max;
+  });
+
   constructor() {
     this.account.loadMe();
   }
