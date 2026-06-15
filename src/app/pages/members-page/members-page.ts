@@ -1,19 +1,22 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { InviteMember } from '../../components/invite-member/invite-member';
+import { MemberList } from '../../components/member-list/member-list';
 import { Button } from '../../components/ui/button/button';
 import { Modal } from '../../components/ui/modal/modal';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { CompanyRole, INVITER_ROLES } from '../../models/companies';
 import { AccountStore } from '../../state/account';
+import { MembersStore } from '../../state/companies';
 
 @Component({
   selector: 'app-members-page',
-  imports: [TranslatePipe, Button, Modal, InviteMember],
+  imports: [TranslatePipe, Button, Modal, InviteMember, MemberList],
   templateUrl: './members-page.html',
   styleUrl: './members-page.css',
 })
 export class MembersPage {
   private readonly account = inject(AccountStore);
+  protected readonly members = inject(MembersStore);
 
   protected readonly open = signal(false);
 
@@ -34,5 +37,9 @@ export class MembersPage {
 
   protected closeModal(): void {
     this.open.set(false);
+    const id = this.companyId();
+    if (id) {
+      this.members.load(id);
+    }
   }
 }

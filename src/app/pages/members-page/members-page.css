@@ -26,13 +26,15 @@
   color: var(--ink-soft);
 }
 
-.members__placeholder {
-  margin: 0;
-  padding: var(--space-6);
+.members__head-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.members__count {
   font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
   color: var(--ink-faint);
-  text-align: center;
-  background: var(--paper);
-  border: 1px dashed var(--paper-edge);
-  border-radius: var(--radius-lg);
+  white-space: nowrap;
 }
