@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 import { Observable, finalize } from 'rxjs';
 import { AppRoute } from '../../app-route';
 import { OnboardingService } from '../../api/onboarding';
+import { AuthTokens } from '../../models/auth';
 import { CreateCompanyRequest, JoinInvitationRequest } from '../../models/onboarding';
+import { SessionStore } from '../auth';
 import { OnboardingStep } from './onboarding-step';
 
 @Injectable({
@@ -12,6 +14,7 @@ import { OnboardingStep } from './onboarding-step';
 export class OnboardingStore {
   private readonly api = inject(OnboardingService);
   private readonly router = inject(Router);
+  private readonly session = inject(SessionStore);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
@@ -35,12 +38,13 @@ export class OnboardingStore {
     this.complete(this.api.joinInvitation(payload));
   }
 
-  private complete(request: Observable<unknown>): void {
+  private complete(request: Observable<AuthTokens>): void {
     this.loading.set(true);
     this.error.set(null);
 
     request.pipe(finalize(() => this.loading.set(false))).subscribe({
-      next: () => {
+      next: (tokens) => {
+        this.session.setSession(tokens.accessToken, tokens.refreshToken);
         this.router.navigate(['/', AppRoute.Dashboard]);
       },
       error: (err: Error) => {
