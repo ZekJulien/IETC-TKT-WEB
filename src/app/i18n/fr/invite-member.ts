@@ -1,0 +1,25 @@
+export const inviteMember = {
+  title: 'Inviter un membre',
+  subtitle: 'Envoyez une invitation par email avec un rôle prédéfini.',
+  emailLabel: 'Adresse email',
+  emailPlaceholder: 'membre@entreprise.com',
+  roleLabel: 'Rôle',
+  roles: {
+    admin: 'Administrateur',
+    agent: 'Agent',
+    member: 'Membre',
+  },
+  departmentLabel: 'Département',
+  departmentPlaceholder: 'Support, Ventes…',
+  jobTitleLabel: 'Fonction',
+  jobTitlePlaceholder: 'Responsable support…',
+  optional: 'Optionnel',
+  cancel: 'Annuler',
+  submit: 'Envoyer l’invitation',
+  inviteAnother: 'Inviter un autre membre',
+  done: 'Fermer',
+  success: {
+    pending: 'Invitation envoyée à {email}.',
+    direct: '{email} a été ajouté à votre équipe.',
+  },
+};

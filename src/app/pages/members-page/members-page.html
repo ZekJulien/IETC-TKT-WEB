@@ -1,0 +1,27 @@
+<section class="members">
+  <header class="members__head">
+    <div class="members__heading">
+      <h1 class="members__title">{{ 'membersPage.title' | translate }}</h1>
+      <p class="members__sub">{{ 'membersPage.subtitle' | translate }}</p>
+    </div>
+
+    @if (canInvite()) {
+      <app-button variant="primary" (click)="openModal()">
+        {{ 'membersPage.invite' | translate }}
+      </app-button>
+    }
+  </header>
+
+  <p class="members__placeholder">{{ 'membersPage.listComingSoon' | translate }}</p>
+</section>
+
+<app-modal
+  [open]="open()"
+  [heading]="'inviteMember.title' | translate"
+  [closeLabel]="'inviteMember.cancel' | translate"
+  (closed)="closeModal()"
+>
+  @if (open() && companyId(); as companyId) {
+    <app-invite-member [companyId]="companyId" (done)="closeModal()" />
+  }
+</app-modal>

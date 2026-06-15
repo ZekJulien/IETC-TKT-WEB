@@ -1,0 +1,74 @@
+<p class="invite__intro">{{ 'inviteMember.subtitle' | translate }}</p>
+
+@if (store.result(); as result) {
+  <p class="invite__success" role="status">
+    {{ successKey() | translate: { email: store.invitedEmail() ?? '' } }}
+  </p>
+
+  <div class="invite__actions">
+    <app-button variant="ghost" (click)="another()">
+      {{ 'inviteMember.inviteAnother' | translate }}
+    </app-button>
+    <app-button variant="primary" (click)="finish()">
+      {{ 'inviteMember.done' | translate }}
+    </app-button>
+  </div>
+} @else {
+  @if (store.error(); as error) {
+    <div class="invite__alert" role="alert">{{ error }}</div>
+  }
+
+  <form class="invite__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <app-form-field
+      label="inviteMember.emailLabel"
+      [control]="form.controls.email"
+      forId="invite-email"
+    >
+      <app-input
+        inputId="invite-email"
+        type="email"
+        formControlName="email"
+        autocomplete="email"
+        [placeholder]="'inviteMember.emailPlaceholder' | translate"
+      />
+    </app-form-field>
+
+    <app-form-field label="inviteMember.roleLabel" [control]="form.controls.role" forId="invite-role">
+      <select id="invite-role" class="invite__select" formControlName="role">
+        @for (role of roles; track role) {
+          <option [value]="role">{{ roleLabelKey(role) | translate }}</option>
+        }
+      </select>
+    </app-form-field>
+
+    <app-form-field
+      label="inviteMember.departmentLabel"
+      [control]="form.controls.department"
+      forId="invite-department"
+    >
+      <app-input
+        inputId="invite-department"
+        formControlName="department"
+        [placeholder]="'inviteMember.departmentPlaceholder' | translate"
+      />
+    </app-form-field>
+
+    <app-form-field
+      label="inviteMember.jobTitleLabel"
+      [control]="form.controls.jobTitle"
+      forId="invite-job-title"
+    >
+      <app-input
+        inputId="invite-job-title"
+        formControlName="jobTitle"
+        [placeholder]="'inviteMember.jobTitlePlaceholder' | translate"
+      />
+    </app-form-field>
+
+    <div class="invite__actions">
+      <app-button type="submit" variant="primary" [block]="true" [loading]="store.loading()">
+        {{ 'inviteMember.submit' | translate }}
+      </app-button>
+    </div>
+  </form>
+}

@@ -1,6 +1,8 @@
 import { common } from './common';
 import { dashboardPage } from './dashboard-page';
+import { inviteMember } from './invite-member';
 import { loginPage } from './login-page';
+import { membersPage } from './members-page';
 import { navbar } from './navbar';
 import { onboardingPage } from './onboarding-page';
 import { passwordRules } from './password-rules';
@@ -15,5 +17,7 @@ export const fr = {
   verifyEmailPage,
   onboardingPage,
   dashboardPage,
+  membersPage,
+  inviteMember,
   navbar,
 };

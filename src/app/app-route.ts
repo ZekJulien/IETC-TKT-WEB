@@ -4,4 +4,5 @@ export const AppRoute = {
   Login: 'login',
   Onboarding: 'onboarding',
   Dashboard: 'dashboard',
+  Members: 'members',
 } as const;
