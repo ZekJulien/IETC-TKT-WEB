@@ -5,4 +5,5 @@ export interface DatatableColumn {
   filterable?: boolean;
   width?: number;
   align?: 'start' | 'center' | 'end';
+  flex?: boolean;
 }

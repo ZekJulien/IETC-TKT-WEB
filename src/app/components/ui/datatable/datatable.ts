@@ -1,10 +1,20 @@
-import { Component, TemplateRef, computed, contentChildren, input, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  TemplateRef,
+  computed,
+  contentChildren,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { DatatableCell } from './datatable-cell';
 import { DatatableColumn } from './datatable-column';
 
-const DEFAULT_WIDTH = 160;
 const MIN_WIDTH = 64;
+const DEFAULT_WIDTH = 160;
 
 type Row = Record<string, unknown>;
 type SortDirection = 'asc' | 'desc';
@@ -22,16 +32,22 @@ export class Datatable {
   readonly filterPlaceholder = input('');
   readonly emptyLabel = input('');
 
+  private readonly tableRef = viewChild<ElementRef<HTMLTableElement>>('tableEl');
   private readonly cells = contentChildren(DatatableCell);
 
   private readonly sortKey = signal<string | null>(null);
   private readonly sortDir = signal<SortDirection>('asc');
   private readonly filters = signal<Record<string, string>>({});
+  private readonly openFilters = signal<Record<string, boolean>>({});
   private readonly widths = signal<Record<string, number>>({});
 
-  private resizing: { key: string; startX: number; startWidth: number } | null = null;
-
-  protected readonly hasFilters = computed(() => this.columns().some((c) => c.filterable));
+  private resizing: {
+    key: string;
+    nextKey: string;
+    startX: number;
+    startW: number;
+    startWNext: number;
+  } | null = null;
 
   protected readonly view = computed<Row[]>(() => {
     const rows = (this.rows() as Row[]).slice();
@@ -62,8 +78,24 @@ export class Datatable {
     return this.cells().find((c) => c.key() === key)?.template ?? null;
   }
 
-  protected colWidth(key: string): number {
-    return this.widths()[key] ?? this.columns().find((c) => c.key === key)?.width ?? DEFAULT_WIDTH;
+  protected readonly flexKey = computed(() => {
+    const cols = this.columns();
+    return cols.find((c) => c.flex)?.key ?? cols.at(-1)?.key ?? null;
+  });
+
+  protected isFlex(col: DatatableColumn): boolean {
+    return col.key === this.flexKey();
+  }
+
+  protected columnWidth(col: DatatableColumn): string {
+    const stored = this.widths()[col.key];
+    if (stored != null) {
+      return stored + 'px';
+    }
+    if (this.isFlex(col)) {
+      return 'auto';
+    }
+    return (col.width ?? DEFAULT_WIDTH) + 'px';
   }
 
   protected currentSort(key: string): SortDirection | null {
@@ -96,28 +128,79 @@ export class Datatable {
     this.filters.update((f) => ({ ...f, [key]: value }));
   }
 
-  protected startResize(event: PointerEvent, col: DatatableColumn): void {
+  protected filterOpen(key: string): boolean {
+    return this.openFilters()[key] ?? false;
+  }
+
+  protected toggleFilter(key: string, event: Event): void {
+    event.stopPropagation();
+    const open = !this.filterOpen(key);
+    this.openFilters.update((o) => ({ ...o, [key]: open }));
+    if (open) {
+      setTimeout(() => document.getElementById('dt-filter-' + key)?.focus());
+    } else {
+      this.filters.update((f) => ({ ...f, [key]: '' }));
+    }
+  }
+
+  protected closeFilter(key: string, event: Event): void {
+    event.stopPropagation();
+    this.openFilters.update((o) => ({ ...o, [key]: false }));
+    this.filters.update((f) => ({ ...f, [key]: '' }));
+  }
+
+  protected canResize(isLast: boolean): boolean {
+    return !isLast;
+  }
+
+  protected startResize(event: PointerEvent, index: number): void {
     event.preventDefault();
     event.stopPropagation();
-    this.resizing = { key: col.key, startX: event.clientX, startWidth: this.colWidth(col.key) };
-    (event.target as HTMLElement).setPointerCapture(event.pointerId);
+    const cols = this.columns();
+    const next = cols[index + 1];
+    const ths = this.tableRef()?.nativeElement.querySelectorAll('thead th');
+    if (!next || !ths) {
+      return;
+    }
+
+    if (Object.keys(this.widths()).length === 0) {
+      const snapshot: Record<string, number> = {};
+      cols.forEach((c, idx) => {
+        const th = ths[idx] as HTMLElement | undefined;
+        snapshot[c.key] = th ? th.offsetWidth : DEFAULT_WIDTH;
+      });
+      this.widths.set(snapshot);
+    }
+
+    const widths = this.widths();
+    this.resizing = {
+      key: cols[index].key,
+      nextKey: next.key,
+      startX: event.clientX,
+      startW: widths[cols[index].key],
+      startWNext: widths[next.key],
+    };
   }
 
+  @HostListener('window:pointermove', ['$event'])
   protected onResizeMove(event: PointerEvent): void {
-    if (!this.resizing) {
+    const r = this.resizing;
+    if (!r) {
       return;
     }
-    const delta = event.clientX - this.resizing.startX;
-    const next = Math.max(MIN_WIDTH, this.resizing.startWidth + delta);
-    const key = this.resizing.key;
-    this.widths.update((w) => ({ ...w, [key]: next }));
+    event.preventDefault();
+    const min = MIN_WIDTH - r.startW;
+    const max = r.startWNext - MIN_WIDTH;
+    const delta = Math.max(min, Math.min(max, event.clientX - r.startX));
+    this.widths.update((w) => ({
+      ...w,
+      [r.key]: r.startW + delta,
+      [r.nextKey]: r.startWNext - delta,
+    }));
   }
 
-  protected endResize(event: PointerEvent): void {
-    if (!this.resizing) {
-      return;
-    }
-    (event.target as HTMLElement).releasePointerCapture(event.pointerId);
+  @HostListener('window:pointerup')
+  protected endResize(): void {
     this.resizing = null;
   }
 

@@ -1,53 +1,73 @@
 <div class="dt__scroll">
-  <table class="dt">
-    <colgroup>
-      @for (col of columns(); track col.key) {
-        <col [style.width.px]="colWidth(col.key)" />
-      }
-    </colgroup>
-
+  <table class="dt" #tableEl>
     <thead>
       <tr class="dt__head">
-        @for (col of columns(); track col.key) {
+        @for (col of columns(); track col.key; let i = $index; let last = $last) {
           <th
             class="dt__th"
             [class.dt__th--sortable]="col.sortable"
-            [style.text-align]="col.align ?? 'start'"
+            [class.dt__th--flex]="isFlex(col)"
+            [style.width]="columnWidth(col)"
             (click)="toggleSort(col)"
           >
-            <span class="dt__th-label">{{ col.header }}</span>
-            @if (currentSort(col.key); as dir) {
-              <span class="dt__sort" aria-hidden="true">{{ dir === 'asc' ? '▲' : '▼' }}</span>
-            }
             <span
-              class="dt__resize"
-              (pointerdown)="startResize($event, col)"
-              (pointermove)="onResizeMove($event)"
-              (pointerup)="endResize($event)"
-              (click)="$event.stopPropagation()"
-            ></span>
-          </th>
-        }
-      </tr>
-
-      @if (hasFilters()) {
-        <tr class="dt__filters">
-          @for (col of columns(); track col.key) {
-            <th class="dt__filter-cell">
-              @if (col.filterable) {
+              class="dt__th-inner"
+              [style.justify-content]="
+                col.align === 'end' ? 'flex-end' : col.align === 'center' ? 'center' : 'flex-start'
+              "
+            >
+              @if (filterOpen(col.key)) {
                 <input
                   class="dt__filter"
                   type="text"
+                  [id]="'dt-filter-' + col.key"
                   [value]="filterValue(col.key)"
                   [attr.placeholder]="filterPlaceholder() || null"
                   (input)="setFilter(col.key, $event)"
                   (click)="$event.stopPropagation()"
+                  (keydown.escape)="closeFilter(col.key, $event)"
                 />
+                <button
+                  class="dt__filter-toggle is-active"
+                  type="button"
+                  (click)="toggleFilter(col.key, $event)"
+                >
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                  </svg>
+                </button>
+              } @else {
+                <span class="dt__th-label">{{ col.header }}</span>
+                @if (currentSort(col.key); as dir) {
+                  <span class="dt__sort" aria-hidden="true">{{ dir === 'asc' ? '▲' : '▼' }}</span>
+                }
+                @if (col.filterable) {
+                  <button
+                    class="dt__filter-toggle"
+                    [class.is-active]="filterValue(col.key)"
+                    type="button"
+                    (click)="toggleFilter(col.key, $event)"
+                  >
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="11" cy="11" r="7" />
+                      <path d="m21 21-4.3-4.3" />
+                    </svg>
+                  </button>
+                }
               }
-            </th>
-          }
-        </tr>
-      }
+            </span>
+
+            @if (canResize(last)) {
+              <span
+                class="dt__resize"
+                (pointerdown)="startResize($event, i)"
+                (click)="$event.stopPropagation()"
+              ></span>
+            }
+          </th>
+        }
+      </tr>
     </thead>
 
     <tbody>
