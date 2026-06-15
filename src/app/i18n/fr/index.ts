@@ -2,6 +2,7 @@ import { common } from './common';
 import { dashboardPage } from './dashboard-page';
 import { inviteMember } from './invite-member';
 import { loginPage } from './login-page';
+import { maintenancePage } from './maintenance-page';
 import { membersPage } from './members-page';
 import { navbar } from './navbar';
 import { onboardingPage } from './onboarding-page';
@@ -19,5 +20,6 @@ export const fr = {
   dashboardPage,
   membersPage,
   inviteMember,
+  maintenancePage,
   navbar,
 };

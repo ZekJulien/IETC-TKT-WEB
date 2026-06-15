@@ -40,7 +40,7 @@ export class InviteMember {
   }
 
   protected roleLabelKey(role: CompanyRole): TranslationKey {
-    return ('inviteMember.roles.' + role) as TranslationKey;
+    return ('common.roles.' + role) as TranslationKey;
   }
 
   protected successKey(): TranslationKey {

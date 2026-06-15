@@ -1,0 +1,110 @@
+@if (store.actionError(); as err) {
+  <div class="member-list__alert" role="alert">{{ err }}</div>
+}
+
+@if (store.loading()) {
+  <p class="member-list__muted">{{ 'membersPage.loading' | translate }}</p>
+} @else if (store.error(); as err) {
+  <div class="member-list__alert" role="alert">{{ err }}</div>
+} @else {
+  <app-datatable
+    [columns]="columns()"
+    [rows]="store.members()"
+    trackKey="accountId"
+    [filterPlaceholder]="'membersPage.filter' | translate"
+    [emptyLabel]="'membersPage.empty' | translate"
+  >
+    <ng-template appDatatableCell="displayName" let-row>
+      <span class="member-list__name">{{ memberName(row) }}</span>
+    </ng-template>
+
+    <ng-template appDatatableCell="role" let-row>
+      @if (isPending(row) || isOwner(row)) {
+        <app-badge [tone]="roleTone(row.role)">{{ roleLabelKey(row.role) | translate }}</app-badge>
+      } @else {
+        <span class="member-list__role">
+          <app-badge [tone]="roleTone(row.role)">
+            {{ roleLabelKey(row.role) | translate }}
+            <svg class="member-list__role-caret" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+          </app-badge>
+          <select
+            class="member-list__role-overlay"
+            [value]="row.role"
+            [disabled]="isBusy(row)"
+            [attr.aria-label]="'membersPage.changeRole' | translate"
+            (change)="onRoleChange(row, $event)"
+            (click)="$event.stopPropagation()"
+          >
+            @for (role of roles; track role) {
+              <option [value]="role">{{ roleLabelKey(role) | translate }}</option>
+            }
+          </select>
+        </span>
+      }
+    </ng-template>
+
+    <ng-template appDatatableCell="status" let-row>
+      <app-badge [tone]="statusTone(row.status)">{{ statusLabelKey(row.status) | translate }}</app-badge>
+    </ng-template>
+
+    <ng-template appDatatableCell="joinedAt" let-row>
+      {{ row.joinedAt ? (row.joinedAt | date: 'dd/MM/yyyy') : '—' }}
+    </ng-template>
+
+    <ng-template appDatatableCell="actions" let-row>
+      <div class="member-list__actions">
+        @if (isPending(row)) {
+          <app-button
+            variant="ghost"
+            [loading]="isBusy(row)"
+            [disabled]="isBusy(row)"
+            (click)="revoke(row)"
+          >
+            {{ 'membersPage.actions.cancelInvitation' | translate }}
+          </app-button>
+        } @else if (isActiveMember(row)) {
+          <app-button
+            variant="ghost"
+            [loading]="isBusy(row)"
+            [disabled]="isBusy(row)"
+            (click)="askDeactivate(row)"
+          >
+            {{ 'membersPage.actions.deactivate' | translate }}
+          </app-button>
+        } @else {
+          <app-button
+            variant="ghost"
+            [loading]="isBusy(row)"
+            [disabled]="isBusy(row)"
+            (click)="reactivate(row)"
+          >
+            {{ 'membersPage.actions.reactivate' | translate }}
+          </app-button>
+        }
+      </div>
+    </ng-template>
+  </app-datatable>
+}
+
+<app-modal
+  [open]="!!pendingDeactivate()"
+  [heading]="'membersPage.deactivate.title' | translate"
+  [closeLabel]="'membersPage.deactivate.cancel' | translate"
+  (closed)="cancelDeactivate()"
+>
+  @if (pendingDeactivate(); as member) {
+    <p class="member-list__confirm">
+      {{ 'membersPage.deactivate.message' | translate: { name: memberName(member) } }}
+    </p>
+    <div class="member-list__confirm-actions">
+      <app-button variant="ghost" (click)="cancelDeactivate()">
+        {{ 'membersPage.deactivate.cancel' | translate }}
+      </app-button>
+      <app-button variant="primary" (click)="confirmDeactivate()">
+        {{ 'membersPage.deactivate.confirm' | translate }}
+      </app-button>
+    </div>
+  }
+</app-modal>

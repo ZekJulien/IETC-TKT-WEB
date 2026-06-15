@@ -6,13 +6,31 @@
     </div>
 
     @if (canInvite()) {
-      <app-button variant="primary" (click)="openModal()">
-        {{ 'membersPage.invite' | translate }}
-      </app-button>
+      <div class="members__head-actions">
+        @if (members.maxUsers() > 0) {
+          <div
+            class="members__quota"
+            [class.members__quota--full]="quotaFull()"
+            [attr.title]="'membersPage.quota.title' | translate"
+          >
+            <span class="members__quota-label">{{
+              'membersPage.quota.label' | translate: { used: seatsUsed(), max: members.maxUsers() }
+            }}</span>
+            <span class="members__quota-bar" aria-hidden="true">
+              <span class="members__quota-fill" [style.width.%]="quotaRatio() * 100"></span>
+            </span>
+          </div>
+        }
+        <app-button variant="primary" [disabled]="quotaFull()" (click)="openModal()">
+          {{ 'membersPage.invite' | translate }}
+        </app-button>
+      </div>
     }
   </header>
 
-  <p class="members__placeholder">{{ 'membersPage.listComingSoon' | translate }}</p>
+  @if (companyId(); as companyId) {
+    <app-member-list [companyId]="companyId" />
+  }
 </section>
 
 <app-modal

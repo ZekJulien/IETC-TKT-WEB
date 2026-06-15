@@ -4,6 +4,12 @@ export const common = {
     subtitle: 'Helpdesk',
     tagline: 'Vos tickets, sans friction.',
   },
+  roles: {
+    owner: 'Propriétaire',
+    admin: 'Administrateur',
+    agent: 'Agent',
+    member: 'Membre',
+  },
   errors: {
     required: 'Ce champ est requis.',
     email: 'Format d’email invalide.',
