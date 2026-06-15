@@ -27,13 +27,16 @@ export class MembersPage {
   protected readonly companyId = computed(() => this.inviterMembership()?.companyId ?? null);
   protected readonly canInvite = computed(() => this.companyId() !== null);
 
+  protected readonly seatsUsed = computed(
+    () => this.members.activeMembers() + this.members.pendingInvitations(),
+  );
   protected readonly quotaRatio = computed(() => {
     const max = this.members.maxUsers();
-    return max > 0 ? Math.min(1, this.members.activeMembers() / max) : 0;
+    return max > 0 ? Math.min(1, this.seatsUsed() / max) : 0;
   });
   protected readonly quotaFull = computed(() => {
     const max = this.members.maxUsers();
-    return max > 0 && this.members.activeMembers() >= max;
+    return max > 0 && this.seatsUsed() >= max;
   });
 
   constructor() {

@@ -7,7 +7,7 @@ export const membersPage = {
   filter: 'Filtrer…',
   quota: {
     label: '{used} / {max} sièges',
-    title: 'Sièges occupés (membres actifs)',
+    title: 'Sièges occupés (membres actifs + invitations en attente)',
     full: 'Quota atteint',
   },
   columns: {
@@ -20,12 +20,14 @@ export const membersPage = {
   },
   status: {
     active: 'Actif',
-    inactive: 'Inactif',
+    inactive: 'Désactivé',
+    pending: 'En attente',
   },
   changeRole: 'Changer le rôle',
   actions: {
     deactivate: 'Désactiver',
     reactivate: 'Réactiver',
+    cancelInvitation: 'Annuler l’invitation',
   },
   deactivate: {
     title: 'Désactiver le membre',

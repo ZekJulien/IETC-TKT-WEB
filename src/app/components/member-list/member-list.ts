@@ -8,7 +8,7 @@ import { DatatableColumn } from '../ui/datatable/datatable-column';
 import { Modal } from '../ui/modal/modal';
 import { I18nStore, TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
-import { CompanyRole, INVITABLE_ROLES, Member } from '../../models/companies';
+import { CompanyRole, INVITABLE_ROLES, Member, MemberStatus } from '../../models/companies';
 import { MembersStore } from '../../state/companies';
 
 @Component({
@@ -42,12 +42,7 @@ export class MemberList implements OnInit {
       flex: true,
     },
     { key: 'role', header: this.i18n.t('membersPage.columns.role'), sortable: true, width: 160 },
-    {
-      key: 'isActive',
-      header: this.i18n.t('membersPage.columns.status'),
-      sortable: true,
-      width: 130,
-    },
+    { key: 'status', header: this.i18n.t('membersPage.columns.status'), sortable: true, width: 140 },
     {
       key: 'joinedAt',
       header: this.i18n.t('membersPage.columns.joinedAt'),
@@ -57,7 +52,7 @@ export class MemberList implements OnInit {
     {
       key: 'actions',
       header: this.i18n.t('membersPage.columns.actions'),
-      width: 150,
+      width: 180,
       align: 'end',
     },
   ]);
@@ -85,6 +80,21 @@ export class MemberList implements OnInit {
     }
   }
 
+  protected statusLabelKey(status: string): TranslationKey {
+    return ('membersPage.status.' + status) as TranslationKey;
+  }
+
+  protected statusTone(status: string): BadgeTone {
+    switch (status) {
+      case MemberStatus.Active:
+        return 'accent';
+      case MemberStatus.Pending:
+        return 'amber';
+      default:
+        return 'neutral';
+    }
+  }
+
   protected memberName(member: Member): string {
     return member.displayName?.trim() || member.email;
   }
@@ -93,19 +103,35 @@ export class MemberList implements OnInit {
     return member.role === CompanyRole.Owner;
   }
 
+  protected isPending(member: Member): boolean {
+    return member.status === MemberStatus.Pending;
+  }
+
+  protected isActiveMember(member: Member): boolean {
+    return member.status === MemberStatus.Active;
+  }
+
   protected isBusy(member: Member): boolean {
-    return this.store.busyAccountId() === member.accountId;
+    return this.store.busyId() === (member.accountId ?? member.invitationId);
   }
 
   protected onRoleChange(member: Member, event: Event): void {
     const role = (event.target as HTMLSelectElement).value as CompanyRole;
-    if (role !== member.role) {
+    if (member.accountId && role !== member.role) {
       this.store.changeRole(this.companyId(), member.accountId, role);
     }
   }
 
   protected reactivate(member: Member): void {
-    this.store.setActive(this.companyId(), member.accountId, true);
+    if (member.accountId) {
+      this.store.setActive(this.companyId(), member.accountId, true);
+    }
+  }
+
+  protected revoke(member: Member): void {
+    if (member.invitationId) {
+      this.store.revokeInvitation(this.companyId(), member.invitationId);
+    }
   }
 
   protected askDeactivate(member: Member): void {
@@ -118,9 +144,9 @@ export class MemberList implements OnInit {
 
   protected confirmDeactivate(): void {
     const member = this.pendingDeactivate();
-    if (member) {
+    if (member?.accountId) {
       this.store.setActive(this.companyId(), member.accountId, false);
-      this.pendingDeactivate.set(null);
     }
+    this.pendingDeactivate.set(null);
   }
 }

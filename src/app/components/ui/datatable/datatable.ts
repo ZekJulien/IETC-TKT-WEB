@@ -104,7 +104,7 @@ export class Datatable {
 
   protected trackRow(index: number, row: unknown): unknown {
     const key = this.trackKey();
-    return key ? this.cellValue(row, key) : index;
+    return (key ? this.cellValue(row, key) : null) ?? index;
   }
 
   protected toggleSort(col: DatatableColumn): void {

@@ -14,8 +14,7 @@
             [attr.title]="'membersPage.quota.title' | translate"
           >
             <span class="members__quota-label">{{
-              'membersPage.quota.label'
-                | translate: { used: members.activeMembers(), max: members.maxUsers() }
+              'membersPage.quota.label' | translate: { used: seatsUsed(), max: members.maxUsers() }
             }}</span>
             <span class="members__quota-bar" aria-hidden="true">
               <span class="members__quota-fill" [style.width.%]="quotaRatio() * 100"></span>

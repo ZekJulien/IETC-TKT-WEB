@@ -19,7 +19,7 @@
     </ng-template>
 
     <ng-template appDatatableCell="role" let-row>
-      @if (isOwner(row)) {
+      @if (isPending(row) || isOwner(row)) {
         <app-badge [tone]="roleTone(row.role)">{{ roleLabelKey(row.role) | translate }}</app-badge>
       } @else {
         <span class="member-list__role">
@@ -45,12 +45,8 @@
       }
     </ng-template>
 
-    <ng-template appDatatableCell="isActive" let-row>
-      @if (row.isActive) {
-        <app-badge tone="accent">{{ 'membersPage.status.active' | translate }}</app-badge>
-      } @else {
-        <app-badge tone="neutral">{{ 'membersPage.status.inactive' | translate }}</app-badge>
-      }
+    <ng-template appDatatableCell="status" let-row>
+      <app-badge [tone]="statusTone(row.status)">{{ statusLabelKey(row.status) | translate }}</app-badge>
     </ng-template>
 
     <ng-template appDatatableCell="joinedAt" let-row>
@@ -59,7 +55,16 @@
 
     <ng-template appDatatableCell="actions" let-row>
       <div class="member-list__actions">
-        @if (row.isActive) {
+        @if (isPending(row)) {
+          <app-button
+            variant="ghost"
+            [loading]="isBusy(row)"
+            [disabled]="isBusy(row)"
+            (click)="revoke(row)"
+          >
+            {{ 'membersPage.actions.cancelInvitation' | translate }}
+          </app-button>
+        } @else if (isActiveMember(row)) {
           <app-button
             variant="ghost"
             [loading]="isBusy(row)"
