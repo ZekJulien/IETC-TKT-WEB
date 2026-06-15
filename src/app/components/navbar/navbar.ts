@@ -3,9 +3,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AppRoute } from '../../app-route';
 import { TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
-import { CompanyRole, INVITER_ROLES } from '../../models/companies';
+import { INVITER_ROLES } from '../../models/companies';
 import { AccountStore } from '../../state/account';
 import { AuthStore } from '../../state/auth';
+import { TenantStore } from '../../state/tenant';
+import { TenantSwitcher } from '../tenant-switcher/tenant-switcher';
 
 type NavIcon = 'dashboard' | 'members';
 
@@ -18,13 +20,14 @@ interface NavItem {
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive, TranslatePipe],
+  imports: [RouterLink, RouterLinkActive, TranslatePipe, TenantSwitcher],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
 export class Navbar {
   private readonly account = inject(AccountStore);
   private readonly auth = inject(AuthStore);
+  private readonly tenant = inject(TenantStore);
 
   protected readonly menuOpen = signal(false);
 
@@ -33,11 +36,10 @@ export class Navbar {
     () => (this.account.me()?.email ?? '').charAt(0).toUpperCase() || '?',
   );
 
-  protected readonly canManageMembers = computed(() =>
-    (this.account.me()?.memberships ?? []).some((m) =>
-      INVITER_ROLES.includes(m.role as CompanyRole),
-    ),
-  );
+  protected readonly canManageMembers = computed(() => {
+    const role = this.tenant.activeRole();
+    return role !== null && INVITER_ROLES.includes(role);
+  });
 
   protected readonly navItems: NavItem[] = [
     {

@@ -1,0 +1,64 @@
+@if (store.activeCompany()) {
+  <div class="switcher" [class.is-open]="open()">
+    @if (open()) {
+      <div class="switcher__menu" role="menu">
+        @for (company of store.companies(); track company.companyId) {
+          <button
+            type="button"
+            role="menuitem"
+            class="switcher__item"
+            [class.is-active]="isActive(company)"
+            (click)="select(company)"
+          >
+            <span class="switcher__item-mark" aria-hidden="true">{{ initial(company) }}</span>
+            <span class="switcher__item-body">
+              <span class="switcher__item-name">{{ company.companyName }}</span>
+              <span class="switcher__item-role">{{ roleLabelKey(company.role) | translate }}</span>
+            </span>
+            @if (isActive(company)) {
+              <svg
+                class="switcher__check"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.25"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+            }
+          </button>
+        }
+      </div>
+    }
+
+    <button
+      type="button"
+      class="switcher__btn"
+      [class.is-open]="open()"
+      [disabled]="!store.hasMultiple() || store.switchingId() !== null"
+      [attr.aria-label]="'tenant.switcher.switch' | translate"
+      [attr.aria-expanded]="open()"
+      (click)="toggle($event)"
+    >
+      <span class="switcher__mark" aria-hidden="true">{{ activeInitial() }}</span>
+      <span class="switcher__name label">{{ activeName() }}</span>
+      @if (store.hasMultiple()) {
+        <svg
+          class="switcher__caret label"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      }
+    </button>
+  </div>
+}
