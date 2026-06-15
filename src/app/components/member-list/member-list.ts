@@ -39,14 +39,14 @@ export class MemberList implements OnInit {
       header: this.i18n.t('membersPage.columns.email'),
       sortable: true,
       filterable: true,
-      width: 220,
+      flex: true,
     },
-    { key: 'role', header: this.i18n.t('membersPage.columns.role'), sortable: true, width: 130 },
+    { key: 'role', header: this.i18n.t('membersPage.columns.role'), sortable: true, width: 160 },
     {
       key: 'isActive',
       header: this.i18n.t('membersPage.columns.status'),
       sortable: true,
-      width: 120,
+      width: 130,
     },
     {
       key: 'joinedAt',
@@ -57,7 +57,7 @@ export class MemberList implements OnInit {
     {
       key: 'actions',
       header: this.i18n.t('membersPage.columns.actions'),
-      width: 240,
+      width: 150,
       align: 'end',
     },
   ]);
@@ -76,6 +76,10 @@ export class MemberList implements OnInit {
         return 'amber';
       case CompanyRole.Admin:
         return 'accent';
+      case CompanyRole.Agent:
+        return 'info';
+      case CompanyRole.Member:
+        return 'violet';
       default:
         return 'neutral';
     }

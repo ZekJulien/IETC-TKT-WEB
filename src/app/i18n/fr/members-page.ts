@@ -22,6 +22,7 @@ export const membersPage = {
     active: 'Actif',
     inactive: 'Inactif',
   },
+  changeRole: 'Changer le rôle',
   actions: {
     deactivate: 'Désactiver',
     reactivate: 'Réactiver',

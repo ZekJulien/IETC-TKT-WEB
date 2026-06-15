@@ -30,25 +30,30 @@
   gap: var(--space-2);
 }
 
-.member-list__select {
-  padding: 6px 8px;
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  color: var(--ink);
-  background: var(--surface);
-  border: 1px solid var(--paper-edge);
-  border-radius: var(--radius-sm);
+.member-list__role {
+  position: relative;
+  display: inline-flex;
+}
+
+.member-list__role-caret {
+  margin-left: var(--space-1);
+  opacity: 0.7;
+}
+
+.member-list__role-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  opacity: 0;
   cursor: pointer;
 }
 
-.member-list__select:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--accent-tint);
-}
-
-.member-list__select:disabled {
-  opacity: 0.55;
+.member-list__role-overlay:disabled {
   cursor: default;
 }
 
