@@ -4,6 +4,7 @@ import { Observable, finalize, map, shareReplay, throwError } from 'rxjs';
 import { AppRoute } from '../../app-route';
 import { AuthService } from '../../api/auth';
 import { LoginRequest, RegisterRequest } from '../../models/auth';
+import { TenantStore } from '../tenant';
 import { SessionStore } from './session-store';
 
 @Injectable({
@@ -13,6 +14,7 @@ export class AuthStore {
   private readonly api = inject(AuthService);
   private readonly router = inject(Router);
   private readonly session = inject(SessionStore);
+  private readonly tenant = inject(TenantStore);
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
@@ -66,7 +68,8 @@ export class AuthStore {
       .subscribe({
         next: (tokens) => {
           this.session.setSession(tokens.accessToken, tokens.refreshToken);
-          this.router.navigate(['/', AppRoute.Dashboard]);
+          this.tenant.clear();
+          this.router.navigate(['/', AppRoute.SelectCompany]);
         },
         error: (err: Error) => {
           this.error.set(err.message);
@@ -76,6 +79,7 @@ export class AuthStore {
 
   logout(): void {
     this.session.clear();
+    this.tenant.clear();
     this.router.navigate(['/', AppRoute.Login]);
   }
 

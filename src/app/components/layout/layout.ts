@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AccountStore } from '../../state/account';
+import { TenantStore } from '../../state/tenant';
 import { Navbar } from '../navbar/navbar';
 
 @Component({
@@ -8,4 +10,12 @@ import { Navbar } from '../navbar/navbar';
   templateUrl: './layout.html',
   styleUrl: './layout.css',
 })
-export class Layout {}
+export class Layout {
+  private readonly account = inject(AccountStore);
+  private readonly tenant = inject(TenantStore);
+
+  constructor() {
+    this.account.loadMe();
+    this.tenant.ensureCompanies();
+  }
+}

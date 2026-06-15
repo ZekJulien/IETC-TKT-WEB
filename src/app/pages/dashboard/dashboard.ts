@@ -10,8 +10,4 @@ import { AccountStore } from '../../state/account';
 })
 export class Dashboard {
   readonly store = inject(AccountStore);
-
-  constructor() {
-    this.store.loadMe();
-  }
 }
