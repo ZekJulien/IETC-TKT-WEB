@@ -8,6 +8,7 @@ import { navbar } from './navbar';
 import { onboardingPage } from './onboarding-page';
 import { passwordRules } from './password-rules';
 import { registerPage } from './register-page';
+import { tenant } from './tenant';
 import { verifyEmailPage } from './verify-email-page';
 
 export const fr = {
@@ -22,4 +23,5 @@ export const fr = {
   inviteMember,
   maintenancePage,
   navbar,
+  tenant,
 };
