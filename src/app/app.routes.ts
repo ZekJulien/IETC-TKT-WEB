@@ -35,6 +35,11 @@ export const routes: Routes = [
         path: AppRoute.Dashboard,
         loadComponent: () => import('./pages/dashboard/dashboard').then((m) => m.Dashboard),
       },
+      {
+        path: AppRoute.Members,
+        loadComponent: () =>
+          import('./pages/members-page/members-page').then((m) => m.MembersPage),
+      },
     ],
   },
   {
