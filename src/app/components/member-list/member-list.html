@@ -1,0 +1,95 @@
+@if (store.actionError(); as err) {
+  <div class="member-list__alert" role="alert">{{ err }}</div>
+}
+
+@if (store.loading()) {
+  <p class="member-list__muted">{{ 'membersPage.loading' | translate }}</p>
+} @else if (store.error(); as err) {
+  <div class="member-list__alert" role="alert">{{ err }}</div>
+} @else {
+  <app-datatable
+    [columns]="columns()"
+    [rows]="store.members()"
+    trackKey="accountId"
+    [filterPlaceholder]="'membersPage.filter' | translate"
+    [emptyLabel]="'membersPage.empty' | translate"
+  >
+    <ng-template appDatatableCell="displayName" let-row>
+      <span class="member-list__name">{{ memberName(row) }}</span>
+    </ng-template>
+
+    <ng-template appDatatableCell="role" let-row>
+      <app-badge [tone]="roleTone(row.role)">{{ roleLabelKey(row.role) | translate }}</app-badge>
+    </ng-template>
+
+    <ng-template appDatatableCell="isActive" let-row>
+      @if (row.isActive) {
+        <app-badge tone="accent">{{ 'membersPage.status.active' | translate }}</app-badge>
+      } @else {
+        <app-badge tone="neutral">{{ 'membersPage.status.inactive' | translate }}</app-badge>
+      }
+    </ng-template>
+
+    <ng-template appDatatableCell="joinedAt" let-row>
+      {{ row.joinedAt ? (row.joinedAt | date: 'dd/MM/yyyy') : '—' }}
+    </ng-template>
+
+    <ng-template appDatatableCell="actions" let-row>
+      <div class="member-list__actions">
+        @if (!isOwner(row)) {
+          <select
+            class="member-list__select"
+            [value]="row.role"
+            [disabled]="isBusy(row)"
+            (change)="onRoleChange(row, $event)"
+          >
+            @for (role of roles; track role) {
+              <option [value]="role">{{ roleLabelKey(role) | translate }}</option>
+            }
+          </select>
+        }
+
+        @if (row.isActive) {
+          <app-button
+            variant="ghost"
+            [loading]="isBusy(row)"
+            [disabled]="isBusy(row)"
+            (click)="askDeactivate(row)"
+          >
+            {{ 'membersPage.actions.deactivate' | translate }}
+          </app-button>
+        } @else {
+          <app-button
+            variant="ghost"
+            [loading]="isBusy(row)"
+            [disabled]="isBusy(row)"
+            (click)="reactivate(row)"
+          >
+            {{ 'membersPage.actions.reactivate' | translate }}
+          </app-button>
+        }
+      </div>
+    </ng-template>
+  </app-datatable>
+}
+
+<app-modal
+  [open]="!!pendingDeactivate()"
+  [heading]="'membersPage.deactivate.title' | translate"
+  [closeLabel]="'membersPage.deactivate.cancel' | translate"
+  (closed)="cancelDeactivate()"
+>
+  @if (pendingDeactivate(); as member) {
+    <p class="member-list__confirm">
+      {{ 'membersPage.deactivate.message' | translate: { name: memberName(member) } }}
+    </p>
+    <div class="member-list__confirm-actions">
+      <app-button variant="ghost" (click)="cancelDeactivate()">
+        {{ 'membersPage.deactivate.cancel' | translate }}
+      </app-button>
+      <app-button variant="primary" (click)="confirmDeactivate()">
+        {{ 'membersPage.deactivate.confirm' | translate }}
+      </app-button>
+    </div>
+  }
+</app-modal>
