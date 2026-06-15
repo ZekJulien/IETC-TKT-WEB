@@ -65,4 +65,10 @@ export class CompaniesService {
       { isActive },
     );
   }
+
+  revokeInvitation(companyId: string, invitationId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiUrl}/companies/${companyId}/invitations/${invitationId}`,
+    );
+  }
 }

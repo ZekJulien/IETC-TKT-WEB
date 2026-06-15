@@ -1,10 +1,12 @@
 import { CompanyRole } from './member-role';
+import { MemberStatus } from './member-status';
 
 export interface Member {
-  accountId: string;
+  accountId: string | null;
+  invitationId: string | null;
   email: string;
   displayName?: string | null;
   role: CompanyRole;
-  isActive: boolean;
+  status: MemberStatus;
   joinedAt?: string | null;
 }
