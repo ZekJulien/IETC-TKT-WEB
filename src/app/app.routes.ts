@@ -20,6 +20,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/login-page/login-page').then((m) => m.LoginPage),
   },
   {
+    path: AppRoute.Maintenance,
+    loadComponent: () => import('./pages/maintenance/maintenance').then((m) => m.Maintenance),
+  },
+  {
     path: AppRoute.Onboarding,
     canActivate: [authGuard],
     loadComponent: () =>
