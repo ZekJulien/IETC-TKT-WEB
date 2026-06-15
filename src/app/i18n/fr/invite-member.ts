@@ -4,11 +4,6 @@ export const inviteMember = {
   emailLabel: 'Adresse email',
   emailPlaceholder: 'membre@entreprise.com',
   roleLabel: 'Rôle',
-  roles: {
-    admin: 'Administrateur',
-    agent: 'Agent',
-    member: 'Membre',
-  },
   departmentLabel: 'Département',
   departmentPlaceholder: 'Support, Ventes…',
   jobTitleLabel: 'Fonction',
