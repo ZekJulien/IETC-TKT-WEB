@@ -1,0 +1,51 @@
+<app-auth-shell tagline="tenant.selection.tagline">
+  <div class="select">
+    <header class="select__head">
+      <h1 class="select__title">{{ 'tenant.selection.title' | translate }}</h1>
+      <p class="select__sub">{{ 'tenant.selection.subtitle' | translate }}</p>
+    </header>
+
+    @if (store.error(); as error) {
+      <div class="select__alert" role="alert">{{ error }}</div>
+    }
+
+    @if (store.loading() || store.switchingId()) {
+      <p class="select__loading">{{ 'tenant.selection.loading' | translate }}</p>
+    } @else {
+      <ul class="select__list">
+        @for (company of store.companies(); track company.companyId) {
+          <li>
+            <button
+              type="button"
+              class="company"
+              [disabled]="store.switchingId() !== null"
+              (click)="select(company)"
+            >
+              <span class="company__mark" aria-hidden="true">{{ initial(company) }}</span>
+              <span class="company__body">
+                <span class="company__name">{{ company.companyName }}</span>
+                <span class="company__slug">
+                  {{ 'onboardingPage.create.previewBase' | translate }}{{ company.companySlug }}
+                </span>
+              </span>
+              <span class="company__role">{{ roleLabelKey(company.role) | translate }}</span>
+              <svg
+                class="company__arrow"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</app-auth-shell>
