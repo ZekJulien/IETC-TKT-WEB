@@ -8,7 +8,7 @@
 
   <div class="create-ticket__panel">
     @if (companyId(); as id) {
-      <app-ticket-form [companyId]="id" (done)="onDone()" />
+      <app-ticket-form [companyId]="id" />
     }
   </div>
 </section>

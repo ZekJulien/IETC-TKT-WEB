@@ -21,9 +21,17 @@
   font-variant-numeric: tabular-nums;
   font-weight: var(--weight-medium);
   color: var(--ink-soft);
+  text-decoration: none;
 }
 
 .tickets-table__title {
   font-weight: var(--weight-medium);
   color: var(--ink);
+  text-decoration: none;
+}
+
+.tickets-table__number:hover,
+.tickets-table__title:hover {
+  color: var(--accent);
+  text-decoration: underline;
 }

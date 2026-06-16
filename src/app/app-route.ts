@@ -8,5 +8,6 @@ export const AppRoute = {
   Members: 'members',
   Tickets: 'tickets',
   CreateTicket: 'tickets/new',
+  TicketDetail: 'tickets/:id',
   Maintenance: 'maintenance',
 } as const;
