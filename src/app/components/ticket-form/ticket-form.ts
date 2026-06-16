@@ -6,7 +6,7 @@ import { FormField } from '../ui/form-field/form-field';
 import { Input } from '../ui/input/input';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { TranslationKey } from '../../i18n/i18n-store';
-import { Member, MemberStatus } from '../../models/companies';
+import { CompanyRole, DirectoryMember, directoryMemberName } from '../../models/companies';
 import {
   CreateTicketRequest,
   DEFAULT_TICKET_PRIORITY,
@@ -14,7 +14,8 @@ import {
   TICKET_PRIORITIES,
   TicketPriority,
 } from '../../models/tickets';
-import { MembersStore } from '../../state/companies';
+import { DirectoryStore } from '../../state/companies';
+import { TenantStore } from '../../state/tenant';
 import { TicketCreateStore } from '../../state/tickets';
 
 const TITLE_MIN = 3;
@@ -29,18 +30,18 @@ const DESCRIPTION_MAX = 5000;
 })
 export class TicketForm implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly members = inject(MembersStore);
+  private readonly directory = inject(DirectoryStore);
+  private readonly tenant = inject(TenantStore);
   readonly store = inject(TicketCreateStore);
 
   readonly companyId = input.required<string>();
 
   protected readonly priorities = TICKET_PRIORITIES;
   protected readonly titleMax = TITLE_MAX;
-  protected readonly membersLoading = this.members.loading;
+  protected readonly membersLoading = this.directory.loading;
+  protected readonly assignableMembers = this.directory.assignable;
 
-  protected readonly assignableMembers = computed<Member[]>(() =>
-    this.members.members().filter((m) => m.status === MemberStatus.Active && m.accountId !== null),
-  );
+  protected readonly canAssign = computed(() => this.tenant.activeRole() !== CompanyRole.Member);
 
   readonly form = this.fb.nonNullable.group({
     title: [
@@ -58,15 +59,15 @@ export class TicketForm implements OnInit {
   }
 
   ngOnInit(): void {
-    this.members.load(this.companyId());
+    this.directory.ensure(this.companyId());
   }
 
   protected priorityLabelKey(priority: TicketPriority): TranslationKey {
     return ('ticketForm.priorities.' + priority) as TranslationKey;
   }
 
-  protected memberLabel(member: Member): string {
-    return member.displayName?.trim() || member.email;
+  protected memberLabel(member: DirectoryMember): string {
+    return directoryMemberName(member);
   }
 
   protected readonly formatTicketNumber = formatTicketNumber;

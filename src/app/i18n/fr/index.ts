@@ -9,6 +9,7 @@ import { onboardingPage } from './onboarding-page';
 import { passwordRules } from './password-rules';
 import { registerPage } from './register-page';
 import { tenant } from './tenant';
+import { ticketComments } from './ticket-comments';
 import { ticketDetailPage } from './ticket-detail-page';
 import { ticketEdit } from './ticket-edit';
 import { ticketForm } from './ticket-form';
@@ -32,4 +33,5 @@ export const fr = {
   ticketsPage,
   ticketDetailPage,
   ticketEdit,
+  ticketComments,
 };

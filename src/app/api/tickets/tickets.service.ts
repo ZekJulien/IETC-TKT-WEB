@@ -3,11 +3,14 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import {
+  Comment,
+  CreateCommentRequest,
   CreateTicketRequest,
   CreateTicketResponse,
   TicketDetail,
   TicketListQuery,
   TicketListResponse,
+  UpdateCommentRequest,
   UpdateTicketRequest,
 } from '../../models/tickets';
 
@@ -38,5 +41,17 @@ export class TicketsService {
 
   updateTicket(ticketId: string, payload: UpdateTicketRequest): Observable<TicketDetail> {
     return this.http.patch<TicketDetail>(`${this.apiUrl}/tickets/${ticketId}`, payload);
+  }
+
+  listComments(ticketId: string): Observable<Comment[]> {
+    return this.http.get<Comment[]>(`${this.apiUrl}/tickets/${ticketId}/comments`);
+  }
+
+  createComment(ticketId: string, payload: CreateCommentRequest): Observable<Comment> {
+    return this.http.post<Comment>(`${this.apiUrl}/tickets/${ticketId}/comments`, payload);
+  }
+
+  updateComment(commentId: string, payload: UpdateCommentRequest): Observable<Comment> {
+    return this.http.patch<Comment>(`${this.apiUrl}/comments/${commentId}`, payload);
   }
 }

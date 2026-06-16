@@ -1,0 +1,15 @@
+export const ticketComments = {
+  title: 'Commentaires',
+  loading: 'Chargement des commentaires…',
+  empty: 'Aucun commentaire pour le moment.',
+  placeholder: 'Écrire un commentaire…',
+  replyPlaceholder: 'Écrire une réponse…',
+  internalToggle: 'Note interne',
+  internalBadge: 'Interne',
+  submit: 'Commenter',
+  reply: 'Répondre',
+  edit: 'Modifier',
+  save: 'Enregistrer',
+  cancel: 'Annuler',
+  edited: 'modifié',
+};

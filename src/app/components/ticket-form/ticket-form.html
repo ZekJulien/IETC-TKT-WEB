@@ -112,21 +112,23 @@
         </div>
       </div>
 
-      <app-form-field
-        label="ticketForm.assigneeLabel"
-        [control]="form.controls.assignedTo"
-        forId="ticket-assignee"
-      >
-        <select id="ticket-assignee" class="ticket-form__select" formControlName="assignedTo">
-          <option value="">{{ 'ticketForm.assigneeUnassigned' | translate }}</option>
-          @for (member of assignableMembers(); track member.accountId) {
-            <option [value]="member.accountId">{{ memberLabel(member) }}</option>
+      @if (canAssign()) {
+        <app-form-field
+          label="ticketForm.assigneeLabel"
+          [control]="form.controls.assignedTo"
+          forId="ticket-assignee"
+        >
+          <select id="ticket-assignee" class="ticket-form__select" formControlName="assignedTo">
+            <option value="">{{ 'ticketForm.assigneeUnassigned' | translate }}</option>
+            @for (member of assignableMembers(); track member.accountId) {
+              <option [value]="member.accountId">{{ memberLabel(member) }}</option>
+            }
+          </select>
+          @if (membersLoading()) {
+            <p class="ticket-form__hint">{{ 'ticketForm.assigneeLoading' | translate }}</p>
           }
-        </select>
-        @if (membersLoading()) {
-          <p class="ticket-form__hint">{{ 'ticketForm.assigneeLoading' | translate }}</p>
-        }
-      </app-form-field>
+        </app-form-field>
+      }
 
       <app-form-field label="ticketForm.dueDateLabel" forId="ticket-due-date">
         <input

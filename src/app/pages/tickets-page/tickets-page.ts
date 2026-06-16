@@ -7,7 +7,7 @@ import { Button } from '../../components/ui/button/button';
 import { TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { TICKET_STATUSES, TicketStatus } from '../../models/tickets';
-import { MembersStore } from '../../state/companies';
+import { DirectoryStore } from '../../state/companies';
 import { TenantStore } from '../../state/tenant';
 import { TICKET_PAGE_SIZES, TicketsListStore } from '../../state/tickets';
 
@@ -25,7 +25,7 @@ interface StatusCounter {
 })
 export class TicketsPage implements OnInit {
   private readonly tenant = inject(TenantStore);
-  private readonly members = inject(MembersStore);
+  private readonly directory = inject(DirectoryStore);
   protected readonly store = inject(TicketsListStore);
 
   protected readonly newTicketRoute = '/' + AppRoute.CreateTicket;
@@ -43,7 +43,7 @@ export class TicketsPage implements OnInit {
   ngOnInit(): void {
     const companyId = this.tenant.activeCompanyId();
     if (companyId) {
-      this.members.load(companyId);
+      this.directory.ensure(companyId);
     }
     this.store.load();
   }

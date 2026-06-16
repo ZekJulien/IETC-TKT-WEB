@@ -1,0 +1,119 @@
+<section class="comments">
+  <h2 class="comments__title">{{ 'ticketComments.title' | translate }}</h2>
+
+  <form class="comments__composer" [formGroup]="newForm" (ngSubmit)="submitNew()">
+    <textarea
+      class="comments__textarea"
+      rows="3"
+      formControlName="content"
+      [placeholder]="'ticketComments.placeholder' | translate"
+    ></textarea>
+    <div class="comments__composer-actions">
+      @if (canViewInternal()) {
+        <label class="comments__internal">
+          <input type="checkbox" formControlName="isInternal" />
+          {{ 'ticketComments.internalToggle' | translate }}
+        </label>
+      }
+      <app-button type="submit" variant="primary" [loading]="store.saving()">
+        {{ 'ticketComments.submit' | translate }}
+      </app-button>
+    </div>
+  </form>
+
+  @if (store.saveError(); as err) {
+    <div class="comments__alert" role="alert">{{ err }}</div>
+  }
+
+  @if (store.loading()) {
+    <p class="comments__muted">{{ 'ticketComments.loading' | translate }}</p>
+  } @else if (store.error(); as err) {
+    <div class="comments__alert" role="alert">{{ err }}</div>
+  } @else if (roots().length === 0) {
+    <p class="comments__muted">{{ 'ticketComments.empty' | translate }}</p>
+  } @else {
+    <div class="comments__thread">
+      @for (comment of roots(); track comment.commentId) {
+        <ng-container *ngTemplateOutlet="commentNode; context: { $implicit: comment, depth: 0 }" />
+      }
+    </div>
+  }
+</section>
+
+<ng-template #commentNode let-comment let-depth="depth">
+  <article class="comment" [style.--depth]="depth > 3 ? 3 : depth">
+    <span class="comment__avatar" aria-hidden="true">{{ authorInitials(comment.accountId) }}</span>
+
+    <div class="comment__body">
+      <header class="comment__head">
+        <span class="comment__author">{{ authorName(comment.accountId) }}</span>
+        @if (comment.isInternal) {
+          <span class="comment__internal-badge">{{
+            'ticketComments.internalBadge' | translate
+          }}</span>
+        }
+        <span class="comment__date">{{ comment.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+        @if (comment.editedAt) {
+          <span class="comment__edited">({{ 'ticketComments.edited' | translate }})</span>
+        }
+      </header>
+
+      @if (editingId() === comment.commentId) {
+        <textarea class="comments__textarea" rows="3" [formControl]="editControl"></textarea>
+        <div class="comment__actions">
+          <app-button variant="ghost" (click)="cancelEdit()">
+            {{ 'ticketComments.cancel' | translate }}
+          </app-button>
+          <app-button
+            variant="primary"
+            [loading]="store.saving()"
+            (click)="submitEdit(comment.commentId)"
+          >
+            {{ 'ticketComments.save' | translate }}
+          </app-button>
+        </div>
+      } @else {
+        <p class="comment__content">{{ comment.content }}</p>
+        <div class="comment__actions">
+          <button type="button" class="comment__link" (click)="startReply(comment.commentId)">
+            {{ 'ticketComments.reply' | translate }}
+          </button>
+          @if (isOwn(comment)) {
+            <button type="button" class="comment__link" (click)="startEdit(comment)">
+              {{ 'ticketComments.edit' | translate }}
+            </button>
+          }
+        </div>
+      }
+
+      @if (replyingTo() === comment.commentId) {
+        <div class="comment__reply">
+          <textarea
+            class="comments__textarea"
+            rows="2"
+            [formControl]="replyControl"
+            [placeholder]="'ticketComments.replyPlaceholder' | translate"
+          ></textarea>
+          <div class="comment__actions">
+            <app-button variant="ghost" (click)="cancelReply()">
+              {{ 'ticketComments.cancel' | translate }}
+            </app-button>
+            <app-button
+              variant="primary"
+              [loading]="store.saving()"
+              (click)="submitReply(comment.commentId)"
+            >
+              {{ 'ticketComments.reply' | translate }}
+            </app-button>
+          </div>
+        </div>
+      }
+
+      @for (child of childrenOf(comment.commentId); track child.commentId) {
+        <ng-container
+          *ngTemplateOutlet="commentNode; context: { $implicit: child, depth: depth + 1 }"
+        />
+      }
+    </div>
+  </article>
+</ng-template>

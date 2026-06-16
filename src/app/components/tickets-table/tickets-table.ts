@@ -8,7 +8,7 @@ import { DatatableColumn } from '../ui/datatable/datatable-column';
 import { I18nStore, TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { formatTicketNumber, TicketPriority, TicketStatus } from '../../models/tickets';
-import { MembersStore } from '../../state/companies';
+import { DirectoryStore } from '../../state/companies';
 import { TicketsListStore } from '../../state/tickets';
 
 @Component({
@@ -19,20 +19,10 @@ import { TicketsListStore } from '../../state/tickets';
 })
 export class TicketsTable {
   private readonly i18n = inject(I18nStore);
-  private readonly members = inject(MembersStore);
+  private readonly directory = inject(DirectoryStore);
   protected readonly store = inject(TicketsListStore);
 
   protected readonly formatNumber = formatTicketNumber;
-
-  private readonly assigneeNames = computed(() => {
-    const map = new Map<string, string>();
-    for (const member of this.members.members()) {
-      if (member.accountId) {
-        map.set(member.accountId, member.displayName?.trim() || member.email);
-      }
-    }
-    return map;
-  });
 
   protected readonly columns = computed<DatatableColumn[]>(() => [
     {
@@ -103,6 +93,6 @@ export class TicketsTable {
     if (!assignedTo) {
       return this.i18n.t('ticketsPage.unassigned');
     }
-    return this.assigneeNames().get(assignedTo) ?? this.i18n.t('ticketsPage.unassigned');
+    return this.directory.nameById().get(assignedTo) ?? this.i18n.t('ticketsPage.unassigned');
   }
 }
