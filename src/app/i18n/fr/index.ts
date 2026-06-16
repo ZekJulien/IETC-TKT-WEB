@@ -9,6 +9,7 @@ import { onboardingPage } from './onboarding-page';
 import { passwordRules } from './password-rules';
 import { registerPage } from './register-page';
 import { tenant } from './tenant';
+import { ticketForm } from './ticket-form';
 import { verifyEmailPage } from './verify-email-page';
 
 export const fr = {
@@ -24,4 +25,5 @@ export const fr = {
   maintenancePage,
   navbar,
   tenant,
+  ticketForm,
 };

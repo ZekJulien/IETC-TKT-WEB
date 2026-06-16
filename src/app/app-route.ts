@@ -6,5 +6,6 @@ export const AppRoute = {
   Onboarding: 'onboarding',
   Dashboard: 'dashboard',
   Members: 'members',
+  CreateTicket: 'tickets/new',
   Maintenance: 'maintenance',
 } as const;

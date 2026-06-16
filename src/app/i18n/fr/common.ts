@@ -13,6 +13,7 @@ export const common = {
   errors: {
     required: 'Ce champ est requis.',
     email: 'Format d’email invalide.',
+    minlength: 'Ce champ est trop court.',
     maxlength: 'Ce champ est trop long.',
     passwordRules: 'MDP : 8 caractères, 1 majuscule, 1 chiffre minimum.',
     passwordMismatch: 'Les mots de passe ne correspondent pas.',

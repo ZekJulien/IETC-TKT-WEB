@@ -1,0 +1,14 @@
+<section class="create-ticket">
+  <header class="create-ticket__head">
+    <div class="create-ticket__heading">
+      <h1 class="create-ticket__title">{{ 'ticketForm.title' | translate }}</h1>
+      <p class="create-ticket__sub">{{ 'ticketForm.subtitle' | translate }}</p>
+    </div>
+  </header>
+
+  <div class="create-ticket__panel">
+    @if (companyId(); as id) {
+      <app-ticket-form [companyId]="id" (done)="onDone()" />
+    }
+  </div>
+</section>

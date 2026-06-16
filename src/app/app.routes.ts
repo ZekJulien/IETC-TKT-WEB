@@ -51,6 +51,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/members-page/members-page').then((m) => m.MembersPage),
       },
+      {
+        path: AppRoute.CreateTicket,
+        loadComponent: () =>
+          import('./pages/create-ticket-page/create-ticket-page').then((m) => m.CreateTicketPage),
+      },
     ],
   },
   {
