@@ -1,0 +1,55 @@
+<div class="toolbar">
+  <div class="toolbar__row">
+    <div class="toolbar__filters">
+      <label class="toolbar__field">
+        <span class="toolbar__label">{{ 'ticketsPage.filters.priority' | translate }}</span>
+        <select
+          class="toolbar__select"
+          [value]="store.priority() ?? ''"
+          (change)="onPriority($event)"
+        >
+          <option value="">{{ 'ticketsPage.filters.all' | translate }}</option>
+          @for (priority of priorities; track priority) {
+            <option [value]="priority">{{ priorityLabelKey(priority) | translate }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="toolbar__field">
+        <span class="toolbar__label">{{ 'ticketsPage.filters.assignee' | translate }}</span>
+        <select
+          class="toolbar__select"
+          [value]="store.assignedTo() ?? ''"
+          (change)="onAssignee($event)"
+        >
+          <option value="">{{ 'ticketsPage.filters.all' | translate }}</option>
+          @for (member of assignableMembers(); track member.accountId) {
+            <option [value]="member.accountId">{{ assigneeName(member.accountId) }}</option>
+          }
+        </select>
+      </label>
+    </div>
+
+    @if (store.hasActiveFilters()) {
+      <div class="toolbar__active">
+        <div class="toolbar__chips">
+          @if (store.priority(); as priority) {
+            <button type="button" class="toolbar__chip" (click)="store.setPriority(null)">
+              {{ priorityLabelKey(priority) | translate }}
+              <span class="toolbar__chip-x" aria-hidden="true">×</span>
+            </button>
+          }
+          @if (store.assignedTo(); as assignee) {
+            <button type="button" class="toolbar__chip" (click)="store.setAssignee(null)">
+              {{ assigneeName(assignee) }}
+              <span class="toolbar__chip-x" aria-hidden="true">×</span>
+            </button>
+          }
+        </div>
+        <app-button variant="ghost" (click)="store.resetFilters()">
+          {{ 'ticketsPage.filters.reset' | translate }}
+        </app-button>
+      </div>
+    }
+  </div>
+</div>

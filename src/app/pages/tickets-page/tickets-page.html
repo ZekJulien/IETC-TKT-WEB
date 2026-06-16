@@ -1,0 +1,78 @@
+<section class="tickets">
+  <header class="tickets__head">
+    <div class="tickets__heading">
+      <h1 class="tickets__title">{{ 'ticketsPage.title' | translate }}</h1>
+      <p class="tickets__sub">{{ 'ticketsPage.subtitle' | translate }}</p>
+    </div>
+
+    <app-button variant="primary" [routerLink]="newTicketRoute">
+      {{ 'ticketsPage.newTicket' | translate }}
+    </app-button>
+  </header>
+
+  <div class="tickets__counters" role="tablist">
+    <button
+      type="button"
+      class="tickets__counter"
+      [class.is-active]="store.status() === null"
+      (click)="store.setStatus(null)"
+    >
+      {{ 'ticketsPage.counters.all' | translate }}
+    </button>
+    @for (counter of counters(); track counter.status) {
+      <button
+        type="button"
+        class="tickets__counter"
+        [class.is-active]="store.status() === counter.status"
+        (click)="store.setStatus(counter.status)"
+      >
+        {{ counter.labelKey | translate }}
+        <span class="tickets__counter-badge">{{ counter.count }}</span>
+      </button>
+    }
+  </div>
+
+  <div class="tickets__panel">
+    <app-tickets-toolbar />
+    <app-tickets-table />
+
+    <footer class="tickets__footer">
+      <span class="tickets__results">
+        {{ 'ticketsPage.pagination.results' | translate: { total: store.total() } }}
+      </span>
+
+      <div class="tickets__pager">
+        <app-button
+          variant="ghost"
+          [disabled]="store.page() <= 1"
+          (click)="store.setPage(store.page() - 1)"
+        >
+          {{ 'ticketsPage.pagination.previous' | translate }}
+        </app-button>
+
+        <span class="tickets__page">
+          {{
+            'ticketsPage.pagination.page'
+              | translate: { page: store.page(), totalPages: store.totalPages() || 1 }
+          }}
+        </span>
+
+        <app-button
+          variant="ghost"
+          [disabled]="store.page() >= store.totalPages()"
+          (click)="store.setPage(store.page() + 1)"
+        >
+          {{ 'ticketsPage.pagination.next' | translate }}
+        </app-button>
+
+        <select class="tickets__size" [value]="store.pageSize()" (change)="onPageSize($event)">
+          @for (size of pageSizes; track size) {
+            <option [value]="size">
+              {{ 'ticketsPage.pagination.pageSize' | translate: { size } }}
+            </option>
+          }
+        </select>
+      </div>
+    </footer>
+  </div>
+</section>

@@ -9,6 +9,7 @@ import { Member, MemberStatus } from '../../models/companies';
 import {
   CreateTicketRequest,
   DEFAULT_TICKET_PRIORITY,
+  formatTicketNumber,
   TICKET_PRIORITIES,
   TicketPriority,
 } from '../../models/tickets';
@@ -67,17 +68,7 @@ export class TicketForm implements OnInit {
     return member.displayName?.trim() || member.email;
   }
 
-  protected formatTicketNumber(raw: string): string {
-    const dash = raw.lastIndexOf('-');
-    if (dash === -1) {
-      return raw;
-    }
-    const numPart = raw.slice(dash + 1);
-    if (!/^\d+$/.test(numPart)) {
-      return raw;
-    }
-    return `${raw.slice(0, dash + 1)}${Number(numPart)}`;
-  }
+  protected readonly formatTicketNumber = formatTicketNumber;
 
   protected selectPriority(priority: TicketPriority): void {
     this.form.controls.priority.setValue(priority);
