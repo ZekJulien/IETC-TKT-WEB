@@ -1,0 +1,35 @@
+.create-ticket {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.create-ticket__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.create-ticket__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  color: var(--ink);
+}
+
+.create-ticket__sub {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+  color: var(--ink-soft);
+}
+
+.create-ticket__panel {
+  padding: var(--space-6);
+  background: var(--surface);
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}

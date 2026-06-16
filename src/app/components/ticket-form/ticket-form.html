@@ -1,0 +1,134 @@
+@if (store.result(); as result) {
+  <div class="ticket-form__success" role="status">
+    <span class="ticket-form__success-icon" aria-hidden="true">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M20 6 9 17l-5-5" />
+      </svg>
+    </span>
+    <p class="ticket-form__success-label">{{ 'ticketForm.success.heading' | translate }}</p>
+    <p class="ticket-form__number">{{ formatTicketNumber(result.ticketNumber) }}</p>
+    <p class="ticket-form__success-body">{{ 'ticketForm.success.body' | translate }}</p>
+
+    <div class="ticket-form__actions">
+      <app-button variant="ghost" (click)="createAnother()">
+        {{ 'ticketForm.createAnother' | translate }}
+      </app-button>
+      <app-button variant="primary" (click)="finish()">
+        {{ 'ticketForm.done' | translate }}
+      </app-button>
+    </div>
+  </div>
+} @else {
+  @if (store.error(); as error) {
+    <div class="ticket-form__alert" role="alert">{{ error }}</div>
+  }
+
+  <form class="ticket-form__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <div class="ticket-form__main">
+      <app-form-field
+        label="ticketForm.titleLabel"
+        [control]="form.controls.title"
+        forId="ticket-title"
+      >
+        <div class="ticket-form__title-wrap">
+          <app-input
+            inputId="ticket-title"
+            formControlName="title"
+            autocomplete="off"
+            [placeholder]="'ticketForm.titlePlaceholder' | translate"
+          />
+          <span class="ticket-form__title-meta">
+            @if (form.controls.title.valid) {
+              <span class="ticket-form__check" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.4"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
+              </span>
+            }
+            <span
+              class="ticket-form__counter"
+              [class.is-over]="form.controls.title.value.trim().length > titleMax"
+            >
+              {{
+                'ticketForm.titleHint'
+                  | translate: { count: form.controls.title.value.trim().length }
+              }}
+            </span>
+          </span>
+        </div>
+      </app-form-field>
+
+      <app-form-field
+        label="ticketForm.descriptionLabel"
+        [control]="form.controls.description"
+        forId="ticket-description"
+      >
+        <textarea
+          id="ticket-description"
+          class="ticket-form__textarea"
+          rows="4"
+          formControlName="description"
+          [placeholder]="'ticketForm.descriptionPlaceholder' | translate"
+        ></textarea>
+      </app-form-field>
+    </div>
+
+    <aside class="ticket-form__aside">
+      <div class="ticket-form__group">
+        <span class="ticket-form__group-label">{{ 'ticketForm.priorityLabel' | translate }}</span>
+        <div class="ticket-form__priorities" role="radiogroup">
+          @for (priority of priorities; track priority) {
+            <button
+              type="button"
+              class="ticket-form__priority"
+              [class.is-active]="form.controls.priority.value === priority"
+              [attr.data-priority]="priority"
+              role="radio"
+              [attr.aria-checked]="form.controls.priority.value === priority"
+              (click)="selectPriority(priority)"
+            >
+              <span class="ticket-form__priority-dot" aria-hidden="true"></span>
+              {{ priorityLabelKey(priority) | translate }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <app-form-field
+        label="ticketForm.assigneeLabel"
+        [control]="form.controls.assignedTo"
+        forId="ticket-assignee"
+      >
+        <select id="ticket-assignee" class="ticket-form__select" formControlName="assignedTo">
+          <option value="">{{ 'ticketForm.assigneeUnassigned' | translate }}</option>
+          @for (member of assignableMembers(); track member.accountId) {
+            <option [value]="member.accountId">{{ memberLabel(member) }}</option>
+          }
+        </select>
+        @if (membersLoading()) {
+          <p class="ticket-form__hint">{{ 'ticketForm.assigneeLoading' | translate }}</p>
+        }
+      </app-form-field>
+
+      <div class="ticket-form__actions">
+        <app-button type="submit" variant="primary" [block]="true" [loading]="store.loading()">
+          {{ 'ticketForm.submit' | translate }}
+        </app-button>
+      </div>
+    </aside>
+  </form>
+}

@@ -9,7 +9,7 @@ import { AuthStore } from '../../state/auth';
 import { TenantStore } from '../../state/tenant';
 import { TenantSwitcher } from '../tenant-switcher/tenant-switcher';
 
-type NavIcon = 'dashboard' | 'members';
+type NavIcon = 'dashboard' | 'members' | 'new-ticket';
 
 interface NavItem {
   route: string;
@@ -46,6 +46,12 @@ export class Navbar {
       route: AppRoute.Dashboard,
       labelKey: 'navbar.dashboard',
       icon: 'dashboard',
+      show: signal(true),
+    },
+    {
+      route: AppRoute.CreateTicket,
+      labelKey: 'navbar.newTicket',
+      icon: 'new-ticket',
       show: signal(true),
     },
     {
