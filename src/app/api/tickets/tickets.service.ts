@@ -8,6 +8,7 @@ import {
   TicketDetail,
   TicketListQuery,
   TicketListResponse,
+  UpdateTicketRequest,
 } from '../../models/tickets';
 
 @Injectable({
@@ -33,5 +34,9 @@ export class TicketsService {
 
   getTicket(ticketId: string): Observable<TicketDetail> {
     return this.http.get<TicketDetail>(`${this.apiUrl}/tickets/${ticketId}`);
+  }
+
+  updateTicket(ticketId: string, payload: UpdateTicketRequest): Observable<TicketDetail> {
+    return this.http.patch<TicketDetail>(`${this.apiUrl}/tickets/${ticketId}`, payload);
   }
 }

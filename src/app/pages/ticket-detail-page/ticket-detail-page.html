@@ -22,95 +22,185 @@
     <div class="detail__alert" role="alert">{{ err }}</div>
   } @else if (store.detail(); as ticket) {
     <header class="detail__head">
-      <span class="detail__number">{{ formatNumber(ticket.ticketNumber) }}</span>
-      <h1 class="detail__title">{{ ticket.title }}</h1>
-      <div class="detail__badges">
-        <app-badge [tone]="statusTone(ticket.status)">
-          {{ statusLabelKey(ticket.status) | translate }}
-        </app-badge>
-        <app-badge [tone]="priorityTone(ticket.priority)">
-          {{ priorityLabelKey(ticket.priority) | translate }}
-        </app-badge>
-        @if (ticket.isLocked) {
-          <app-badge tone="neutral">{{ 'ticketDetailPage.locked' | translate }}</app-badge>
+      <div class="detail__heading">
+        <span class="detail__number">{{ formatNumber(ticket.ticketNumber) }}</span>
+        <h1 class="detail__title">{{ ticket.title }}</h1>
+        @if (!editing()) {
+          <div class="detail__badges">
+            <app-badge [tone]="statusTone(ticket.status)">
+              {{ statusLabelKey(ticket.status) | translate }}
+            </app-badge>
+            <app-badge [tone]="priorityTone(ticket.priority)">
+              {{ priorityLabelKey(ticket.priority) | translate }}
+            </app-badge>
+            @if (ticket.isLocked) {
+              <app-badge tone="neutral">{{ 'ticketDetailPage.locked' | translate }}</app-badge>
+            }
+          </div>
         }
       </div>
+
+      @if (canModify()) {
+        <div class="detail__head-actions">
+          @if (editing()) {
+            <app-button variant="ghost" (click)="cancelEdit()">
+              {{ 'ticketEdit.cancel' | translate }}
+            </app-button>
+            <app-button variant="primary" [loading]="saving()" (click)="save()">
+              {{ 'ticketEdit.save' | translate }}
+            </app-button>
+          } @else {
+            <app-button variant="primary" (click)="startEdit()">
+              {{ 'ticketEdit.modify' | translate }}
+            </app-button>
+          }
+        </div>
+      }
     </header>
 
-    <div class="detail__grid">
-      <div class="detail__main">
-        <section class="detail__card">
-          <h2 class="detail__card-title">{{ 'ticketDetailPage.descriptionTitle' | translate }}</h2>
-          @if (ticket.description) {
-            <p class="detail__description">{{ ticket.description }}</p>
-          } @else {
-            <p class="detail__muted">{{ 'ticketDetailPage.noDescription' | translate }}</p>
-          }
-        </section>
+    <form class="detail__form" [formGroup]="form">
+      @if (editing()) {
+        @if (saveError(); as err) {
+          <div class="detail__alert" role="alert">{{ err }}</div>
+        }
 
-        <section class="detail__card detail__card--grow">
-          <h2 class="detail__card-title">{{ 'ticketDetailPage.timeline.title' | translate }}</h2>
-          <ol class="detail__timeline">
-            @for (event of timeline(); track event.labelKey) {
-              <li class="detail__event" [class.is-done]="!!event.date">
-                <span class="detail__event-dot" aria-hidden="true"></span>
-                <span class="detail__event-label">{{ event.labelKey | translate }}</span>
-                <span class="detail__event-date">
-                  @if (event.date) {
-                    {{ event.date | date: 'dd/MM/yyyy HH:mm' }}
-                  } @else {
-                    {{ 'ticketDetailPage.metadata.none' | translate }}
-                  }
-                </span>
-              </li>
+        <div class="detail__editbar">
+          <div class="detail__field">
+            <span class="detail__field-label">{{ 'ticketEdit.statusLabel' | translate }}</span>
+            <div class="detail__statuses" role="radiogroup">
+              @for (status of statuses; track status) {
+                <button
+                  type="button"
+                  class="detail__status"
+                  [class.is-active]="form.controls.status.value === status"
+                  [disabled]="!canSelectStatus(status)"
+                  role="radio"
+                  [attr.aria-checked]="form.controls.status.value === status"
+                  (click)="selectStatus(status)"
+                >
+                  {{ statusLabelKey(status) | translate }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <div class="detail__field">
+            <span class="detail__field-label">{{ 'ticketEdit.priorityLabel' | translate }}</span>
+            <div class="detail__statuses" role="radiogroup">
+              @for (priority of priorities; track priority) {
+                <button
+                  type="button"
+                  class="detail__status"
+                  [class.is-active]="form.controls.priority.value === priority"
+                  role="radio"
+                  [attr.aria-checked]="form.controls.priority.value === priority"
+                  (click)="form.controls.priority.setValue(priority)"
+                >
+                  {{ priorityLabelKey(priority) | translate }}
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="detail__grid">
+        <div class="detail__main">
+          <section class="detail__card">
+            <h2 class="detail__card-title">
+              {{ 'ticketDetailPage.descriptionTitle' | translate }}
+            </h2>
+            @if (ticket.description) {
+              <p class="detail__description">{{ ticket.description }}</p>
+            } @else {
+              <p class="detail__muted">{{ 'ticketDetailPage.noDescription' | translate }}</p>
             }
-          </ol>
-          <p class="detail__note">{{ 'ticketDetailPage.timeline.note' | translate }}</p>
-        </section>
-      </div>
+          </section>
 
-      <aside class="detail__side">
-        <h2 class="detail__card-title">{{ 'ticketDetailPage.metadata.title' | translate }}</h2>
-        <dl class="detail__meta">
-          <div class="detail__meta-row">
-            <dt>{{ 'ticketDetailPage.metadata.assignee' | translate }}</dt>
-            <dd>
-              {{
-                memberName(ticket.assignedTo) ??
-                  ('ticketDetailPage.metadata.unassigned' | translate)
-              }}
-            </dd>
-          </div>
-          <div class="detail__meta-row">
-            <dt>{{ 'ticketDetailPage.metadata.creator' | translate }}</dt>
-            <dd>
-              {{ memberName(ticket.createdBy) ?? ('ticketDetailPage.metadata.none' | translate) }}
-            </dd>
-          </div>
-          <div class="detail__meta-row">
-            <dt>{{ 'ticketDetailPage.metadata.source' | translate }}</dt>
-            <dd>{{ ticket.source }}</dd>
-          </div>
-          <div class="detail__meta-row">
-            <dt>{{ 'ticketDetailPage.metadata.dueDate' | translate }}</dt>
-            <dd>
-              {{
-                ticket.dueDate
-                  ? (ticket.dueDate | date: 'dd/MM/yyyy')
-                  : ('ticketDetailPage.metadata.none' | translate)
-              }}
-            </dd>
-          </div>
-          <div class="detail__meta-row">
-            <dt>{{ 'ticketDetailPage.metadata.category' | translate }}</dt>
-            <dd>{{ ticket.categoryId ?? ('ticketDetailPage.metadata.none' | translate) }}</dd>
-          </div>
-          <div class="detail__meta-row">
-            <dt>{{ 'ticketDetailPage.metadata.team' | translate }}</dt>
-            <dd>{{ ticket.teamId ?? ('ticketDetailPage.metadata.none' | translate) }}</dd>
-          </div>
-        </dl>
-      </aside>
-    </div>
+          <section class="detail__card detail__card--grow">
+            <h2 class="detail__card-title">{{ 'ticketDetailPage.timeline.title' | translate }}</h2>
+            <ol class="detail__timeline">
+              @for (event of timeline(); track event.labelKey) {
+                <li class="detail__event" [class.is-done]="!!event.date">
+                  <span class="detail__event-dot" aria-hidden="true"></span>
+                  <span class="detail__event-label">{{ event.labelKey | translate }}</span>
+                  <span class="detail__event-date">
+                    @if (event.date) {
+                      {{ event.date | date: 'dd/MM/yyyy HH:mm' }}
+                    } @else {
+                      {{ 'ticketDetailPage.metadata.none' | translate }}
+                    }
+                  </span>
+                </li>
+              }
+            </ol>
+            <p class="detail__note">{{ 'ticketDetailPage.timeline.note' | translate }}</p>
+          </section>
+        </div>
+
+        <aside class="detail__side">
+          <h2 class="detail__card-title">{{ 'ticketDetailPage.metadata.title' | translate }}</h2>
+          <dl class="detail__meta">
+            <div class="detail__meta-row">
+              <dt>{{ 'ticketDetailPage.metadata.assignee' | translate }}</dt>
+              @if (editing()) {
+                <dd>
+                  <select class="detail__control" formControlName="assignedTo">
+                    <option value="">{{ 'ticketEdit.unassigned' | translate }}</option>
+                    @for (member of assignableMembers(); track member.accountId) {
+                      <option [value]="member.accountId">{{ memberLabel(member) }}</option>
+                    }
+                  </select>
+                </dd>
+              } @else {
+                <dd>
+                  {{
+                    memberName(ticket.assignedTo) ??
+                      ('ticketDetailPage.metadata.unassigned' | translate)
+                  }}
+                </dd>
+              }
+            </div>
+
+            <div class="detail__meta-row">
+              <dt>{{ 'ticketDetailPage.metadata.creator' | translate }}</dt>
+              <dd>
+                {{ memberName(ticket.createdBy) ?? ('ticketDetailPage.metadata.none' | translate) }}
+              </dd>
+            </div>
+
+            <div class="detail__meta-row">
+              <dt>{{ 'ticketDetailPage.metadata.source' | translate }}</dt>
+              <dd>{{ ticket.source }}</dd>
+            </div>
+
+            <div class="detail__meta-row">
+              <dt>{{ 'ticketDetailPage.metadata.dueDate' | translate }}</dt>
+              @if (editing()) {
+                <dd><input class="detail__control" type="date" formControlName="dueDate" /></dd>
+              } @else {
+                <dd>
+                  {{
+                    ticket.dueDate
+                      ? (ticket.dueDate | date: 'dd/MM/yyyy')
+                      : ('ticketDetailPage.metadata.none' | translate)
+                  }}
+                </dd>
+              }
+            </div>
+
+            <div class="detail__meta-row">
+              <dt>{{ 'ticketDetailPage.metadata.category' | translate }}</dt>
+              <dd>{{ ticket.categoryId ?? ('ticketDetailPage.metadata.none' | translate) }}</dd>
+            </div>
+
+            <div class="detail__meta-row">
+              <dt>{{ 'ticketDetailPage.metadata.team' | translate }}</dt>
+              <dd>{{ ticket.teamId ?? ('ticketDetailPage.metadata.none' | translate) }}</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </form>
   }
 </section>

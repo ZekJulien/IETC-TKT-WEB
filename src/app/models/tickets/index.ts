@@ -4,6 +4,8 @@ export * from './create-ticket-request';
 export * from './create-ticket-response';
 export * from './ticket-list-item';
 export * from './ticket-detail';
+export * from './update-ticket-request';
+export * from './ticket-workflow';
 export * from './ticket-list-response';
 export * from './ticket-list-query';
 export * from './format-ticket-number';

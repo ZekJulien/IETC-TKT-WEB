@@ -16,12 +16,15 @@
     <p class="ticket-form__number">{{ formatTicketNumber(result.ticketNumber) }}</p>
     <p class="ticket-form__success-body">{{ 'ticketForm.success.body' | translate }}</p>
 
-    <div class="ticket-form__actions">
+    <div class="ticket-form__actions ticket-form__actions--success">
       <app-button variant="ghost" (click)="createAnother()">
         {{ 'ticketForm.createAnother' | translate }}
       </app-button>
       <app-button variant="primary" [routerLink]="['/tickets', result.ticketId]">
         {{ 'ticketForm.viewTicket' | translate }}
+      </app-button>
+      <app-button variant="ghost" routerLink="/tickets">
+        {{ 'ticketForm.backToList' | translate }}
       </app-button>
     </div>
   </div>
@@ -73,6 +76,7 @@
       </app-form-field>
 
       <app-form-field
+        class="ticket-form__desc"
         label="ticketForm.descriptionLabel"
         [control]="form.controls.description"
         forId="ticket-description"
@@ -122,6 +126,15 @@
         @if (membersLoading()) {
           <p class="ticket-form__hint">{{ 'ticketForm.assigneeLoading' | translate }}</p>
         }
+      </app-form-field>
+
+      <app-form-field label="ticketForm.dueDateLabel" forId="ticket-due-date">
+        <input
+          id="ticket-due-date"
+          class="ticket-form__select"
+          type="date"
+          formControlName="dueDate"
+        />
       </app-form-field>
 
       <div class="ticket-form__actions">

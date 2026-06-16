@@ -18,9 +18,11 @@ export const ticketForm = {
   assigneeLabel: 'Assigné à',
   assigneeUnassigned: 'Non assigné',
   assigneeLoading: 'Chargement des membres…',
+  dueDateLabel: 'Échéance',
   cancel: 'Annuler',
   submit: 'Créer le ticket',
   createAnother: 'Créer un autre ticket',
+  backToList: 'Retour aux tickets',
   viewTicket: 'Voir le ticket',
   done: 'Terminer',
   success: {
