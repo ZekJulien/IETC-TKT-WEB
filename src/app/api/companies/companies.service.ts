@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import {
   ChangeMemberRoleResponse,
   CompanyRole,
+  DirectoryMember,
   InviteMemberRequest,
   InviteMemberResponse,
   MemberListResponse,
@@ -24,6 +25,12 @@ export interface ListMembersParams {
 export class CompaniesService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = environment.apiUrl;
+
+  listDirectory(companyId: string): Observable<DirectoryMember[]> {
+    return this.http.get<DirectoryMember[]>(
+      `${this.apiUrl}/companies/${companyId}/members/directory`,
+    );
+  }
 
   inviteMember(companyId: string, payload: InviteMemberRequest): Observable<InviteMemberResponse> {
     return this.http.post<InviteMemberResponse>(

@@ -4,11 +4,12 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { TicketsService } from '../../api/tickets';
+import { TicketComments } from '../../components/ticket-comments/ticket-comments';
 import { Badge, BadgeTone } from '../../components/ui/badge/badge';
 import { Button } from '../../components/ui/button/button';
 import { I18nStore, TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
-import { CompanyRole, Member, MemberStatus } from '../../models/companies';
+import { CompanyRole, DirectoryMember, directoryMemberName } from '../../models/companies';
 import {
   canTransition,
   formatTicketNumber,
@@ -18,7 +19,7 @@ import {
   TicketStatus,
   UpdateTicketRequest,
 } from '../../models/tickets';
-import { MembersStore } from '../../state/companies';
+import { DirectoryStore } from '../../state/companies';
 import { TenantStore } from '../../state/tenant';
 import { TicketDetailStore } from '../../state/tickets';
 
@@ -35,7 +36,15 @@ interface TimelineEvent {
 
 @Component({
   selector: 'app-ticket-detail-page',
-  imports: [DatePipe, RouterLink, ReactiveFormsModule, TranslatePipe, Badge, Button],
+  imports: [
+    DatePipe,
+    RouterLink,
+    ReactiveFormsModule,
+    TranslatePipe,
+    Badge,
+    Button,
+    TicketComments,
+  ],
   templateUrl: './ticket-detail-page.html',
   styleUrl: './ticket-detail-page.css',
 })
@@ -44,7 +53,7 @@ export class TicketDetailPage implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly api = inject(TicketsService);
   private readonly tenant = inject(TenantStore);
-  private readonly members = inject(MembersStore);
+  private readonly directory = inject(DirectoryStore);
   protected readonly store = inject(TicketDetailStore);
 
   protected readonly formatNumber = formatTicketNumber;
@@ -60,19 +69,7 @@ export class TicketDetailPage implements OnInit {
     return role !== null && MODIFIER_ROLES.includes(role);
   });
 
-  protected readonly assignableMembers = computed<Member[]>(() =>
-    this.members.members().filter((m) => m.status === MemberStatus.Active && m.accountId !== null),
-  );
-
-  private readonly memberNames = computed(() => {
-    const map = new Map<string, string>();
-    for (const member of this.members.members()) {
-      if (member.accountId) {
-        map.set(member.accountId, member.displayName?.trim() || member.email);
-      }
-    }
-    return map;
-  });
+  protected readonly assignableMembers = this.directory.assignable;
 
   protected readonly timeline = computed<TimelineEvent[]>(() => {
     const detail = this.store.detail();
@@ -97,7 +94,7 @@ export class TicketDetailPage implements OnInit {
   ngOnInit(): void {
     const companyId = this.tenant.activeCompanyId();
     if (companyId) {
-      this.members.load(companyId);
+      this.directory.ensure(companyId);
     }
     const ticketId = this.route.snapshot.paramMap.get('id');
     if (ticketId) {
@@ -145,11 +142,11 @@ export class TicketDetailPage implements OnInit {
     if (!accountId) {
       return null;
     }
-    return this.memberNames().get(accountId) ?? accountId;
+    return this.directory.nameById().get(accountId) ?? accountId;
   }
 
-  protected memberLabel(member: Member): string {
-    return member.displayName?.trim() || member.email;
+  protected memberLabel(member: DirectoryMember): string {
+    return directoryMemberName(member);
   }
 
   protected canSelectStatus(status: TicketStatus): boolean {
