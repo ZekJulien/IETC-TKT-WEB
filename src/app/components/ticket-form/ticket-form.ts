@@ -50,6 +50,7 @@ export class TicketForm implements OnInit {
     description: ['', [Validators.maxLength(DESCRIPTION_MAX)]],
     priority: [DEFAULT_TICKET_PRIORITY as TicketPriority, [Validators.required]],
     assignedTo: [''],
+    dueDate: [''],
   });
 
   constructor() {
@@ -94,6 +95,9 @@ export class TicketForm implements OnInit {
     if (raw.assignedTo) {
       payload.assignedTo = raw.assignedTo;
     }
+    if (raw.dueDate) {
+      payload.dueDate = `${raw.dueDate}T00:00:00Z`;
+    }
 
     this.store.create(payload);
   }
@@ -104,6 +108,7 @@ export class TicketForm implements OnInit {
       title: '',
       description: '',
       assignedTo: '',
+      dueDate: '',
     });
     this.store.reset();
   }

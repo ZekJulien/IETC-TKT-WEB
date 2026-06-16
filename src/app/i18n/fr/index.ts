@@ -10,6 +10,7 @@ import { passwordRules } from './password-rules';
 import { registerPage } from './register-page';
 import { tenant } from './tenant';
 import { ticketDetailPage } from './ticket-detail-page';
+import { ticketEdit } from './ticket-edit';
 import { ticketForm } from './ticket-form';
 import { ticketsPage } from './tickets-page';
 import { verifyEmailPage } from './verify-email-page';
@@ -30,4 +31,5 @@ export const fr = {
   ticketForm,
   ticketsPage,
   ticketDetailPage,
+  ticketEdit,
 };

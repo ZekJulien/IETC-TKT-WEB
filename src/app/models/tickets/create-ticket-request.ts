@@ -7,4 +7,5 @@ export interface CreateTicketRequest {
   categoryId?: string;
   assignedTo?: string;
   source?: string;
+  dueDate?: string;
 }
