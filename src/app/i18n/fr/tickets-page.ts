@@ -1,0 +1,45 @@
+export const ticketsPage = {
+  title: 'Tickets',
+  subtitle: 'Suivez et filtrez les demandes de votre entreprise.',
+  newTicket: 'Nouveau ticket',
+  loading: 'Chargement des tickets…',
+  empty: 'Aucun ticket à afficher.',
+  counters: {
+    all: 'Tous',
+  },
+  columns: {
+    number: 'N°',
+    title: 'Titre',
+    status: 'Statut',
+    priority: 'Priorité',
+    assignee: 'Assigné',
+    createdAt: 'Créé le',
+  },
+  status: {
+    open: 'Ouvert',
+    in_progress: 'En cours',
+    pending: 'En attente',
+    resolved: 'Résolu',
+    closed: 'Fermé',
+  },
+  filters: {
+    priority: 'Priorité',
+    assignee: 'Assigné',
+    sort: 'Trier par',
+    all: 'Tous',
+    reset: 'Réinitialiser',
+  },
+  sort: {
+    created_at: 'Date de création',
+    priority: 'Priorité',
+    status: 'Statut',
+  },
+  unassigned: 'Non assigné',
+  pagination: {
+    previous: 'Précédent',
+    next: 'Suivant',
+    page: 'Page {page} / {totalPages}',
+    pageSize: '{size} / page',
+    results: '{total} résultat(s)',
+  },
+};
