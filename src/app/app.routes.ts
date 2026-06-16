@@ -61,6 +61,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/create-ticket-page/create-ticket-page').then((m) => m.CreateTicketPage),
       },
+      {
+        path: AppRoute.TicketDetail,
+        loadComponent: () =>
+          import('./pages/ticket-detail-page/ticket-detail-page').then((m) => m.TicketDetailPage),
+      },
     ],
   },
   {

@@ -20,8 +20,8 @@
       <app-button variant="ghost" (click)="createAnother()">
         {{ 'ticketForm.createAnother' | translate }}
       </app-button>
-      <app-button variant="primary" (click)="finish()">
-        {{ 'ticketForm.done' | translate }}
+      <app-button variant="primary" [routerLink]="['/tickets', result.ticketId]">
+        {{ 'ticketForm.viewTicket' | translate }}
       </app-button>
     </div>
   </div>

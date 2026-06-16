@@ -11,11 +11,15 @@
       [emptyLabel]="'ticketsPage.empty' | translate"
     >
       <ng-template appDatatableCell="ticketNumber" let-row>
-        <span class="tickets-table__number">{{ formatNumber(row.ticketNumber) }}</span>
+        <a class="tickets-table__number" [routerLink]="['/tickets', row.ticketId]">
+          {{ formatNumber(row.ticketNumber) }}
+        </a>
       </ng-template>
 
       <ng-template appDatatableCell="title" let-row>
-        <span class="tickets-table__title">{{ row.title }}</span>
+        <a class="tickets-table__title" [routerLink]="['/tickets', row.ticketId]">{{
+          row.title
+        }}</a>
       </ng-template>
 
       <ng-template appDatatableCell="status" let-row>

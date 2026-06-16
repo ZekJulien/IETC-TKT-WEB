@@ -1,5 +1,6 @@
-import { Component, OnInit, computed, inject, input, output } from '@angular/core';
+import { Component, OnInit, computed, inject, input } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { Button } from '../ui/button/button';
 import { FormField } from '../ui/form-field/form-field';
 import { Input } from '../ui/input/input';
@@ -22,7 +23,7 @@ const DESCRIPTION_MAX = 5000;
 
 @Component({
   selector: 'app-ticket-form',
-  imports: [ReactiveFormsModule, TranslatePipe, Button, FormField, Input],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, Button, FormField, Input],
   templateUrl: './ticket-form.html',
   styleUrl: './ticket-form.css',
 })
@@ -32,7 +33,6 @@ export class TicketForm implements OnInit {
   readonly store = inject(TicketCreateStore);
 
   readonly companyId = input.required<string>();
-  readonly done = output<void>();
 
   protected readonly priorities = TICKET_PRIORITIES;
   protected readonly titleMax = TITLE_MAX;
@@ -106,9 +106,5 @@ export class TicketForm implements OnInit {
       assignedTo: '',
     });
     this.store.reset();
-  }
-
-  protected finish(): void {
-    this.done.emit();
   }
 }

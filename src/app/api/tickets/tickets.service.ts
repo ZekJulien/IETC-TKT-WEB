@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import {
   CreateTicketRequest,
   CreateTicketResponse,
+  TicketDetail,
   TicketListQuery,
   TicketListResponse,
 } from '../../models/tickets';
@@ -28,5 +29,9 @@ export class TicketsService {
       }
     }
     return this.http.get<TicketListResponse>(`${this.apiUrl}/tickets`, { params });
+  }
+
+  getTicket(ticketId: string): Observable<TicketDetail> {
+    return this.http.get<TicketDetail>(`${this.apiUrl}/tickets/${ticketId}`);
   }
 }
