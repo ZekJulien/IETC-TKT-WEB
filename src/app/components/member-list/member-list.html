@@ -2,7 +2,7 @@
   <div class="member-list__alert" role="alert">{{ err }}</div>
 }
 
-@if (store.loading()) {
+@if (store.loading() && store.members().length === 0) {
   <p class="member-list__muted">{{ 'membersPage.loading' | translate }}</p>
 } @else if (store.error(); as err) {
   <div class="member-list__alert" role="alert">{{ err }}</div>

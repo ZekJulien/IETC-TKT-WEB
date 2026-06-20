@@ -40,6 +40,6 @@
   (closed)="closeModal()"
 >
   @if (open() && companyId(); as companyId) {
-    <app-invite-member [companyId]="companyId" (done)="closeModal()" />
+    <app-invite-member [companyId]="companyId" (done)="onInvited()" />
   }
 </app-modal>

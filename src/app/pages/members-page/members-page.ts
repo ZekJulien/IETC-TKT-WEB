@@ -44,6 +44,10 @@ export class MembersPage {
 
   protected closeModal(): void {
     this.open.set(false);
+  }
+
+  protected onInvited(): void {
+    this.open.set(false);
     const id = this.companyId();
     if (id) {
       this.members.load(id);
