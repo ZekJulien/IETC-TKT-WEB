@@ -101,7 +101,7 @@
 
 .auth__panel {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: var(--space-6);
   background: var(--bg);
@@ -111,6 +111,7 @@
 .auth__content {
   width: 100%;
   max-width: 392px;
+  margin: auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
