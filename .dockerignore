@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.angular/
+.git/
+.github/
+.idea/
+.vscode/
+.claude/
+*.log
+.env
+.env.*
+!.env.example
+Dockerfile
+.dockerignore
