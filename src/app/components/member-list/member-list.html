@@ -3,7 +3,7 @@
 }
 
 @if (store.loading() && store.members().length === 0) {
-  <p class="member-list__muted">{{ 'membersPage.loading' | translate }}</p>
+  <app-muted pad>{{ 'membersPage.loading' | translate }}</app-muted>
 } @else if (store.error(); as err) {
   <app-alert>{{ err }}</app-alert>
 } @else {

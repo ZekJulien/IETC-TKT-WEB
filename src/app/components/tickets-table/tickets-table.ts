@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { Datatable } from '../ui/datatable/datatable';
 import { DatatableCell } from '../ui/datatable/datatable-cell';
 import { DatatableColumn } from '../ui/datatable/datatable-column';
+import { Muted } from '../ui/muted/muted';
 import { TicketPriorityBadge } from '../ui/ticket-priority-badge/ticket-priority-badge';
 import { TicketStatusBadge } from '../ui/ticket-status-badge/ticket-status-badge';
 import { I18nStore } from '../../i18n/i18n-store';
@@ -22,6 +23,7 @@ import { TicketsListStore } from '../../state/tickets';
     TranslatePipe,
     Datatable,
     DatatableCell,
+    Muted,
     TicketStatusBadge,
     TicketPriorityBadge,
   ],

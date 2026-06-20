@@ -1,5 +1,5 @@
 @if (store.loading() && !store.loaded()) {
-  <p class="tickets-table__muted">{{ 'ticketsPage.loading' | translate }}</p>
+  <app-muted pad>{{ 'ticketsPage.loading' | translate }}</app-muted>
 } @else if (store.error(); as err) {
   <app-alert>{{ err }}</app-alert>
 } @else {

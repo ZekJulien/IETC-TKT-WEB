@@ -2,13 +2,6 @@
   display: block;
 }
 
-.member-list__muted {
-  margin: 0;
-  padding: var(--space-5);
-  font-size: var(--text-sm);
-  color: var(--ink-faint);
-}
-
 
 .member-list__name {
   font-weight: var(--weight-medium);

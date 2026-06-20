@@ -19,13 +19,6 @@
   color: var(--accent);
 }
 
-.detail__muted {
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--ink-faint);
-}
-
-
 /* ---- Header ---- */
 .detail__head {
   display: flex;

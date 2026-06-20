@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--ink-faint);
+}
+
+:host(.muted--base) {
+  font-size: var(--text-base);
+}
+
+:host(.muted--pad) {
+  padding: var(--space-5);
+}

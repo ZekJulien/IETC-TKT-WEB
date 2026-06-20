@@ -11,6 +11,7 @@ import {
 } from '@lucide/angular';
 import { AppRoute } from '../../app-route';
 import { KpiAccent, KpiCard } from '../../components/ui/kpi-card/kpi-card';
+import { Muted } from '../../components/ui/muted/muted';
 import { PageHeader } from '../../components/ui/page-header/page-header';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { TranslationKey } from '../../i18n/i18n-store';
@@ -35,6 +36,7 @@ interface KpiCardData {
     TranslatePipe,
     KpiCard,
     PageHeader,
+    Muted,
     LucideInbox,
     LucideHourglass,
     LucideLoader,

@@ -13,13 +13,6 @@
   flex: 1;
 }
 
-.tickets-table__muted {
-  margin: 0;
-  padding: var(--space-5);
-  font-size: var(--text-sm);
-  color: var(--ink-faint);
-}
-
 
 .tickets-table__number {
   font-variant-numeric: tabular-nums;

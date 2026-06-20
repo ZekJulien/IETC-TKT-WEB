@@ -17,7 +17,7 @@
   </a>
 
   @if (store.loading()) {
-    <p class="detail__muted">{{ 'ticketDetailPage.loading' | translate }}</p>
+    <app-muted>{{ 'ticketDetailPage.loading' | translate }}</app-muted>
   } @else if (store.error(); as err) {
     <app-alert>{{ err }}</app-alert>
   } @else if (store.detail(); as ticket) {
@@ -109,7 +109,7 @@
             @if (ticket.description) {
               <p class="detail__description">{{ ticket.description }}</p>
             } @else {
-              <p class="detail__muted">{{ 'ticketDetailPage.noDescription' | translate }}</p>
+              <app-muted>{{ 'ticketDetailPage.noDescription' | translate }}</app-muted>
             }
           </section>
 

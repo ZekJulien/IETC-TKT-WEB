@@ -33,12 +33,6 @@
   height: 16px;
 }
 
-.dash__muted {
-  color: var(--ink-faint);
-  font-size: var(--text-base);
-}
-
-
 .dash__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));

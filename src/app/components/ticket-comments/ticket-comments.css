@@ -21,11 +21,6 @@
   color: var(--ink-faint);
 }
 
-.comments__muted {
-  margin: 0;
-  font-size: var(--text-sm);
-  color: var(--ink-faint);
-}
 
 
 /* ---- Composer ---- */

@@ -35,11 +35,11 @@
   }
 
   @if (store.loading()) {
-    <p class="comments__muted">{{ 'ticketComments.loading' | translate }}</p>
+    <app-muted>{{ 'ticketComments.loading' | translate }}</app-muted>
   } @else if (store.error(); as err) {
     <app-alert>{{ err }}</app-alert>
   } @else if (roots().length === 0) {
-    <p class="comments__muted">{{ 'ticketComments.empty' | translate }}</p>
+    <app-muted>{{ 'ticketComments.empty' | translate }}</app-muted>
   } @else {
     <div class="comments__thread">
       @for (comment of roots(); track comment.commentId) {

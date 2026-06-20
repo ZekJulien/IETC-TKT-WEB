@@ -7,6 +7,7 @@ import { Datatable } from '../ui/datatable/datatable';
 import { DatatableCell } from '../ui/datatable/datatable-cell';
 import { DatatableColumn } from '../ui/datatable/datatable-column';
 import { Modal } from '../ui/modal/modal';
+import { Muted } from '../ui/muted/muted';
 import { I18nStore, TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { CompanyRole, INVITABLE_ROLES, Member, MemberStatus } from '../../models/companies';
@@ -14,7 +15,7 @@ import { MembersStore } from '../../state/companies';
 
 @Component({
   selector: 'app-member-list',
-  imports: [Alert, DatePipe, TranslatePipe, Datatable, DatatableCell, Badge, Button, Modal],
+  imports: [Alert, DatePipe, TranslatePipe, Datatable, DatatableCell, Badge, Button, Modal, Muted],
   templateUrl: './member-list.html',
   styleUrl: './member-list.css',
 })

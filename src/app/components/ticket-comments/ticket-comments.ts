@@ -3,6 +3,7 @@ import { Component, OnInit, computed, inject, input, output, signal } from '@ang
 import { Alert } from '../ui/alert/alert';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from '../ui/button/button';
+import { Muted } from '../ui/muted/muted';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { CompanyRole } from '../../models/companies';
 import { Comment } from '../../models/tickets';
@@ -21,7 +22,7 @@ const CONTENT_MAX = 10000;
 
 @Component({
   selector: 'app-ticket-comments',
-  imports: [Alert, DatePipe, NgTemplateOutlet, ReactiveFormsModule, TranslatePipe, Button],
+  imports: [Alert, DatePipe, NgTemplateOutlet, ReactiveFormsModule, TranslatePipe, Button, Muted],
   templateUrl: './ticket-comments.html',
   styleUrl: './ticket-comments.css',
 })
