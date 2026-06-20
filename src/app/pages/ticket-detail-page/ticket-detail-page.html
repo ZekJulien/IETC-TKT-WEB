@@ -141,12 +141,12 @@
               <dt>{{ 'ticketDetailPage.metadata.assignee' | translate }}</dt>
               @if (editing()) {
                 <dd>
-                  <select class="detail__control" formControlName="assignedTo">
+                  <app-select formControlName="assignedTo">
                     <option value="">{{ 'ticketEdit.unassigned' | translate }}</option>
                     @for (member of assignableMembers(); track member.accountId) {
                       <option [value]="member.accountId">{{ memberLabel(member) }}</option>
                     }
-                  </select>
+                  </app-select>
                 </dd>
               } @else {
                 <dd>
@@ -173,7 +173,7 @@
             <div class="detail__meta-row">
               <dt>{{ 'ticketDetailPage.metadata.dueDate' | translate }}</dt>
               @if (editing()) {
-                <dd><input class="detail__control" type="date" formControlName="dueDate" /></dd>
+                <dd><app-input type="date" formControlName="dueDate" /></dd>
               } @else {
                 <dd>
                   {{

@@ -60,13 +60,13 @@
           {{ 'ticketsPage.pagination.next' | translate }}
         </app-button>
 
-        <select class="tickets__size" [value]="store.pageSize()" (change)="onPageSize($event)">
+        <app-select size="sm" [block]="false" [value]="store.pageSize()" (changed)="onPageSize($event)">
           @for (size of pageSizes; track size) {
             <option [value]="size">
               {{ 'ticketsPage.pagination.pageSize' | translate: { size } }}
             </option>
           }
-        </select>
+        </app-select>
       </div>
     </footer>
   </div>

@@ -3,31 +3,33 @@
     <div class="toolbar__filters">
       <label class="toolbar__field">
         <span class="toolbar__label">{{ 'ticketsPage.filters.priority' | translate }}</span>
-        <select
-          class="toolbar__select"
+        <app-select
+          size="sm"
+          [block]="false"
           [value]="store.priority() ?? ''"
-          (change)="onPriority($event)"
+          (changed)="onPriority($event)"
         >
           <option value="">{{ 'ticketsPage.filters.all' | translate }}</option>
           @for (priority of priorities; track priority) {
             <option [value]="priority">{{ priorityLabelKey(priority) | translate }}</option>
           }
-        </select>
+        </app-select>
       </label>
 
       <label class="toolbar__field">
         <span class="toolbar__label">{{ 'ticketsPage.filters.assignee' | translate }}</span>
-        <select
-          class="toolbar__select"
+        <app-select
+          size="sm"
+          [block]="false"
           [value]="store.assignedTo() ?? ''"
-          (change)="onAssignee($event)"
+          (changed)="onAssignee($event)"
         >
           <option value="">{{ 'ticketsPage.filters.all' | translate }}</option>
           <option [value]="unassigned">{{ 'ticketsPage.unassigned' | translate }}</option>
           @for (member of assignableMembers(); track member.accountId) {
             <option [value]="member.accountId">{{ assigneeName(member.accountId) }}</option>
           }
-        </select>
+        </app-select>
       </label>
     </div>
 

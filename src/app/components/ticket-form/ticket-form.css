@@ -199,26 +199,6 @@
   box-shadow: inset 0 0 0 1px var(--tone);
 }
 
-/* ---- Select ---- */
-.ticket-form__select {
-  width: 100%;
-  padding: 10px 13px;
-  font-family: var(--font-ui);
-  font-size: var(--text-base);
-  color: var(--ink);
-  background: var(--surface);
-  border: 1px solid var(--paper-edge);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-xs);
-  cursor: pointer;
-}
-
-.ticket-form__select:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-tint);
-}
-
 .ticket-form__hint {
   margin: var(--space-2) 0 0;
   font-size: var(--text-xs);

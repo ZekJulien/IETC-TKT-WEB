@@ -1,0 +1,42 @@
+:host {
+  display: inline-block;
+}
+
+:host(.block) {
+  display: block;
+}
+
+.select {
+  width: 100%;
+  padding: 10px 13px;
+  font-family: var(--font-ui);
+  font-size: var(--text-base);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--paper-edge);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs);
+  cursor: pointer;
+  transition:
+    border-color var(--speed-fast) var(--ease-out),
+    box-shadow var(--speed-fast) var(--ease-out);
+}
+
+.select--sm {
+  padding: 8px 11px;
+  font-size: var(--text-sm);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+.select--invalid {
+  border-color: var(--danger);
+}
+
+.select--invalid:focus {
+  box-shadow: 0 0 0 3px var(--danger-tint);
+}

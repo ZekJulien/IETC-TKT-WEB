@@ -5,6 +5,7 @@ import { TicketsTable } from '../../components/tickets-table/tickets-table';
 import { TicketsToolbar } from '../../components/tickets-toolbar/tickets-toolbar';
 import { Button } from '../../components/ui/button/button';
 import { PageHeader } from '../../components/ui/page-header/page-header';
+import { Select } from '../../components/ui/select/select';
 import { TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { ticketStatusLabelKey, TICKET_STATUSES, TicketStatus } from '../../models/tickets';
@@ -20,7 +21,7 @@ interface StatusCounter {
 
 @Component({
   selector: 'app-tickets-page',
-  imports: [RouterLink, TranslatePipe, TicketsTable, TicketsToolbar, Button, PageHeader],
+  imports: [RouterLink, TranslatePipe, TicketsTable, TicketsToolbar, Button, PageHeader, Select],
   templateUrl: './tickets-page.html',
   styleUrl: './tickets-page.css',
 })
@@ -55,7 +56,7 @@ export class TicketsPage implements OnInit {
     this.store.applyQuery({ status, assignedTo: params.get('assignee') });
   }
 
-  protected onPageSize(event: Event): void {
-    this.store.setPageSize(Number((event.target as HTMLSelectElement).value));
+  protected onPageSize(value: string): void {
+    this.store.setPageSize(Number(value));
   }
 }

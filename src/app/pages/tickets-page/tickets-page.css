@@ -100,19 +100,3 @@
   white-space: nowrap;
 }
 
-.tickets__size {
-  padding: 6px 10px;
-  font-family: var(--font-ui);
-  font-size: var(--text-sm);
-  color: var(--ink);
-  background: var(--surface);
-  border: 1px solid var(--paper-edge);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-}
-
-.tickets__size:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-tint);
-}

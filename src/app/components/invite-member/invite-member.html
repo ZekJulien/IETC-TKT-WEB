@@ -34,11 +34,11 @@
     </app-form-field>
 
     <app-form-field label="inviteMember.roleLabel" [control]="form.controls.role" forId="invite-role">
-      <select id="invite-role" class="invite__select" formControlName="role">
+      <app-select selectId="invite-role" formControlName="role">
         @for (role of roles; track role) {
           <option [value]="role">{{ roleLabelKey(role) | translate }}</option>
         }
-      </select>
+      </app-select>
     </app-form-field>
 
     <app-form-field

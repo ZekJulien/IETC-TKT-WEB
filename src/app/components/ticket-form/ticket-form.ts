@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 import { Button } from '../ui/button/button';
 import { FormField } from '../ui/form-field/form-field';
 import { Input } from '../ui/input/input';
+import { Select } from '../ui/select/select';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { CompanyRole, DirectoryMember, directoryMemberName } from '../../models/companies';
 import {
@@ -25,7 +26,7 @@ const DESCRIPTION_MAX = 5000;
 
 @Component({
   selector: 'app-ticket-form',
-  imports: [Alert, ReactiveFormsModule, RouterLink, TranslatePipe, Button, FormField, Input],
+  imports: [Alert, ReactiveFormsModule, RouterLink, TranslatePipe, Button, FormField, Input, Select],
   templateUrl: './ticket-form.html',
   styleUrl: './ticket-form.css',
 })

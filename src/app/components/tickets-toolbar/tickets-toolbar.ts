@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Button } from '../ui/button/button';
+import { Select } from '../ui/select/select';
 import { I18nStore } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { ticketPriorityLabelKey, TICKET_PRIORITIES, UNASSIGNED_ASSIGNEE } from '../../models/tickets';
@@ -8,7 +9,7 @@ import { TicketsListStore } from '../../state/tickets';
 
 @Component({
   selector: 'app-tickets-toolbar',
-  imports: [TranslatePipe, Button],
+  imports: [TranslatePipe, Button, Select],
   templateUrl: './tickets-toolbar.html',
   styleUrl: './tickets-toolbar.css',
 })
@@ -33,13 +34,11 @@ export class TicketsToolbar {
     return this.directory.nameById().get(accountId) ?? accountId;
   }
 
-  protected onPriority(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
+  protected onPriority(value: string): void {
     this.store.setPriority(value || null);
   }
 
-  protected onAssignee(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
+  protected onAssignee(value: string): void {
     this.store.setAssignee(value || null);
   }
 }

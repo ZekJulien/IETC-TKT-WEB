@@ -118,12 +118,12 @@
           [control]="form.controls.assignedTo"
           forId="ticket-assignee"
         >
-          <select id="ticket-assignee" class="ticket-form__select" formControlName="assignedTo">
+          <app-select selectId="ticket-assignee" formControlName="assignedTo">
             <option value="">{{ 'ticketForm.assigneeUnassigned' | translate }}</option>
             @for (member of assignableMembers(); track member.accountId) {
               <option [value]="member.accountId">{{ memberLabel(member) }}</option>
             }
-          </select>
+          </app-select>
           @if (membersLoading()) {
             <p class="ticket-form__hint">{{ 'ticketForm.assigneeLoading' | translate }}</p>
           }

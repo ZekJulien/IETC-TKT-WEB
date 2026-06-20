@@ -99,24 +99,6 @@
   cursor: not-allowed;
 }
 
-.detail__control {
-  padding: 9px 12px;
-  font-family: var(--font-ui);
-  font-size: var(--text-base);
-  color: var(--ink);
-  background: var(--surface);
-  border: 1px solid var(--paper-edge);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-xs);
-  cursor: pointer;
-}
-
-.detail__control:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-tint);
-}
-
 .detail__number {
   font-variant-numeric: tabular-nums;
   font-size: var(--text-sm);
@@ -297,6 +279,3 @@
   word-break: break-word;
 }
 
-.detail__meta-row dd .detail__control {
-  width: 100%;
-}

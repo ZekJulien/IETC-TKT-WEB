@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from '../ui/button/button';
 import { FormField } from '../ui/form-field/form-field';
 import { Input } from '../ui/input/input';
+import { Select } from '../ui/select/select';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { TranslationKey } from '../../i18n/i18n-store';
 import {
@@ -16,7 +17,7 @@ import { InviteStore } from '../../state/companies';
 
 @Component({
   selector: 'app-invite-member',
-  imports: [Alert, ReactiveFormsModule, TranslatePipe, Button, FormField, Input],
+  imports: [Alert, ReactiveFormsModule, TranslatePipe, Button, FormField, Input, Select],
   templateUrl: './invite-member.html',
   styleUrl: './invite-member.css',
 })

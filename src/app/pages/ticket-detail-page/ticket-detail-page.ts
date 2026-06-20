@@ -8,7 +8,9 @@ import { TicketsService } from '../../api/tickets';
 import { TicketComments } from '../../components/ticket-comments/ticket-comments';
 import { Badge } from '../../components/ui/badge/badge';
 import { Button } from '../../components/ui/button/button';
+import { Input } from '../../components/ui/input/input';
 import { Muted } from '../../components/ui/muted/muted';
+import { Select } from '../../components/ui/select/select';
 import { TicketPriorityBadge } from '../../components/ui/ticket-priority-badge/ticket-priority-badge';
 import { TicketStatusBadge } from '../../components/ui/ticket-status-badge/ticket-status-badge';
 import { TranslationKey } from '../../i18n/i18n-store';
@@ -51,6 +53,8 @@ interface TimelineEvent {
     Button,
     TicketComments,
     Muted,
+    Input,
+    Select,
     TicketStatusBadge,
     TicketPriorityBadge,
   ],

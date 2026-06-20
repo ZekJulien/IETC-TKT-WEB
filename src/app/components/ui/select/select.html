@@ -1,0 +1,12 @@
+<select
+  class="select"
+  [class.select--sm]="size() === 'sm'"
+  [class.select--invalid]="invalid"
+  [id]="selectId() || null"
+  [value]="selected()"
+  [disabled]="disabled()"
+  (change)="handleChange($event)"
+  (blur)="handleBlur()"
+>
+  <ng-content />
+</select>
