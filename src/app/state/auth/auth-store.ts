@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable, finalize, map, shareReplay, throwError } from 'rxjs';
+import { NavigationStart, Router } from '@angular/router';
+import { Observable, filter, finalize, map, shareReplay, throwError } from 'rxjs';
 import { AppRoute } from '../../app-route';
 import { AuthService } from '../../api/auth';
 import { LoginRequest, RegisterRequest } from '../../models/auth';
@@ -20,6 +20,12 @@ export class AuthStore {
   readonly error = signal<string | null>(null);
 
   private refreshInFlight: Observable<string> | null = null;
+
+  constructor() {
+    this.router.events
+      .pipe(filter((e) => e instanceof NavigationStart))
+      .subscribe(() => this.error.set(null));
+  }
 
   register(payload: RegisterRequest): void {
     this.loading.set(true);
