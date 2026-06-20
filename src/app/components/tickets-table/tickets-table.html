@@ -9,6 +9,7 @@
       [rows]="store.items()"
       trackKey="ticketId"
       [emptyLabel]="'ticketsPage.empty' | translate"
+      [rowLink]="ticketLink"
     >
       <ng-template appDatatableCell="ticketNumber" let-row>
         <a class="tickets-table__number" [routerLink]="['/tickets', row.ticketId]">

@@ -72,9 +72,13 @@
 
     <tbody>
       @for (row of view(); track trackRow($index, row)) {
-        <tr class="dt__row">
+        <tr
+          class="dt__row"
+          [class.dt__row--clickable]="rowLink()"
+          [routerLink]="linkFor(row)"
+        >
           @for (col of columns(); track col.key) {
-            <td class="dt__td" [style.text-align]="col.align ?? 'start'">
+            <td class="dt__td" [attr.data-label]="col.header" [style.text-align]="col.align ?? 'start'">
               @if (templateFor(col.key); as tpl) {
                 <ng-container [ngTemplateOutlet]="tpl" [ngTemplateOutletContext]="{ $implicit: row }" />
               } @else {

@@ -24,6 +24,11 @@ export class TicketsTable {
 
   protected readonly formatNumber = formatTicketNumber;
 
+  protected readonly ticketLink = (row: unknown): unknown[] => [
+    '/tickets',
+    (row as { ticketId: string }).ticketId,
+  ];
+
   protected readonly columns = computed<DatatableColumn[]>(() => [
     {
       key: 'ticketNumber',

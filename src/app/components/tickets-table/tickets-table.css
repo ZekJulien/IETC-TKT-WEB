@@ -1,5 +1,16 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+}
+
+.tickets-table__wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tickets-table__wrap app-datatable {
+  flex: 1;
 }
 
 .tickets-table__muted {

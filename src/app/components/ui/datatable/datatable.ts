@@ -10,6 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { DatatableCell } from './datatable-cell';
 import { DatatableColumn } from './datatable-column';
 
@@ -21,7 +22,7 @@ type SortDirection = 'asc' | 'desc';
 
 @Component({
   selector: 'app-datatable',
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, RouterLink],
   templateUrl: './datatable.html',
   styleUrl: './datatable.css',
 })
@@ -31,6 +32,7 @@ export class Datatable {
   readonly trackKey = input<string | null>(null);
   readonly filterPlaceholder = input('');
   readonly emptyLabel = input('');
+  readonly rowLink = input<((row: unknown) => unknown[] | string | null) | null>(null);
 
   private readonly tableRef = viewChild<ElementRef<HTMLTableElement>>('tableEl');
   private readonly cells = contentChildren(DatatableCell);
@@ -72,6 +74,10 @@ export class Datatable {
 
   protected cellValue(row: unknown, key: string): unknown {
     return (row as Row)[key];
+  }
+
+  protected linkFor(row: unknown): unknown[] | string | null {
+    return this.rowLink()?.(row) ?? null;
   }
 
   protected templateFor(key: string): TemplateRef<{ $implicit: unknown }> | null {
