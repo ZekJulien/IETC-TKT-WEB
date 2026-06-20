@@ -25,11 +25,4 @@ export const ticketDetailPage = {
     closed: 'Fermé',
     note: 'L’historique détaillé des changements arrivera avec le journal d’événements.',
   },
-  status: {
-    open: 'Ouvert',
-    in_progress: 'En cours',
-    pending: 'En attente',
-    resolved: 'Résolu',
-    closed: 'Fermé',
-  },
 };

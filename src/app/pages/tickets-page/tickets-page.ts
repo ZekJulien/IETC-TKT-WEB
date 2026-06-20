@@ -6,7 +6,7 @@ import { TicketsToolbar } from '../../components/tickets-toolbar/tickets-toolbar
 import { Button } from '../../components/ui/button/button';
 import { TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
-import { TICKET_STATUSES, TicketStatus } from '../../models/tickets';
+import { ticketStatusLabelKey, TICKET_STATUSES, TicketStatus } from '../../models/tickets';
 import { DirectoryStore } from '../../state/companies';
 import { TenantStore } from '../../state/tenant';
 import { TICKET_PAGE_SIZES, TicketsListStore } from '../../state/tickets';
@@ -36,7 +36,7 @@ export class TicketsPage implements OnInit {
     const counts = this.store.statusCounts();
     return TICKET_STATUSES.map((status) => ({
       status,
-      labelKey: ('ticketsPage.status.' + status) as TranslationKey,
+      labelKey: ticketStatusLabelKey(status),
       count: counts[status] ?? 0,
     }));
   });

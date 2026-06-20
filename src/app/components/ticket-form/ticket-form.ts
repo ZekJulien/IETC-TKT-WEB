@@ -6,12 +6,12 @@ import { Button } from '../ui/button/button';
 import { FormField } from '../ui/form-field/form-field';
 import { Input } from '../ui/input/input';
 import { TranslatePipe } from '../../i18n/translate-pipe';
-import { TranslationKey } from '../../i18n/i18n-store';
 import { CompanyRole, DirectoryMember, directoryMemberName } from '../../models/companies';
 import {
   CreateTicketRequest,
   DEFAULT_TICKET_PRIORITY,
   formatTicketNumber,
+  ticketPriorityLabelKey,
   TICKET_PRIORITIES,
   TicketPriority,
 } from '../../models/tickets';
@@ -63,9 +63,7 @@ export class TicketForm implements OnInit {
     this.directory.ensure(this.companyId());
   }
 
-  protected priorityLabelKey(priority: TicketPriority): TranslationKey {
-    return ('ticketForm.priorities.' + priority) as TranslationKey;
-  }
+  protected readonly priorityLabelKey = ticketPriorityLabelKey;
 
   protected memberLabel(member: DirectoryMember): string {
     return directoryMemberName(member);

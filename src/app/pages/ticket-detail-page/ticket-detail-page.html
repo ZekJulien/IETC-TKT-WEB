@@ -27,12 +27,8 @@
         <h1 class="detail__title">{{ ticket.title }}</h1>
         @if (!editing()) {
           <div class="detail__badges">
-            <app-badge [tone]="statusTone(ticket.status)">
-              {{ statusLabelKey(ticket.status) | translate }}
-            </app-badge>
-            <app-badge [tone]="priorityTone(ticket.priority)">
-              {{ priorityLabelKey(ticket.priority) | translate }}
-            </app-badge>
+            <app-ticket-status-badge [status]="ticket.status" />
+            <app-ticket-priority-badge [priority]="ticket.priority" />
             @if (ticket.isLocked) {
               <app-badge tone="neutral">{{ 'ticketDetailPage.locked' | translate }}</app-badge>
             }

@@ -6,17 +6,20 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { TicketsService } from '../../api/tickets';
 import { TicketComments } from '../../components/ticket-comments/ticket-comments';
-import { Badge, BadgeTone } from '../../components/ui/badge/badge';
+import { Badge } from '../../components/ui/badge/badge';
 import { Button } from '../../components/ui/button/button';
-import { I18nStore, TranslationKey } from '../../i18n/i18n-store';
+import { TicketPriorityBadge } from '../../components/ui/ticket-priority-badge/ticket-priority-badge';
+import { TicketStatusBadge } from '../../components/ui/ticket-status-badge/ticket-status-badge';
+import { TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { CompanyRole, DirectoryMember, directoryMemberName } from '../../models/companies';
 import {
   canTransition,
   formatTicketNumber,
+  ticketPriorityLabelKey,
+  ticketStatusLabelKey,
   TICKET_PRIORITIES,
   TICKET_STATUSES,
-  TicketPriority,
   TicketStatus,
   UpdateTicketRequest,
 } from '../../models/tickets';
@@ -37,7 +40,8 @@ interface TimelineEvent {
 
 @Component({
   selector: 'app-ticket-detail-page',
-  imports: [Alert, 
+  imports: [
+    Alert,
     DatePipe,
     RouterLink,
     ReactiveFormsModule,
@@ -45,6 +49,8 @@ interface TimelineEvent {
     Badge,
     Button,
     TicketComments,
+    TicketStatusBadge,
+    TicketPriorityBadge,
   ],
   templateUrl: './ticket-detail-page.html',
   styleUrl: './ticket-detail-page.css',
@@ -103,41 +109,8 @@ export class TicketDetailPage implements OnInit {
     }
   }
 
-  protected statusLabelKey(status: string): TranslationKey {
-    return ('ticketDetailPage.status.' + status) as TranslationKey;
-  }
-
-  protected priorityLabelKey(priority: string): TranslationKey {
-    return ('ticketForm.priorities.' + priority) as TranslationKey;
-  }
-
-  protected statusTone(status: string): BadgeTone {
-    switch (status) {
-      case TicketStatus.Open:
-        return 'info';
-      case TicketStatus.InProgress:
-        return 'accent';
-      case TicketStatus.Pending:
-        return 'amber';
-      case TicketStatus.Resolved:
-        return 'violet';
-      default:
-        return 'neutral';
-    }
-  }
-
-  protected priorityTone(priority: string): BadgeTone {
-    switch (priority) {
-      case TicketPriority.Medium:
-        return 'accent';
-      case TicketPriority.High:
-        return 'amber';
-      case TicketPriority.Urgent:
-        return 'danger';
-      default:
-        return 'neutral';
-    }
-  }
+  protected readonly statusLabelKey = ticketStatusLabelKey;
+  protected readonly priorityLabelKey = ticketPriorityLabelKey;
 
   protected memberName(accountId: string | null): string | null {
     if (!accountId) {

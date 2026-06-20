@@ -13,3 +13,4 @@ export * from './update-comment-request';
 export * from './ticket-list-response';
 export * from './ticket-list-query';
 export * from './format-ticket-number';
+export * from './ticket-labels';

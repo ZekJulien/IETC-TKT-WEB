@@ -2,19 +2,29 @@ import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { Alert } from '../ui/alert/alert';
 import { RouterLink } from '@angular/router';
-import { Badge, BadgeTone } from '../ui/badge/badge';
 import { Datatable } from '../ui/datatable/datatable';
 import { DatatableCell } from '../ui/datatable/datatable-cell';
 import { DatatableColumn } from '../ui/datatable/datatable-column';
-import { I18nStore, TranslationKey } from '../../i18n/i18n-store';
+import { TicketPriorityBadge } from '../ui/ticket-priority-badge/ticket-priority-badge';
+import { TicketStatusBadge } from '../ui/ticket-status-badge/ticket-status-badge';
+import { I18nStore } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
-import { formatTicketNumber, TicketPriority, TicketStatus } from '../../models/tickets';
+import { formatTicketNumber } from '../../models/tickets';
 import { DirectoryStore } from '../../state/companies';
 import { TicketsListStore } from '../../state/tickets';
 
 @Component({
   selector: 'app-tickets-table',
-  imports: [Alert, DatePipe, RouterLink, TranslatePipe, Datatable, DatatableCell, Badge],
+  imports: [
+    Alert,
+    DatePipe,
+    RouterLink,
+    TranslatePipe,
+    Datatable,
+    DatatableCell,
+    TicketStatusBadge,
+    TicketPriorityBadge,
+  ],
   templateUrl: './tickets-table.html',
   styleUrl: './tickets-table.css',
 })
@@ -58,42 +68,6 @@ export class TicketsTable {
       width: 140,
     },
   ]);
-
-  protected statusLabelKey(status: string): TranslationKey {
-    return ('ticketsPage.status.' + status) as TranslationKey;
-  }
-
-  protected priorityLabelKey(priority: string): TranslationKey {
-    return ('ticketForm.priorities.' + priority) as TranslationKey;
-  }
-
-  protected statusTone(status: string): BadgeTone {
-    switch (status) {
-      case TicketStatus.Open:
-        return 'info';
-      case TicketStatus.InProgress:
-        return 'accent';
-      case TicketStatus.Pending:
-        return 'amber';
-      case TicketStatus.Resolved:
-        return 'violet';
-      default:
-        return 'neutral';
-    }
-  }
-
-  protected priorityTone(priority: string): BadgeTone {
-    switch (priority) {
-      case TicketPriority.Medium:
-        return 'accent';
-      case TicketPriority.High:
-        return 'amber';
-      case TicketPriority.Urgent:
-        return 'danger';
-      default:
-        return 'neutral';
-    }
-  }
 
   protected assigneeLabel(assignedTo: string | null): string {
     if (!assignedTo) {

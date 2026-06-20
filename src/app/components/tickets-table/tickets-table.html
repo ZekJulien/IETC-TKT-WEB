@@ -24,15 +24,11 @@
       </ng-template>
 
       <ng-template appDatatableCell="status" let-row>
-        <app-badge [tone]="statusTone(row.status)">
-          {{ statusLabelKey(row.status) | translate }}
-        </app-badge>
+        <app-ticket-status-badge [status]="row.status" />
       </ng-template>
 
       <ng-template appDatatableCell="priority" let-row>
-        <app-badge [tone]="priorityTone(row.priority)">
-          {{ priorityLabelKey(row.priority) | translate }}
-        </app-badge>
+        <app-ticket-priority-badge [priority]="row.priority" />
       </ng-template>
 
       <ng-template appDatatableCell="assignedTo" let-row>
