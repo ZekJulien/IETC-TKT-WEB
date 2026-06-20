@@ -1,10 +1,6 @@
+import { PagedResult } from '../paged-result';
 import { TicketListItem } from './ticket-list-item';
 
-export interface TicketListResponse {
-  items: TicketListItem[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
+export interface TicketListResponse extends PagedResult<TicketListItem> {
   statusCounts: Record<string, number>;
 }

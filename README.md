@@ -1,152 +1,194 @@
 # IETC-TKT-WEB
 
-Frontend **Angular** du projet **TKT** — application web (SPA) du système de **ticketing multi-tenant** (helpdesk interne), qui consomme l'API REST [`IETC-TKT-API`](https://github.com/ZekJulien/IETC-TKT-API).
+Frontend **Angular** du projet **TKT** — application web (SPA) d'un système de **ticketing multi-tenant** (helpdesk interne), qui consomme l'API REST [`IETC-TKT-API`](https://github.com/ZekJulien/IETC-TKT-API).
 
 > Cours « Projet de développement web » — BAC 2, Bachelier en Informatique : orientation développement d'applications — *Kamal BELOUH*.
-> Backend C# / ASP.NET : dépôt séparé `IETC-TKT-API`.
-
-> **État** : stack Angular 21 en place. **US 1.1 (inscription)** implémentée — formulaire d'inscription + page « Vérifiez votre email ». Les écrans suivants sont développés au fil des epics / user stories.
+> Backend C# / ASP.NET : dépôt séparé [`IETC-TKT-API`](https://github.com/ZekJulien/IETC-TKT-API).
 
 ---
 
 ## Le produit
 
-Interface du helpdesk interne multi-tenant. Chaque utilisateur appartient à une ou plusieurs entreprises (tenants) et voit l'app selon son rôle :
+Helpdesk interne multi-tenant. Chaque utilisateur appartient à une ou plusieurs entreprises (tenants) et voit l'application selon son rôle dans le tenant actif :
 
 | Rôle | Vue principale |
 |------|----------------|
 | **Owner** | gestion de l'entreprise, abonnement, membres |
-| **Admin** | catégories, équipes, SLA, audit |
+| **Admin** | membres, rôles, configuration |
 | **Agent** | file des tickets, prise en charge, résolution |
-| **Member** | mes tickets, création de demande |
+| **Member** | ses tickets, création de demande |
 
-Parcours : inscription → création/rejoindre une entreprise → sélection du tenant actif → cycle de vie d'un ticket.
+Parcours : inscription / connexion → création ou sélection d'une entreprise → tableau de bord → cycle de vie d'un ticket (liste, filtres, détail, édition, commentaires).
+
+---
+
+## Fonctionnalités couvertes
+
+- **Authentification** : inscription, vérification d'email, connexion, déconnexion (JWT + refresh token).
+- **Multi-tenant** : sélection du tenant actif, bascule d'entreprise (un même compte peut avoir un rôle différent par entreprise).
+- **Onboarding** : création d'une entreprise.
+- **Membres** : liste, invitation, changement de rôle, quota de sièges selon l'abonnement.
+- **Tickets** : tableau filtrable/triable, compteurs par statut, pagination, détail, création, édition (statut/priorité/assignation/échéance), commentaires (publics / internes, avec réponses).
+- **Tableau de bord** : cartes KPI cliquables.
+- **Transverse** : i18n maison (FR), barre de chargement globale, gestion d'erreur centralisée, routes protégées.
 
 ---
 
 ## Stack
 
-- **Angular 21** (standalone components, **signaux**)
+- **Angular 21** — standalone components, **signaux** pour l'état
 - **TypeScript** strict (`strictTemplates`)
-- **RxJS** — au bord (HttpClient), converti en signaux via `toSignal`
-- Client HTTP Angular (`HttpClient`) vers l'API `IETC-TKT-API`
-- **i18n maison** — store à signaux + pipe `| translate`, clés typées (`TranslationKey`), switch de langue runtime (FR pour l'instant)
-- **JWT** — token stocké côté client, envoyé en `Authorization: Bearer <token>` *(à venir)*
+- **RxJS** au bord (HttpClient)
+- **HttpClient** Angular vers l'API `IETC-TKT-API`, avec **interceptors** (requête, erreur, refresh token, loading)
+- **i18n maison** — store à signaux + pipe `| translate`, clés typées (`TranslationKey`), bascule de langue runtime (FR)
+- **JWT** — access token + refresh token gérés par interceptors ; routes protégées par **guards**
 
-### Bibliothèque tierce front
+### Bibliothèque tierce
 
-- **[`@lucide/angular`](https://lucide.dev/guide/packages/angular)** — jeu d'icônes SVG utilisé pour les cartes KPI du tableau de bord. Version standalone / signal-based, importée par icône (`<svg lucideInbox></svg>`). Installation : `npm i @lucide/angular`.
+- **[`@lucide/angular`](https://lucide.dev/guide/packages/angular)** — jeu d'icônes SVG (cartes KPI, navigation). Version standalone / signal-based, importée par icône (`<svg lucideInbox></svg>`). Installation : `npm i @lucide/angular`.
 
 ---
 
 ## Prérequis
 
-- **Node.js** LTS (≥ 20)
-- **Angular CLI** : `npm install -g @angular/cli`
-- L'API backend qui tourne en local (voir `IETC-TKT-API` : `docker compose up -d` puis `dotnet run --project TKT.Api`)
+| Outil | Version |
+|-------|---------|
+| **Node.js** | 20 LTS ou supérieur (testé sur Node 24) |
+| **Angular CLI** | 21 (`npm install -g @angular/cli`) |
+| **API backend** | [`IETC-TKT-API`](https://github.com/ZekJulien/IETC-TKT-API) en .NET 10, lancée en local |
+| **Base de données** | PostgreSQL 18 (fournie via Docker par le backend) |
 
 ---
 
 ## Démarrage
+
+### 1. Lancer le backend (API + base de données)
+
+Le frontend ne fonctionne qu'avec l'API démarrée. Voir le README de [`IETC-TKT-API`](https://github.com/ZekJulien/IETC-TKT-API), en résumé :
+
+```bash
+# dans le dépôt IETC-TKT-API
+cp .env.example .env
+docker compose up -d                 # PostgreSQL 18 + init du schéma (Database/tkt.sql)
+# charger les données de démo (comptes de test ci-dessous) :
+docker exec -i tkt_pg psql -U postgres -d ticketing_system -f /chemin/vers/Database/seed.sql
+dotnet run --project TKT.Api         # API sur http://localhost:5083
+```
+
+### 2. Lancer le frontend
 
 ```bash
 npm install
 ng serve
 ```
 
-- App : `http://localhost:4200`
+- Application : `http://localhost:4200`
 
-### Configuration de l'API
+### 3. Configuration de l'URL de l'API
 
-L'URL du backend est dans `src/environments/environment.ts` (et `environment.development.ts` en dev) :
+L'URL du backend est dans `src/environments/environment.development.ts` (utilisé par `ng serve`) :
+
 ```ts
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5083/api'   // base + préfixe /api de l'API IETC-TKT-API
+  apiUrl: 'http://localhost:5083/api',
 };
 ```
-Les services de `src/app/api/` appellent `${environment.apiUrl}/...` (ex. `${apiUrl}/auth/register`).
 
-> ⚠️ Le **CORS n'est pas encore configuré côté API**. Pour appeler le backend depuis `localhost:4200`, il faudra ajouter `AddCors`/`UseCors` dans `IETC-TKT-API`.
-
----
-
-## Authentification (côté client) *(à venir)*
-
-1. `POST /auth/login` → l'API renvoie un **JWT**.
-2. Le token est stocké côté client et ajouté à chaque requête via un **HTTP interceptor** (`Authorization: Bearer <token>`).
-3. Le **tenant actif** est transmis selon la stratégie retenue côté API (claim JWT ou header `X-Company-Id`).
-4. Un **guard** protège les routes nécessitant une authentification.
+> Le CORS est configuré côté API pour accepter les requêtes du frontend.
 
 ---
 
-## Périmètre fonctionnel (MoSCoW)
+## Comptes de démonstration
 
-L'UI couvre, par epic, les fonctionnalités de l'API :
+Tous les comptes de démo (script `Database/seed.sql` du backend) partagent le mot de passe : **`Demo1234`**
 
-| Epic | Écrans |
-|------|--------|
-| 1 | Authentification, inscription, onboarding, profil |
-| 2 | Entreprise, membres, rôles, abonnement, switch de tenant |
-| 3 | **Tickets** — liste/filtres, détail, création, édition, commentaires, **Kanban**, recherche |
-| 4 | Catégories, tags, pièces jointes |
-| 5 | SLA & escalade |
-| 6 | Équipes |
-| 7 | Notifications (in-app) |
-| 8 | Configuration & audit |
-| 9 | Enrichissements UX (mentions, dashboard, temps réel) — post-MVP |
+| Email | Nom | Rôle |
+|-------|-----|------|
+| `owner@acme.test` | Alice Martin | **Owner** — Acme (+ Admin Globex) |
+| `admin@acme.test` | Bruno Lefebvre | Admin — Acme |
+| `agent1@acme.test` | Chloé Dubois | Agent — Acme |
+| `agent2@acme.test` | David Bernard | Agent — Acme |
+| `member1@acme.test` | Emma Rousseau | Member — Acme |
+| `member2@acme.test` | Lucas Moreau | Member — Acme |
+| `owner@globex.test` | Sophie Laurent | Owner — Globex |
+| `nadia@acme.test` | Nadia Haddad | **Multi-tenant** : Member chez Acme, Agent chez Globex |
+
+> `owner@acme.test` et `nadia@acme.test` appartiennent à **deux entreprises** : idéal pour démontrer la bascule de tenant et le rôle différencié par entreprise.
 
 ---
 
-## Structure (convention du projet)
+## Authentification (côté client)
 
-Organisation **par concern** (dossiers à plat sous `app/`), chaque concern **groupé par feature** avec un **barrel `index.ts`**. Pas de dossier `services/` fourre-tout.
+1. `POST /auth/login` → l'API renvoie un **access token (JWT)** et un **refresh token**.
+2. `apiRequestInterceptor` ajoute l'en-tête `Authorization: Bearer <token>` (et le contexte tenant) à chaque requête.
+3. `apiRefreshInterceptor` rejoue la requête après rafraîchissement quand l'access token expire.
+4. `apiErrorInterceptor` centralise le mapping des erreurs HTTP.
+5. Les **guards** protègent les routes : `auth-guard` (authentifié), `guest-guard` (pages auth réservées aux non-connectés), `tenant-guard` (tenant actif requis).
+
+---
+
+## Structure
+
+Organisation **par concern** (dossiers à plat sous `app/`), chaque concern **groupé par feature** avec un **barrel `index.ts`**.
 
 ```
 src/app/
 ├── app.ts/html/css             composant racine
 ├── app.config.ts               providers (HttpClient + interceptors, router…)
-├── app.routes.ts               routing (écrans auth hors Layout)
+├── app.routes.ts               routing
+├── routing/                    UrlSerializer custom (slug d'entreprise dans l'URL)
 ├── api/                        services HTTP + interceptors
-│   ├── auth/                   auth.service.ts (+ index.ts)
-│   └── api-error-interceptor.ts   mapping d'erreur centralisé (générique)
+│   ├── auth/ · tickets/ · companies/…   un service par feature
+│   ├── api-request-interceptor.ts       JWT + contexte tenant
+│   ├── api-refresh-interceptor.ts       refresh token
+│   ├── api-error-interceptor.ts         mapping d'erreur centralisé
+│   └── loading-interceptor.ts           barre de chargement globale
+├── guards/                     auth-guard · guest-guard · tenant-guard
+├── state/                      stores à signaux (état client) — un par feature
 ├── models/                     DTO (interfaces) — 1 interface = 1 fichier
-│   ├── auth/                   register-request.ts (+ index.ts)
-│   └── api-error.ts            forme générique { error }
-├── state/                      stores à signaux (état client)
-│   └── auth/                   auth-store.ts (+ index.ts)
 ├── validators/                 ValidatorFn réutilisables
-│   └── auth/                   auth-validators.ts (+ index.ts)
-├── i18n/                       i18n maison
-│   ├── fr/                     common.ts, register-page.ts… (+ index.ts barrel)
-│   ├── i18n-store.ts           signal `lang` + `t(key, params)`
-│   └── translate-pipe.ts       pipe `| translate`
+├── i18n/                       i18n maison (store à signaux + pipe + dictionnaires FR typés)
 ├── components/                 UI réutilisable
-│   ├── auth-shell/             coquille des écrans auth
-│   └── ui/                     button, input (CVA), form-field, password-rules
+│   ├── ui/                     alert, avatar, badge, button, datatable, form-field,
+│   │                           input, kpi-card, modal, muted, page-header,
+│   │                           password-rules, select, stepper,
+│   │                           ticket-status-badge, ticket-priority-badge
+│   ├── layout/ · navbar/ · auth-shell/ · global-loading-bar/
+│   ├── tenant-switcher/
+│   ├── tickets-table/ · tickets-toolbar/ · ticket-form/ · ticket-comments/
+│   └── member-list/ · invite-member/
 └── pages/                      vues routées (1 dossier par écran)
-    ├── register-page/
-    └── verify-email-page/
+    ├── login-page/ · register-page/ · verify-email-page/
+    ├── onboarding-page/ · tenant-selection/
+    ├── dashboard/ · members-page/
+    ├── tickets-page/ · create-ticket-page/ · ticket-detail-page/
+    └── maintenance/
 src/environments/
-└── environment.ts              apiUrl de l'API
+└── environment.development.ts  apiUrl de l'API
 ```
-
-Règles : **collection au pluriel** (`models`, `validators`, `components`, `pages`), **domaine au singulier** (`auth`). Le **générique cross-cutting** (interceptor, `api-error`) reste à la racine de son concern.
 
 ---
 
 ## Conventions
 
 - **Standalone components** (pas de NgModules) ; **signaux** pour l'état.
-- **Zéro commentaire** dans le code.
-- **Scaffolding au CLI** : `ng g c/s/guard/interceptor/pipe…` — jamais créé à la main (sauf interfaces/classes simples, écrites directement).
-- Organisation **par concern à plat** sous `app/`, **groupée par feature** + barrel `index.ts`.
-- **`pages/`** = vues routées ; **`components/`** = UI réutilisable ; écrans auth **hors `Layout`** (sans navbar).
 - Appels HTTP **uniquement** dans `api/<feature>/*.service.ts` (HttpClient → Observable). Jamais de HTTP dans les composants/pages.
-- **État client** = **stores à signaux** (`state/<feature>/*-store.ts`) : signaux + méthodes ; la page ne fait que l'**affichage**.
-- **Mapping d'erreur** centralisé dans `apiErrorInterceptor` (jamais dupliqué dans les stores).
+- **État client** = **stores à signaux** (`state/<feature>/*-store.ts`) : signaux + méthodes ; la page se contente de l'**affichage**. Aucune librairie de gestion d'état externe (pas de NgRx/Redux).
+- **Mapping d'erreur** centralisé dans `apiErrorInterceptor`.
 - **`models/`** = interfaces miroir des DTO de l'API (1 interface = 1 fichier).
+- **`components/ui/`** = composants réutilisables sans logique métier (dont des CVA : `input`, `select`).
 - **i18n** : chaînes via clés (`{{ 'x' | translate }}`), dictionnaires typés (`TranslationKey`), bascule de langue runtime.
-- **Validation** : `ValidatorFn` dans `validators/` ; correspondance de champs via **validateur de groupe**.
-- Token JWT via **interceptor** ; routes protégées par **guards** *(à venir)*.
-- Secrets/locaux : jamais committés (voir `.gitignore`).
+- **Validation** : `ValidatorFn` dans `validators/` ; correspondance de champs via validateur de groupe.
+- Nouvelle syntaxe Angular partout : `@if` / `@for` / `@switch`.
+- Secrets / fichiers locaux : jamais committés (voir `.gitignore`).
+
+---
+
+## Build de production
+
+```bash
+ng build
+```
+
+Sortie dans `dist/`. Renseigner `src/environments/environment.ts` (`apiUrl`) avant un build de production.
