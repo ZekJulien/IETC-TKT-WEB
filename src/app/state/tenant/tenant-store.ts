@@ -28,19 +28,20 @@ export class TenantStore {
 
   readonly activeCompanyId = signal<string | null>(localStorage.getItem(ACTIVE_COMPANY_KEY));
 
-  private readonly capturedSlug = signal<string | null>(null);
+  private capturedSlug: string | null = null;
 
   readonly activeCompany = computed(
     () => this.companies().find((company) => company.companyId === this.activeCompanyId()) ?? null,
   );
   readonly activeRole = computed<CompanyRole | null>(() => this.activeCompany()?.role ?? null);
-  readonly activeSlug = computed(() => this.activeCompany()?.companySlug ?? this.capturedSlug());
   readonly hasMultiple = computed(() => this.companies().length > 1);
 
+  get activeSlug(): string | null {
+    return this.activeCompany()?.companySlug ?? this.capturedSlug;
+  }
+
   captureSlugFromUrl(slug: string): void {
-    if (this.capturedSlug() !== slug) {
-      this.capturedSlug.set(slug);
-    }
+    this.capturedSlug = slug;
   }
 
   loadCompanies(): void {
@@ -115,7 +116,7 @@ export class TenantStore {
   clear(): void {
     localStorage.removeItem(ACTIVE_COMPANY_KEY);
     this.activeCompanyId.set(null);
-    this.capturedSlug.set(null);
+    this.capturedSlug = null;
     this.companies.set([]);
     this.error.set(null);
   }

@@ -17,6 +17,14 @@ export const PUBLIC_SEGMENTS: readonly string[] = [
   AppRoute.Maintenance,
 ];
 
+const TENANT_SEGMENTS: readonly string[] = [
+  AppRoute.Dashboard,
+  AppRoute.Members,
+  AppRoute.Tickets,
+];
+
+const RESERVED_SEGMENTS: readonly string[] = [...PUBLIC_SEGMENTS, ...TENANT_SEGMENTS];
+
 @Injectable()
 export class TenantUrlSerializer implements UrlSerializer {
   private readonly base = new DefaultUrlSerializer();
@@ -26,7 +34,7 @@ export class TenantUrlSerializer implements UrlSerializer {
     const tree = this.base.parse(url);
     const primary = tree.root.children[PRIMARY_OUTLET];
     const first = primary?.segments[0]?.path;
-    if (primary && first && !PUBLIC_SEGMENTS.includes(first)) {
+    if (primary && first && !RESERVED_SEGMENTS.includes(first)) {
       this.tenant.captureSlugFromUrl(first);
       primary.segments.splice(0, 1);
     }
@@ -35,7 +43,7 @@ export class TenantUrlSerializer implements UrlSerializer {
 
   serialize(tree: UrlTree): string {
     const url = this.base.serialize(tree);
-    const slug = this.tenant.activeSlug();
+    const slug = this.tenant.activeSlug;
     if (!slug) {
       return url;
     }
