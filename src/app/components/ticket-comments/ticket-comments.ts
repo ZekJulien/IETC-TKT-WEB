@@ -1,5 +1,5 @@
 import { DatePipe, NgTemplateOutlet } from '@angular/common';
-import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, input, output, signal } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from '../ui/button/button';
 import { TranslatePipe } from '../../i18n/translate-pipe';
@@ -32,6 +32,10 @@ export class TicketComments implements OnInit {
   protected readonly store = inject(CommentsStore);
 
   readonly ticketId = input.required<string>();
+  readonly assignedTo = input<string | null>(null);
+  readonly createdBy = input<string | null>(null);
+
+  readonly commented = output<void>();
 
   protected readonly replyingTo = signal<string | null>(null);
   protected readonly editingId = signal<string | null>(null);
@@ -47,6 +51,13 @@ export class TicketComments implements OnInit {
       return null;
     }
     return this.directory.members().find((m) => m.email.toLowerCase() === email)?.accountId ?? null;
+  });
+
+  protected readonly canComment = computed(() => {
+    if (this.assignedTo() !== null) {
+      return true;
+    }
+    return this.myAccountId() === this.createdBy();
   });
 
   protected readonly roots = computed(() =>
@@ -94,7 +105,7 @@ export class TicketComments implements OnInit {
   }
 
   protected submitNew(): void {
-    if (this.newForm.invalid) {
+    if (!this.canComment() || this.newForm.invalid) {
       this.newForm.markAllAsTouched();
       return;
     }
@@ -102,7 +113,12 @@ export class TicketComments implements OnInit {
     this.store.create(
       this.ticketId(),
       { content: raw.content.trim(), isInternal: raw.isInternal },
-      () => this.newForm.reset({ content: '', isInternal: false }),
+      () => {
+        this.newForm.reset({ content: '', isInternal: false });
+        if (!raw.isInternal) {
+          this.commented.emit();
+        }
+      },
     );
   }
 
@@ -117,14 +133,17 @@ export class TicketComments implements OnInit {
   }
 
   protected submitReply(replyToId: string): void {
-    if (this.replyControl.invalid) {
+    if (!this.canComment() || this.replyControl.invalid) {
       this.replyControl.markAsTouched();
       return;
     }
     this.store.create(
       this.ticketId(),
       { content: this.replyControl.value.trim(), isInternal: false, replyToId },
-      () => this.replyingTo.set(null),
+      () => {
+        this.replyingTo.set(null);
+        this.commented.emit();
+      },
     );
   }
 

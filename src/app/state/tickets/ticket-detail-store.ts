@@ -30,4 +30,12 @@ export class TicketDetailStore {
         },
       });
   }
+
+  refresh(ticketId: string): void {
+    this.api.getTicket(ticketId).subscribe({
+      next: (detail) => {
+        this.detail.set(detail);
+      },
+    });
+  }
 }

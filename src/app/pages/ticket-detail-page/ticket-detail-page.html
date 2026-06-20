@@ -203,6 +203,11 @@
       </div>
     </form>
 
-    <app-ticket-comments [ticketId]="ticket.ticketId" />
+    <app-ticket-comments
+      [ticketId]="ticket.ticketId"
+      [assignedTo]="ticket.assignedTo"
+      [createdBy]="ticket.createdBy"
+      (commented)="store.refresh(ticket.ticketId)"
+    />
   }
 </section>

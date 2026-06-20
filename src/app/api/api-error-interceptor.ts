@@ -3,11 +3,15 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { AppRoute } from '../app-route';
-import { I18nStore } from '../i18n/i18n-store';
+import { I18nStore, TranslationKey } from '../i18n/i18n-store';
 import { ApiError } from '../models/api-error';
 import { ServerStore } from '../state/server';
 
 const SERVER_DOWN_STATUSES = [0, 502, 503, 504];
+
+const ERROR_CODE_KEYS: Record<string, TranslationKey> = {
+  'comment.ticket_unassigned': 'ticketComments.errors.unassigned',
+};
 
 export const apiErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const i18n = inject(I18nStore);
@@ -36,6 +40,9 @@ function toMessage(err: HttpErrorResponse, i18n: I18nStore): string {
     return i18n.t('common.errors.network');
   }
   const body = err.error as ApiError | null;
+  if (body?.code && ERROR_CODE_KEYS[body.code]) {
+    return i18n.t(ERROR_CODE_KEYS[body.code]);
+  }
   if (body && typeof body.detail === 'string' && body.detail.length > 0) {
     return body.detail;
   }

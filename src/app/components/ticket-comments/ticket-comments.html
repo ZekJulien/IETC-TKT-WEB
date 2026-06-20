@@ -6,8 +6,12 @@
       class="comments__textarea"
       rows="3"
       formControlName="content"
+      [attr.disabled]="!canComment() ? true : null"
       [placeholder]="'ticketComments.placeholder' | translate"
     ></textarea>
+    @if (!canComment()) {
+      <p class="comments__hint">{{ 'ticketComments.composerDisabledHint' | translate }}</p>
+    }
     <div class="comments__composer-actions">
       @if (canViewInternal()) {
         <label class="comments__internal">
@@ -15,7 +19,12 @@
           {{ 'ticketComments.internalToggle' | translate }}
         </label>
       }
-      <app-button type="submit" variant="primary" [loading]="store.saving()">
+      <app-button
+        type="submit"
+        variant="primary"
+        [disabled]="!canComment()"
+        [loading]="store.saving()"
+      >
         {{ 'ticketComments.submit' | translate }}
       </app-button>
     </div>
@@ -75,9 +84,11 @@
       } @else {
         <p class="comment__content">{{ comment.content }}</p>
         <div class="comment__actions">
-          <button type="button" class="comment__link" (click)="startReply(comment.commentId)">
-            {{ 'ticketComments.reply' | translate }}
-          </button>
+          @if (canComment()) {
+            <button type="button" class="comment__link" (click)="startReply(comment.commentId)">
+              {{ 'ticketComments.reply' | translate }}
+            </button>
+          }
           @if (isOwn(comment)) {
             <button type="button" class="comment__link" (click)="startEdit(comment)">
               {{ 'ticketComments.edit' | translate }}

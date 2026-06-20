@@ -12,4 +12,8 @@ export const ticketComments = {
   save: 'Enregistrer',
   cancel: 'Annuler',
   edited: 'modifié',
+  composerDisabledHint: 'Assignez le ticket pour pouvoir commenter.',
+  errors: {
+    unassigned: 'Ce ticket doit d’abord vous être assigné pour pouvoir commenter.',
+  },
 };
