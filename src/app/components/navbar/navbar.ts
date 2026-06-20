@@ -1,5 +1,6 @@
 import { Component, HostListener, Signal, computed, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Avatar } from '../ui/avatar/avatar';
 import { AppRoute } from '../../app-route';
 import { TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
@@ -20,7 +21,7 @@ interface NavItem {
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive, TranslatePipe, TenantSwitcher],
+  imports: [RouterLink, RouterLinkActive, TranslatePipe, TenantSwitcher, Avatar],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',
 })
@@ -42,8 +43,6 @@ export class Navbar {
       .trim();
     return name || me.email;
   });
-
-  protected readonly initials = computed(() => this.displayName().charAt(0).toUpperCase() || '?');
 
   protected readonly canManageMembers = computed(() => {
     const role = this.tenant.activeRole();

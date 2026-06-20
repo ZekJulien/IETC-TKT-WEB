@@ -34,19 +34,6 @@
   cursor: default;
 }
 
-.switcher__mark {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  flex-shrink: 0;
-  border-radius: var(--radius-md);
-  background: var(--accent-tint);
-  color: var(--accent-deep);
-  font-family: var(--font-display);
-  font-size: var(--text-base);
-  font-weight: var(--weight-bold);
-}
 
 .switcher__name {
   flex: 1;
@@ -116,18 +103,6 @@
   background: var(--accent-tint);
 }
 
-.switcher__item-mark {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
-  border-radius: var(--radius-md);
-  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-  color: #fff;
-  font-size: var(--text-sm);
-  font-weight: var(--weight-bold);
-}
 
 .switcher__item-body {
   display: flex;

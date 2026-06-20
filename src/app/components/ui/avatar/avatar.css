@@ -1,0 +1,21 @@
+:host {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  box-shadow: var(--shadow-accent), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  color: #fff;
+  font-weight: var(--weight-bold);
+  line-height: 1;
+}
+
+:host(.avatar--round) {
+  border-radius: var(--radius-full);
+}
+
+:host(.avatar--soft) {
+  background: var(--accent-tint);
+  box-shadow: none;
+  color: var(--accent-deep);
+}

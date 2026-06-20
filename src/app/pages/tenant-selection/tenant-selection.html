@@ -21,7 +21,7 @@
               [disabled]="store.switchingId() !== null"
               (click)="select(company)"
             >
-              <span class="company__mark" aria-hidden="true">{{ initial(company) }}</span>
+              <app-avatar [name]="company.companyName" [size]="44" />
               <span class="company__body">
                 <span class="company__name">{{ company.companyName }}</span>
                 <span class="company__slug">

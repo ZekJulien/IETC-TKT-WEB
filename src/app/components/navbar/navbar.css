@@ -216,19 +216,6 @@
   background: var(--surface);
 }
 
-.nav__avatar {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  flex-shrink: 0;
-  border-radius: var(--radius-full);
-  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
-  box-shadow: var(--shadow-accent), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  color: #fff;
-  font-size: var(--text-base);
-  font-weight: var(--weight-semibold);
-}
 
 .nav__account-name {
   flex: 1;

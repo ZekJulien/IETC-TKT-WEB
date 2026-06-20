@@ -51,7 +51,7 @@
 
 <ng-template #commentNode let-comment let-depth="depth">
   <article class="comment" [style.--depth]="depth > 3 ? 3 : depth">
-    <span class="comment__avatar" aria-hidden="true">{{ authorInitials(comment.accountId) }}</span>
+    <app-avatar [name]="authorName(comment.accountId)" [size]="34" variant="soft" round />
 
     <div class="comment__body">
       <header class="comment__head">

@@ -85,7 +85,7 @@
         [attr.aria-expanded]="menuOpen()"
         (click)="toggleMenu($event)"
       >
-        <span class="nav__avatar" aria-hidden="true">{{ initials() }}</span>
+        <app-avatar [name]="displayName()" [size]="36" round />
         <span class="nav__account-name label">{{
           displayName() || ('navbar.account' | translate)
         }}</span>

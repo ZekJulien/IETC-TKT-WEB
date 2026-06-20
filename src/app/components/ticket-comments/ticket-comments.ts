@@ -2,6 +2,7 @@ import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { Component, OnInit, computed, inject, input, output, signal } from '@angular/core';
 import { Alert } from '../ui/alert/alert';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Avatar } from '../ui/avatar/avatar';
 import { Button } from '../ui/button/button';
 import { Muted } from '../ui/muted/muted';
 import { TranslatePipe } from '../../i18n/translate-pipe';
@@ -22,7 +23,7 @@ const CONTENT_MAX = 10000;
 
 @Component({
   selector: 'app-ticket-comments',
-  imports: [Alert, DatePipe, NgTemplateOutlet, ReactiveFormsModule, TranslatePipe, Button, Muted],
+  imports: [Alert, DatePipe, NgTemplateOutlet, ReactiveFormsModule, TranslatePipe, Button, Muted, Avatar],
   templateUrl: './ticket-comments.html',
   styleUrl: './ticket-comments.css',
 })
@@ -95,11 +96,6 @@ export class TicketComments implements OnInit {
 
   protected authorName(accountId: string): string {
     return this.directory.nameById().get(accountId) ?? accountId;
-  }
-
-  protected authorInitials(accountId: string): string {
-    const name = this.directory.nameById().get(accountId) ?? '?';
-    return name.charAt(0).toUpperCase();
   }
 
   protected isOwn(comment: Comment): boolean {

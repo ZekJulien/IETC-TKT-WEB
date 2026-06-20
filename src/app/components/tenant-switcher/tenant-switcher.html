@@ -10,7 +10,7 @@
             [class.is-active]="isActive(company)"
             (click)="select(company)"
           >
-            <span class="switcher__item-mark" aria-hidden="true">{{ initial(company) }}</span>
+            <app-avatar [name]="company.companyName" [size]="30" />
             <span class="switcher__item-body">
               <span class="switcher__item-name">{{ company.companyName }}</span>
               <span class="switcher__item-role">{{ roleLabelKey(company.role) | translate }}</span>
@@ -43,7 +43,7 @@
       [attr.aria-expanded]="open()"
       (click)="toggle($event)"
     >
-      <span class="switcher__mark" aria-hidden="true">{{ activeInitial() }}</span>
+      <app-avatar [name]="activeName()" [size]="36" variant="soft" />
       <span class="switcher__name label">{{ activeName() }}</span>
       @if (store.hasMultiple()) {
         <svg

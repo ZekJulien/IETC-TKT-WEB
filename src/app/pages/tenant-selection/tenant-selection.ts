@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Alert } from '../../components/ui/alert/alert';
+import { Avatar } from '../../components/ui/avatar/avatar';
 import { AuthShell } from '../../components/auth-shell/auth-shell';
 import { TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
@@ -9,7 +10,7 @@ import { TenantStore } from '../../state/tenant';
 
 @Component({
   selector: 'app-tenant-selection',
-  imports: [Alert, AuthShell, TranslatePipe],
+  imports: [Alert, Avatar, AuthShell, TranslatePipe],
   templateUrl: './tenant-selection.html',
   styleUrl: './tenant-selection.css',
 })
@@ -22,10 +23,6 @@ export class TenantSelection {
 
   protected select(company: MyCompany): void {
     this.store.switchTo(company.companyId);
-  }
-
-  protected initial(company: MyCompany): string {
-    return company.companyName.charAt(0).toUpperCase();
   }
 
   protected roleLabelKey(role: CompanyRole): TranslationKey {
