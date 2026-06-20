@@ -1,0 +1,35 @@
+.loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  z-index: 9999;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 72%, #073b2f 100%);
+}
+
+.loading-bar__indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-deep) 35%,
+    #073b2f 50%,
+    var(--accent-deep) 65%,
+    transparent 100%
+  );
+  animation: loading-bar-slide 2s linear infinite;
+}
+
+@keyframes loading-bar-slide {
+  0% {
+    transform: translateX(-30%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
