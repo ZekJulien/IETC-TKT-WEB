@@ -4,6 +4,7 @@ import { AppRoute } from '../../app-route';
 import { TicketsTable } from '../../components/tickets-table/tickets-table';
 import { TicketsToolbar } from '../../components/tickets-toolbar/tickets-toolbar';
 import { Button } from '../../components/ui/button/button';
+import { PageHeader } from '../../components/ui/page-header/page-header';
 import { TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { ticketStatusLabelKey, TICKET_STATUSES, TicketStatus } from '../../models/tickets';
@@ -19,7 +20,7 @@ interface StatusCounter {
 
 @Component({
   selector: 'app-tickets-page',
-  imports: [RouterLink, TranslatePipe, TicketsTable, TicketsToolbar, Button],
+  imports: [RouterLink, TranslatePipe, TicketsTable, TicketsToolbar, Button, PageHeader],
   templateUrl: './tickets-page.html',
   styleUrl: './tickets-page.css',
 })

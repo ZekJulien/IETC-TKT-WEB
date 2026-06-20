@@ -1,18 +1,17 @@
 <section class="dash">
-  <header class="dash__head">
-    <div class="dash__heading">
-      <h1 class="dash__title">{{ 'dashboardPage.title' | translate }}</h1>
-      @if (welcomeName(); as name) {
-        <p class="dash__welcome">{{ 'dashboardPage.welcome' | translate: { name } }}</p>
-      }
-    </div>
+  <app-page-header title="dashboardPage.title">
+    @if (welcomeName(); as name) {
+      <p page-header-sub class="dash__welcome">
+        {{ 'dashboardPage.welcome' | translate: { name } }}
+      </p>
+    }
     @if (canCreateTicket()) {
       <a class="dash__new" [routerLink]="newTicketLink">
         <svg lucidePlus></svg>
         {{ 'dashboardPage.newTicket' | translate }}
       </a>
     }
-  </header>
+  </app-page-header>
 
   @if (store.stats()) {
     <div class="dash__grid">

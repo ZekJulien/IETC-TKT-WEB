@@ -11,6 +11,7 @@ import {
 } from '@lucide/angular';
 import { AppRoute } from '../../app-route';
 import { KpiAccent, KpiCard } from '../../components/ui/kpi-card/kpi-card';
+import { PageHeader } from '../../components/ui/page-header/page-header';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { TranslationKey } from '../../i18n/i18n-store';
 import { CompanyRole } from '../../models/companies';
@@ -28,10 +29,12 @@ interface KpiCardData {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Alert, 
+  imports: [
+    Alert,
     RouterLink,
     TranslatePipe,
     KpiCard,
+    PageHeader,
     LucideInbox,
     LucideHourglass,
     LucideLoader,

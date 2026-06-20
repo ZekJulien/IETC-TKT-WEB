@@ -1,0 +1,10 @@
+<header class="page-header">
+  <div class="page-header__heading">
+    <h1 class="page-header__title">{{ title() | translate }}</h1>
+    @if (subtitle(); as sub) {
+      <p class="page-header__sub">{{ sub | translate }}</p>
+    }
+    <ng-content select="[page-header-sub]" />
+  </div>
+  <ng-content />
+</header>

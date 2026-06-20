@@ -1,14 +1,9 @@
 <section class="tickets">
-  <header class="tickets__head">
-    <div class="tickets__heading">
-      <h1 class="tickets__title">{{ 'ticketsPage.title' | translate }}</h1>
-      <p class="tickets__sub">{{ 'ticketsPage.subtitle' | translate }}</p>
-    </div>
-
+  <app-page-header title="ticketsPage.title" subtitle="ticketsPage.subtitle">
     <app-button variant="primary" [routerLink]="newTicketRoute">
       {{ 'ticketsPage.newTicket' | translate }}
     </app-button>
-  </header>
+  </app-page-header>
 
   <div class="tickets__counters" role="tablist">
     <button

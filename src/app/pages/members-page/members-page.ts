@@ -3,6 +3,7 @@ import { InviteMember } from '../../components/invite-member/invite-member';
 import { MemberList } from '../../components/member-list/member-list';
 import { Button } from '../../components/ui/button/button';
 import { Modal } from '../../components/ui/modal/modal';
+import { PageHeader } from '../../components/ui/page-header/page-header';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { INVITER_ROLES } from '../../models/companies';
 import { MembersStore } from '../../state/companies';
@@ -10,7 +11,7 @@ import { TenantStore } from '../../state/tenant';
 
 @Component({
   selector: 'app-members-page',
-  imports: [TranslatePipe, Button, Modal, InviteMember, MemberList],
+  imports: [TranslatePipe, Button, Modal, InviteMember, MemberList, PageHeader],
   templateUrl: './members-page.html',
   styleUrl: './members-page.css',
 })

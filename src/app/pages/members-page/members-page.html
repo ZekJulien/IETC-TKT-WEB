@@ -1,10 +1,5 @@
 <section class="members">
-  <header class="members__head">
-    <div class="members__heading">
-      <h1 class="members__title">{{ 'membersPage.title' | translate }}</h1>
-      <p class="members__sub">{{ 'membersPage.subtitle' | translate }}</p>
-    </div>
-
+  <app-page-header title="membersPage.title" subtitle="membersPage.subtitle">
     @if (canInvite()) {
       <div class="members__head-actions">
         @if (members.maxUsers() > 0) {
@@ -26,7 +21,7 @@
         </app-button>
       </div>
     }
-  </header>
+  </app-page-header>
 
   @if (companyId(); as companyId) {
     <app-member-list [companyId]="companyId" />

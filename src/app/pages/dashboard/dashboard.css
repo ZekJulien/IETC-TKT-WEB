@@ -4,27 +4,6 @@
   gap: var(--space-5);
 }
 
-.dash__head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-4);
-}
-
-.dash__heading {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.dash__title {
-  font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  font-weight: var(--weight-bold);
-  color: var(--ink);
-  margin: 0;
-}
-
 .dash__welcome {
   margin: 0;
   font-size: var(--text-base);
