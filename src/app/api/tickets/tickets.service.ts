@@ -10,6 +10,7 @@ import {
   TicketDetail,
   TicketListQuery,
   TicketListResponse,
+  TicketStats,
   UpdateCommentRequest,
   UpdateTicketRequest,
 } from '../../models/tickets';
@@ -33,6 +34,10 @@ export class TicketsService {
       }
     }
     return this.http.get<TicketListResponse>(`${this.apiUrl}/tickets`, { params });
+  }
+
+  getStats(): Observable<TicketStats> {
+    return this.http.get<TicketStats>(`${this.apiUrl}/tickets/stats`);
   }
 
   getTicket(ticketId: string): Observable<TicketDetail> {

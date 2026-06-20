@@ -33,6 +33,10 @@ Parcours : inscription → création/rejoindre une entreprise → sélection du 
 - **i18n maison** — store à signaux + pipe `| translate`, clés typées (`TranslationKey`), switch de langue runtime (FR pour l'instant)
 - **JWT** — token stocké côté client, envoyé en `Authorization: Bearer <token>` *(à venir)*
 
+### Bibliothèque tierce front
+
+- **[`@lucide/angular`](https://lucide.dev/guide/packages/angular)** — jeu d'icônes SVG utilisé pour les cartes KPI du tableau de bord. Version standalone / signal-based, importée par icône (`<svg lucideInbox></svg>`). Installation : `npm i @lucide/angular`.
+
 ---
 
 ## Prérequis

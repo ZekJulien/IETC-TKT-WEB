@@ -1,12 +1,13 @@
 export const dashboardPage = {
   title: 'Tableau de bord',
+  welcome: 'Bienvenue {name}',
   loading: 'Chargement…',
-  meLabel: 'Données /api/me',
-  email: 'Email',
-  emailConfirmed: 'Email confirmé',
-  onboardingRequired: 'Onboarding requis',
-  memberships: 'Entreprises',
-  noMembership: 'Aucune entreprise',
-  yes: 'Oui',
-  no: 'Non',
+  newTicket: 'Nouveau ticket',
+  kpi: {
+    unassigned: 'Non assignés',
+    pending: 'En attente',
+    inProgress: 'En cours',
+    resolved: 'Résolus',
+    total: 'Total',
+  },
 };

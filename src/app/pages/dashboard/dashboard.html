@@ -1,46 +1,50 @@
 <section class="dash">
-  <h1 class="dash__title">{{ 'dashboardPage.title' | translate }}</h1>
+  <header class="dash__head">
+    <div class="dash__heading">
+      <h1 class="dash__title">{{ 'dashboardPage.title' | translate }}</h1>
+      @if (welcomeName(); as name) {
+        <p class="dash__welcome">{{ 'dashboardPage.welcome' | translate: { name } }}</p>
+      }
+    </div>
+    @if (canCreateTicket()) {
+      <a class="dash__new" [routerLink]="newTicketLink">
+        <svg lucidePlus></svg>
+        {{ 'dashboardPage.newTicket' | translate }}
+      </a>
+    }
+  </header>
 
-  @if (store.loading()) {
+  @if (store.stats()) {
+    <div class="dash__grid">
+      @for (card of cards(); track card.labelKey) {
+        <article class="dash__kpi" [class]="'dash__kpi--' + card.accent">
+          <span class="dash__kpi-icon" aria-hidden="true">
+            @switch (card.accent) {
+              @case ('inbox') {
+                <svg lucideInbox></svg>
+              }
+              @case ('pending') {
+                <svg lucideHourglass></svg>
+              }
+              @case ('progress') {
+                <svg lucideLoader></svg>
+              }
+              @case ('resolved') {
+                <svg lucideCheck></svg>
+              }
+              @default {
+                <svg lucideTicket></svg>
+              }
+            }
+          </span>
+          <span class="dash__kpi-value">{{ card.value }}</span>
+          <span class="dash__kpi-label">{{ card.labelKey | translate }}</span>
+        </article>
+      }
+    </div>
+  } @else if (store.loading()) {
     <p class="dash__muted">{{ 'dashboardPage.loading' | translate }}</p>
   } @else if (store.error(); as error) {
     <div class="dash__alert" role="alert">{{ error }}</div>
-  } @else if (store.me(); as me) {
-    <div class="dash__card">
-      <p class="dash__card-label">{{ 'dashboardPage.meLabel' | translate }}</p>
-
-      <dl class="dash__list">
-        <div class="dash__row">
-          <dt>{{ 'dashboardPage.email' | translate }}</dt>
-          <dd>{{ me.email }}</dd>
-        </div>
-        <div class="dash__row">
-          <dt>{{ 'dashboardPage.emailConfirmed' | translate }}</dt>
-          <dd>{{ (me.emailConfirmed ? 'dashboardPage.yes' : 'dashboardPage.no') | translate }}</dd>
-        </div>
-        <div class="dash__row">
-          <dt>{{ 'dashboardPage.onboardingRequired' | translate }}</dt>
-          <dd>
-            {{ (me.onboardingRequired ? 'dashboardPage.yes' : 'dashboardPage.no') | translate }}
-          </dd>
-        </div>
-        <div class="dash__row">
-          <dt>{{ 'dashboardPage.memberships' | translate }}</dt>
-          <dd>
-            @if (me.memberships.length) {
-              <ul class="dash__memberships">
-                @for (m of me.memberships; track m.companyId) {
-                  <li>
-                    <code>{{ m.companyId }}</code> — {{ m.role }}
-                  </li>
-                }
-              </ul>
-            } @else {
-              {{ 'dashboardPage.noMembership' | translate }}
-            }
-          </dd>
-        </div>
-      </dl>
-    </div>
   }
 </section>
