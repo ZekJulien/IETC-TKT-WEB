@@ -4,18 +4,20 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
+import { provideRouter, UrlSerializer } from '@angular/router';
 
 import { routes } from './app.routes';
 import { apiErrorInterceptor } from './api/api-error-interceptor';
 import { apiRefreshInterceptor } from './api/api-refresh-interceptor';
 import { apiRequestInterceptor } from './api/api-request-interceptor';
+import { TenantUrlSerializer } from './routing/tenant-url-serializer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
+    { provide: UrlSerializer, useClass: TenantUrlSerializer },
     provideHttpClient(
       withInterceptors([apiRequestInterceptor, apiErrorInterceptor, apiRefreshInterceptor]),
     ),

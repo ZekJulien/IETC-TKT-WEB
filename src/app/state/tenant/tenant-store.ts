@@ -1,4 +1,4 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, Injector, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AppRoute } from '../../app-route';
@@ -15,7 +15,11 @@ const ACTIVE_COMPANY_KEY = 'tkt.active-company-id';
 export class TenantStore {
   private readonly api = inject(TenantService);
   private readonly session = inject(SessionStore);
-  private readonly router = inject(Router);
+  private readonly injector = inject(Injector);
+
+  private get router(): Router {
+    return this.injector.get(Router);
+  }
 
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
@@ -24,11 +28,20 @@ export class TenantStore {
 
   readonly activeCompanyId = signal<string | null>(localStorage.getItem(ACTIVE_COMPANY_KEY));
 
+  private readonly capturedSlug = signal<string | null>(null);
+
   readonly activeCompany = computed(
     () => this.companies().find((company) => company.companyId === this.activeCompanyId()) ?? null,
   );
   readonly activeRole = computed<CompanyRole | null>(() => this.activeCompany()?.role ?? null);
+  readonly activeSlug = computed(() => this.activeCompany()?.companySlug ?? this.capturedSlug());
   readonly hasMultiple = computed(() => this.companies().length > 1);
+
+  captureSlugFromUrl(slug: string): void {
+    if (this.capturedSlug() !== slug) {
+      this.capturedSlug.set(slug);
+    }
+  }
 
   loadCompanies(): void {
     this.loading.set(true);
@@ -102,6 +115,7 @@ export class TenantStore {
   clear(): void {
     localStorage.removeItem(ACTIVE_COMPANY_KEY);
     this.activeCompanyId.set(null);
+    this.capturedSlug.set(null);
     this.companies.set([]);
     this.error.set(null);
   }
