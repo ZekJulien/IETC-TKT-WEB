@@ -1,4 +1,5 @@
 import { Component, inject, input, output } from '@angular/core';
+import { Alert } from '../ui/alert/alert';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from '../ui/button/button';
 import { FormField } from '../ui/form-field/form-field';
@@ -15,7 +16,7 @@ import { InviteStore } from '../../state/companies';
 
 @Component({
   selector: 'app-invite-member',
-  imports: [ReactiveFormsModule, TranslatePipe, Button, FormField, Input],
+  imports: [Alert, ReactiveFormsModule, TranslatePipe, Button, FormField, Input],
   templateUrl: './invite-member.html',
   styleUrl: './invite-member.css',
 })

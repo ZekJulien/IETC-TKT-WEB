@@ -9,14 +9,6 @@
   color: var(--ink-faint);
 }
 
-.member-list__alert {
-  margin-bottom: var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--danger);
-  background: var(--danger-tint);
-  border-radius: var(--radius-md);
-}
 
 .member-list__name {
   font-weight: var(--weight-medium);

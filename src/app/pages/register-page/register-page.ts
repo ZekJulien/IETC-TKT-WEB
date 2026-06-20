@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { Alert } from '../../components/ui/alert/alert';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AppRoute } from '../../app-route';
@@ -13,7 +14,7 @@ import { AuthValidators } from '../../validators/auth';
 
 @Component({
   selector: 'app-register-page',
-  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, AuthShell, Button, FormField, Input, PasswordRules],
+  imports: [Alert, ReactiveFormsModule, RouterLink, TranslatePipe, AuthShell, Button, FormField, Input, PasswordRules],
   templateUrl: './register-page.html',
   styleUrl: './register-page.css',
 })

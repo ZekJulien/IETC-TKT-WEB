@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  margin-bottom: var(--space-4);
+}
+
+.alert {
+  padding: 11px 14px;
+  font-size: var(--text-sm);
+  border-radius: var(--radius-md);
+}
+
+.alert--danger {
+  color: var(--danger);
+  background: var(--danger-tint);
+  border: 1px solid color-mix(in srgb, var(--danger) 25%, transparent);
+}
+
+.alert--success {
+  color: var(--accent-deep);
+  background: var(--accent-tint);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+.alert--info {
+  color: var(--ink-soft);
+  background: var(--ink-ghost);
+  border: 1px solid var(--paper-edge);
+}

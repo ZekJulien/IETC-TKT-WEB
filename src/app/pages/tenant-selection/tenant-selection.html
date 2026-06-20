@@ -1,7 +1,7 @@
 <app-auth-shell tagline="tenant.selection.tagline">
   <div class="select">
     @if (store.error(); as error) {
-      <div class="select__alert" role="alert">{{ error }}</div>
+      <app-alert>{{ error }}</app-alert>
     }
 
     @if (store.loading() || store.switchingId()) {

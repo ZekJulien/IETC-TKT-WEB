@@ -1,4 +1,5 @@
 import { Component, computed, effect, inject } from '@angular/core';
+import { Alert } from '../../components/ui/alert/alert';
 import { Params, RouterLink } from '@angular/router';
 import {
   LucideCheck,
@@ -27,7 +28,7 @@ interface KpiCardData {
 
 @Component({
   selector: 'app-dashboard',
-  imports: [
+  imports: [Alert, 
     RouterLink,
     TranslatePipe,
     KpiCard,

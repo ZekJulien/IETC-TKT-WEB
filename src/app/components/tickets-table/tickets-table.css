@@ -20,13 +20,6 @@
   color: var(--ink-faint);
 }
 
-.tickets-table__alert {
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--danger);
-  background: var(--danger-tint);
-  border-radius: var(--radius-md);
-}
 
 .tickets-table__number {
   font-variant-numeric: tabular-nums;

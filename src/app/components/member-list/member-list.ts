@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
+import { Alert } from '../ui/alert/alert';
 import { DatePipe } from '@angular/common';
 import { Badge, BadgeTone } from '../ui/badge/badge';
 import { Button } from '../ui/button/button';
@@ -13,7 +14,7 @@ import { MembersStore } from '../../state/companies';
 
 @Component({
   selector: 'app-member-list',
-  imports: [DatePipe, TranslatePipe, Datatable, DatatableCell, Badge, Button, Modal],
+  imports: [Alert, DatePipe, TranslatePipe, Datatable, DatatableCell, Badge, Button, Modal],
   templateUrl: './member-list.html',
   styleUrl: './member-list.css',
 })

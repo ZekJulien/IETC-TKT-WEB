@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
+import { Alert } from '../ui/alert/alert';
 import { RouterLink } from '@angular/router';
 import { Badge, BadgeTone } from '../ui/badge/badge';
 import { Datatable } from '../ui/datatable/datatable';
@@ -13,7 +14,7 @@ import { TicketsListStore } from '../../state/tickets';
 
 @Component({
   selector: 'app-tickets-table',
-  imports: [DatePipe, RouterLink, TranslatePipe, Datatable, DatatableCell, Badge],
+  imports: [Alert, DatePipe, RouterLink, TranslatePipe, Datatable, DatatableCell, Badge],
   templateUrl: './tickets-table.html',
   styleUrl: './tickets-table.css',
 })

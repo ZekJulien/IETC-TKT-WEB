@@ -25,13 +25,6 @@
   color: var(--ink-faint);
 }
 
-.detail__alert {
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--danger);
-  background: var(--danger-tint);
-  border-radius: var(--radius-md);
-}
 
 /* ---- Header ---- */
 .detail__head {

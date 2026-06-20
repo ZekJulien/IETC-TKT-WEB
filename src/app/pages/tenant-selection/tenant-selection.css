@@ -20,14 +20,6 @@
   color: var(--ink-soft);
 }
 
-.select__alert {
-  margin-bottom: var(--space-4);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  background: var(--danger-tint);
-  color: var(--danger);
-  font-size: var(--text-sm);
-}
 
 .select__loading {
   margin: 0;

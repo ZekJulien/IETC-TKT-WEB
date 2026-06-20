@@ -27,13 +27,6 @@
   color: var(--ink-faint);
 }
 
-.comments__alert {
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--danger);
-  background: var(--danger-tint);
-  border-radius: var(--radius-md);
-}
 
 /* ---- Composer ---- */
 .comments__composer {

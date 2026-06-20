@@ -8,7 +8,7 @@
   </header>
 
   @if (store.error(); as error) {
-    <div class="reg__alert" role="alert">{{ error }}</div>
+    <app-alert>{{ error }}</app-alert>
   }
 
   <form class="reg__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>

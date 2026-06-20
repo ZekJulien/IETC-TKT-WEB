@@ -59,14 +59,6 @@
   font-size: var(--text-base);
 }
 
-.dash__alert {
-  padding: 11px 14px;
-  font-size: var(--text-base);
-  color: var(--danger);
-  background: var(--danger-tint);
-  border: 1px solid color-mix(in srgb, var(--danger) 25%, transparent);
-  border-radius: var(--radius-md);
-}
 
 .dash__grid {
   display: grid;

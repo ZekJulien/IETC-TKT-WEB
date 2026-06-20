@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { Alert } from '../../components/ui/alert/alert';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { AppRoute } from '../../app-route';
@@ -11,7 +12,7 @@ import { AuthStore } from '../../state/auth';
 
 @Component({
   selector: 'app-login-page',
-  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, AuthShell, Button, FormField, Input],
+  imports: [Alert, ReactiveFormsModule, RouterLink, TranslatePipe, AuthShell, Button, FormField, Input],
   templateUrl: './login-page.html',
   styleUrl: './login-page.css',
 })

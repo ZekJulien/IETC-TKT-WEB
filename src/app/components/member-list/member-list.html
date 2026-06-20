@@ -1,11 +1,11 @@
 @if (store.actionError(); as err) {
-  <div class="member-list__alert" role="alert">{{ err }}</div>
+  <app-alert>{{ err }}</app-alert>
 }
 
 @if (store.loading() && store.members().length === 0) {
   <p class="member-list__muted">{{ 'membersPage.loading' | translate }}</p>
 } @else if (store.error(); as err) {
-  <div class="member-list__alert" role="alert">{{ err }}</div>
+  <app-alert>{{ err }}</app-alert>
 } @else {
   <app-datatable
     [columns]="columns()"

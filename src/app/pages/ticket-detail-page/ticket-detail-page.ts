@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Alert } from '../../components/ui/alert/alert';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
@@ -36,7 +37,7 @@ interface TimelineEvent {
 
 @Component({
   selector: 'app-ticket-detail-page',
-  imports: [
+  imports: [Alert, 
     DatePipe,
     RouterLink,
     ReactiveFormsModule,

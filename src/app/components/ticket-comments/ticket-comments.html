@@ -31,13 +31,13 @@
   </form>
 
   @if (store.saveError(); as err) {
-    <div class="comments__alert" role="alert">{{ err }}</div>
+    <app-alert>{{ err }}</app-alert>
   }
 
   @if (store.loading()) {
     <p class="comments__muted">{{ 'ticketComments.loading' | translate }}</p>
   } @else if (store.error(); as err) {
-    <div class="comments__alert" role="alert">{{ err }}</div>
+    <app-alert>{{ err }}</app-alert>
   } @else if (roots().length === 0) {
     <p class="comments__muted">{{ 'ticketComments.empty' | translate }}</p>
   } @else {

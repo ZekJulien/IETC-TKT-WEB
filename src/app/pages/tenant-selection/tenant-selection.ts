@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { Alert } from '../../components/ui/alert/alert';
 import { AuthShell } from '../../components/auth-shell/auth-shell';
 import { TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
@@ -8,7 +9,7 @@ import { TenantStore } from '../../state/tenant';
 
 @Component({
   selector: 'app-tenant-selection',
-  imports: [AuthShell, TranslatePipe],
+  imports: [Alert, AuthShell, TranslatePipe],
   templateUrl: './tenant-selection.html',
   styleUrl: './tenant-selection.css',
 })

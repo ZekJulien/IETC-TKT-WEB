@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { Alert } from '../../components/ui/alert/alert';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthShell } from '../../components/auth-shell/auth-shell';
@@ -13,7 +14,7 @@ import { OnboardingValidators } from '../../validators/onboarding';
 
 @Component({
   selector: 'app-onboarding-page',
-  imports: [ReactiveFormsModule, TranslatePipe, AuthShell, Stepper, Button, FormField, Input],
+  imports: [Alert, ReactiveFormsModule, TranslatePipe, AuthShell, Stepper, Button, FormField, Input],
   templateUrl: './onboarding-page.html',
   styleUrl: './onboarding-page.css',
 })

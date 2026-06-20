@@ -47,6 +47,6 @@
   } @else if (store.loading()) {
     <p class="dash__muted">{{ 'dashboardPage.loading' | translate }}</p>
   } @else if (store.error(); as error) {
-    <div class="dash__alert" role="alert">{{ error }}</div>
+    <app-alert>{{ error }}</app-alert>
   }
 </section>

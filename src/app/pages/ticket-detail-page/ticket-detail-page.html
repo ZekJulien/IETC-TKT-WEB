@@ -19,7 +19,7 @@
   @if (store.loading()) {
     <p class="detail__muted">{{ 'ticketDetailPage.loading' | translate }}</p>
   } @else if (store.error(); as err) {
-    <div class="detail__alert" role="alert">{{ err }}</div>
+    <app-alert>{{ err }}</app-alert>
   } @else if (store.detail(); as ticket) {
     <header class="detail__head">
       <div class="detail__heading">
@@ -61,7 +61,7 @@
     <form class="detail__form" [formGroup]="form">
       @if (editing()) {
         @if (saveError(); as err) {
-          <div class="detail__alert" role="alert">{{ err }}</div>
+          <app-alert>{{ err }}</app-alert>
         }
 
         <div class="detail__editbar">

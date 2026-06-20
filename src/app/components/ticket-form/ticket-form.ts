@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, inject, input } from '@angular/core';
+import { Alert } from '../ui/alert/alert';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Button } from '../ui/button/button';
@@ -24,7 +25,7 @@ const DESCRIPTION_MAX = 5000;
 
 @Component({
   selector: 'app-ticket-form',
-  imports: [ReactiveFormsModule, RouterLink, TranslatePipe, Button, FormField, Input],
+  imports: [Alert, ReactiveFormsModule, RouterLink, TranslatePipe, Button, FormField, Input],
   templateUrl: './ticket-form.html',
   styleUrl: './ticket-form.css',
 })

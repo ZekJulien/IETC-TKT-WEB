@@ -15,7 +15,7 @@
   </div>
 } @else {
   @if (store.error(); as error) {
-    <div class="invite__alert" role="alert">{{ error }}</div>
+    <app-alert>{{ error }}</app-alert>
   }
 
   <form class="invite__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>

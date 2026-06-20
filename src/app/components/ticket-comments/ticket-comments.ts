@@ -1,5 +1,6 @@
 import { DatePipe, NgTemplateOutlet } from '@angular/common';
 import { Component, OnInit, computed, inject, input, output, signal } from '@angular/core';
+import { Alert } from '../ui/alert/alert';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Button } from '../ui/button/button';
 import { TranslatePipe } from '../../i18n/translate-pipe';
@@ -20,7 +21,7 @@ const CONTENT_MAX = 10000;
 
 @Component({
   selector: 'app-ticket-comments',
-  imports: [DatePipe, NgTemplateOutlet, ReactiveFormsModule, TranslatePipe, Button],
+  imports: [Alert, DatePipe, NgTemplateOutlet, ReactiveFormsModule, TranslatePipe, Button],
   templateUrl: './ticket-comments.html',
   styleUrl: './ticket-comments.css',
 })
