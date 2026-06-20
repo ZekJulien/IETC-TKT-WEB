@@ -1,17 +1,17 @@
 <app-auth-shell tagline="tenant.selection.tagline">
   <div class="select">
-    <header class="select__head">
-      <h1 class="select__title">{{ 'tenant.selection.title' | translate }}</h1>
-      <p class="select__sub">{{ 'tenant.selection.subtitle' | translate }}</p>
-    </header>
-
     @if (store.error(); as error) {
       <div class="select__alert" role="alert">{{ error }}</div>
     }
 
     @if (store.loading() || store.switchingId()) {
-      <p class="select__loading">{{ 'tenant.selection.loading' | translate }}</p>
+      <p class="select__loading">{{ 'tenant.selection.connecting' | translate }}</p>
     } @else {
+      <header class="select__head">
+        <h1 class="select__title">{{ 'tenant.selection.title' | translate }}</h1>
+        <p class="select__sub">{{ 'tenant.selection.subtitle' | translate }}</p>
+      </header>
+
       <ul class="select__list">
         @for (company of store.companies(); track company.companyId) {
           <li>

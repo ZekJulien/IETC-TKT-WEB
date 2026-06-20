@@ -8,5 +8,6 @@ export const tenant = {
     title: 'Sélectionnez une entreprise',
     subtitle: 'Vous appartenez à plusieurs entreprises. Choisissez celle où travailler.',
     loading: 'Chargement de vos entreprises…',
+    connecting: 'Connexion…',
   },
 };
