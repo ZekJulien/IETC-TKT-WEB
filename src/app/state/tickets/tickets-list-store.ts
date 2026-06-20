@@ -73,6 +73,13 @@ export class TicketsListStore {
     this.load();
   }
 
+  applyQuery(filters: { status?: string | null; assignedTo?: string | null }): void {
+    this.status.set(filters.status ?? null);
+    this.assignedTo.set(filters.assignedTo ?? null);
+    this.page.set(1);
+    this.load();
+  }
+
   setPriority(value: string | null): void {
     this.priority.set(value);
     this.page.set(1);

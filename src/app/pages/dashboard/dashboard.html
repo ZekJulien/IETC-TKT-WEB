@@ -17,29 +17,31 @@
   @if (store.stats()) {
     <div class="dash__grid">
       @for (card of cards(); track card.labelKey) {
-        <article class="dash__kpi" [class]="'dash__kpi--' + card.accent">
-          <span class="dash__kpi-icon" aria-hidden="true">
-            @switch (card.accent) {
-              @case ('inbox') {
-                <svg lucideInbox></svg>
-              }
-              @case ('pending') {
-                <svg lucideHourglass></svg>
-              }
-              @case ('progress') {
-                <svg lucideLoader></svg>
-              }
-              @case ('resolved') {
-                <svg lucideCheck></svg>
-              }
-              @default {
-                <svg lucideTicket></svg>
-              }
+        <app-kpi-card
+          [value]="card.value"
+          [label]="card.labelKey | translate"
+          [accent]="card.accent"
+          [link]="ticketsLink"
+          [queryParams]="card.query ?? null"
+        >
+          @switch (card.accent) {
+            @case ('inbox') {
+              <svg lucideInbox [size]="20"></svg>
             }
-          </span>
-          <span class="dash__kpi-value">{{ card.value }}</span>
-          <span class="dash__kpi-label">{{ card.labelKey | translate }}</span>
-        </article>
+            @case ('pending') {
+              <svg lucideHourglass [size]="20"></svg>
+            }
+            @case ('progress') {
+              <svg lucideLoader [size]="20"></svg>
+            }
+            @case ('resolved') {
+              <svg lucideCheck [size]="20"></svg>
+            }
+            @default {
+              <svg lucideTicket [size]="20"></svg>
+            }
+          }
+        </app-kpi-card>
       }
     </div>
   } @else if (store.loading()) {

@@ -1,8 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { Button } from '../ui/button/button';
-import { TranslationKey } from '../../i18n/i18n-store';
+import { I18nStore, TranslationKey } from '../../i18n/i18n-store';
 import { TranslatePipe } from '../../i18n/translate-pipe';
-import { TICKET_PRIORITIES } from '../../models/tickets';
+import { TICKET_PRIORITIES, UNASSIGNED_ASSIGNEE } from '../../models/tickets';
 import { DirectoryStore } from '../../state/companies';
 import { TicketsListStore } from '../../state/tickets';
 
@@ -14,10 +14,12 @@ import { TicketsListStore } from '../../state/tickets';
 })
 export class TicketsToolbar {
   private readonly directory = inject(DirectoryStore);
+  private readonly i18n = inject(I18nStore);
   protected readonly store = inject(TicketsListStore);
 
   protected readonly priorities = TICKET_PRIORITIES;
   protected readonly assignableMembers = this.directory.assignable;
+  protected readonly unassigned = UNASSIGNED_ASSIGNEE;
 
   protected priorityLabelKey(priority: string): TranslationKey {
     return ('ticketForm.priorities.' + priority) as TranslationKey;
@@ -26,6 +28,9 @@ export class TicketsToolbar {
   protected assigneeName(accountId: string | null): string {
     if (!accountId) {
       return '';
+    }
+    if (accountId === UNASSIGNED_ASSIGNEE) {
+      return this.i18n.t('ticketsPage.unassigned');
     }
     return this.directory.nameById().get(accountId) ?? accountId;
   }

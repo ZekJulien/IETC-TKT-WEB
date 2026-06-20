@@ -1,5 +1,5 @@
 import { Component, computed, effect, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Params, RouterLink } from '@angular/router';
 import {
   LucideCheck,
   LucideHourglass,
@@ -9,17 +9,20 @@ import {
   LucideTicket,
 } from '@lucide/angular';
 import { AppRoute } from '../../app-route';
+import { KpiAccent, KpiCard } from '../../components/ui/kpi-card/kpi-card';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { TranslationKey } from '../../i18n/i18n-store';
 import { CompanyRole } from '../../models/companies';
+import { TicketStatus, UNASSIGNED_ASSIGNEE } from '../../models/tickets';
 import { AccountStore } from '../../state/account';
 import { TenantStore } from '../../state/tenant';
 import { TicketStatsStore } from '../../state/tickets';
 
-interface KpiCard {
+interface KpiCardData {
   labelKey: TranslationKey;
   value: number;
-  accent: 'inbox' | 'pending' | 'progress' | 'resolved' | 'total';
+  accent: KpiAccent;
+  query?: Params;
 }
 
 @Component({
@@ -27,6 +30,7 @@ interface KpiCard {
   imports: [
     RouterLink,
     TranslatePipe,
+    KpiCard,
     LucideInbox,
     LucideHourglass,
     LucideLoader,
@@ -43,6 +47,7 @@ export class Dashboard {
   private readonly account = inject(AccountStore);
 
   protected readonly newTicketLink = '/' + AppRoute.CreateTicket;
+  protected readonly ticketsLink = '/' + AppRoute.Tickets;
 
   protected readonly canCreateTicket = computed(
     () => this.tenant.activeRole() === CompanyRole.Member,
@@ -60,16 +65,36 @@ export class Dashboard {
     return name || me.email;
   });
 
-  protected readonly cards = computed<KpiCard[]>(() => {
+  protected readonly cards = computed<KpiCardData[]>(() => {
     const s = this.store.stats();
     if (!s) {
       return [];
     }
     return [
-      { labelKey: 'dashboardPage.kpi.unassigned', value: s.unassigned, accent: 'inbox' },
-      { labelKey: 'dashboardPage.kpi.pending', value: s.pending, accent: 'pending' },
-      { labelKey: 'dashboardPage.kpi.inProgress', value: s.inProgress, accent: 'progress' },
-      { labelKey: 'dashboardPage.kpi.resolved', value: s.resolved, accent: 'resolved' },
+      {
+        labelKey: 'dashboardPage.kpi.unassigned',
+        value: s.unassigned,
+        accent: 'inbox',
+        query: { assignee: UNASSIGNED_ASSIGNEE },
+      },
+      {
+        labelKey: 'dashboardPage.kpi.pending',
+        value: s.pending,
+        accent: 'pending',
+        query: { status: TicketStatus.Pending },
+      },
+      {
+        labelKey: 'dashboardPage.kpi.inProgress',
+        value: s.inProgress,
+        accent: 'progress',
+        query: { status: TicketStatus.InProgress },
+      },
+      {
+        labelKey: 'dashboardPage.kpi.resolved',
+        value: s.resolved,
+        accent: 'resolved',
+        query: { status: TicketStatus.Resolved },
+      },
       { labelKey: 'dashboardPage.kpi.total', value: s.total, accent: 'total' },
     ];
   });

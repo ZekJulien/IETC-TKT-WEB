@@ -1,3 +1,5 @@
+export const UNASSIGNED_ASSIGNEE = 'unassigned';
+
 export type TicketSort = 'created_at' | 'priority' | 'status';
 
 export const TICKET_SORTS: readonly TicketSort[] = ['created_at', 'priority', 'status'];

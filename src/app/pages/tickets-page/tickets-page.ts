@@ -1,5 +1,5 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AppRoute } from '../../app-route';
 import { TicketsTable } from '../../components/tickets-table/tickets-table';
 import { TicketsToolbar } from '../../components/tickets-toolbar/tickets-toolbar';
@@ -24,6 +24,7 @@ interface StatusCounter {
   styleUrl: './tickets-page.css',
 })
 export class TicketsPage implements OnInit {
+  private readonly route = inject(ActivatedRoute);
   private readonly tenant = inject(TenantStore);
   private readonly directory = inject(DirectoryStore);
   protected readonly store = inject(TicketsListStore);
@@ -45,7 +46,12 @@ export class TicketsPage implements OnInit {
     if (companyId) {
       this.directory.ensure(companyId);
     }
-    this.store.load();
+    const params = this.route.snapshot.queryParamMap;
+    const rawStatus = params.get('status');
+    const status = rawStatus && (TICKET_STATUSES as readonly string[]).includes(rawStatus)
+      ? rawStatus
+      : null;
+    this.store.applyQuery({ status, assignedTo: params.get('assignee') });
   }
 
   protected onPageSize(event: Event): void {

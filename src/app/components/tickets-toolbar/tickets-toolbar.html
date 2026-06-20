@@ -23,6 +23,7 @@
           (change)="onAssignee($event)"
         >
           <option value="">{{ 'ticketsPage.filters.all' | translate }}</option>
+          <option [value]="unassigned">{{ 'ticketsPage.unassigned' | translate }}</option>
           @for (member of assignableMembers(); track member.accountId) {
             <option [value]="member.accountId">{{ assigneeName(member.accountId) }}</option>
           }

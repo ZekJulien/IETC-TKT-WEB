@@ -1,0 +1,12 @@
+<a
+  class="kpi"
+  [class]="'kpi--' + accent()"
+  [routerLink]="link()"
+  [queryParams]="queryParams() ?? {}"
+>
+  <span class="kpi__icon" aria-hidden="true">
+    <ng-content />
+  </span>
+  <span class="kpi__value">{{ value() }}</span>
+  <span class="kpi__label">{{ label() }}</span>
+</a>
