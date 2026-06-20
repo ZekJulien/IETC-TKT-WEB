@@ -60,7 +60,21 @@ Parcours : inscription / connexion → création ou sélection d'une entreprise 
 
 ---
 
-## Démarrage
+## Méthode A — Docker, prêt à l'emploi (recommandé)
+
+Toute la stack (PostgreSQL + API + frontend) démarre avec **une seule commande**, depuis le dépôt [`IETC-TKT-API`](https://github.com/ZekJulien/IETC-TKT-API) (voir son README, section « Méthode A »). Application sur **http://localhost:8080**.
+
+```bash
+# build depuis le code source (les deux dépôts côte à côte)
+docker compose -f docker-compose.full.yml up --build
+
+# ou images pré-construites, aucun build
+docker compose -f docker-compose.ghcr.yml up
+```
+
+Comptes de démo chargés automatiquement — mot de passe commun **`Demo1234`**.
+
+## Méthode B — Lancement manuel (étape par étape)
 
 ### 1. Lancer le backend (API + base de données)
 
@@ -69,11 +83,11 @@ Le frontend ne fonctionne qu'avec l'API démarrée. Voir le README de [`IETC-TKT
 ```bash
 # dans le dépôt IETC-TKT-API
 cp .env.example .env
-docker compose up -d                 # PostgreSQL 18 + init du schéma (Database/tkt.sql)
-# charger les données de démo (comptes de test ci-dessous) :
-docker exec -i tkt_pg psql -U postgres -d ticketing_system -f /chemin/vers/Database/seed.sql
+docker compose up -d                 # PostgreSQL 18 + schéma + comptes de démo (auto)
 dotnet run --project TKT.Api         # API sur http://localhost:5083
 ```
+
+> Les données de démonstration (comptes de test ci-dessous) sont chargées **automatiquement** par Docker au premier démarrage — aucune commande manuelle à lancer.
 
 ### 2. Lancer le frontend
 
@@ -185,10 +199,16 @@ src/environments/
 
 ---
 
-## Build de production
+## Docker / build de production
+
+Le front se construit en image Docker (`ng build` → **nginx**). nginx sert l'application et **proxifie `/api`** vers le backend ; `src/environments/environment.ts` utilise donc `apiUrl: '/api'` (même origine, pas de CORS).
+
+Pour lancer **toute la stack** (DB + API + front) en une seule commande, voir le README de [`IETC-TKT-API`](https://github.com/ZekJulien/IETC-TKT-API) → « Démarrage tout-en-un (Docker) ».
+
+Build manuel :
 
 ```bash
 ng build
 ```
 
-Sortie dans `dist/`. Renseigner `src/environments/environment.ts` (`apiUrl`) avant un build de production.
+Sortie dans `dist/tkt-web/browser`.
