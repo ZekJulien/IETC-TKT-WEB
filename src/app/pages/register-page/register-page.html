@@ -12,6 +12,32 @@
   }
 
   <form class="reg__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+    <app-form-field
+      label="registerPage.firstNameLabel"
+      [control]="form.controls.firstName"
+      forId="reg-first-name"
+    >
+      <app-input
+        inputId="reg-first-name"
+        formControlName="firstName"
+        autocomplete="given-name"
+        [placeholder]="'registerPage.firstNamePlaceholder' | translate"
+      />
+    </app-form-field>
+
+    <app-form-field
+      label="registerPage.lastNameLabel"
+      [control]="form.controls.lastName"
+      forId="reg-last-name"
+    >
+      <app-input
+        inputId="reg-last-name"
+        formControlName="lastName"
+        autocomplete="family-name"
+        [placeholder]="'registerPage.lastNamePlaceholder' | translate"
+      />
+    </app-form-field>
+
     <app-form-field label="registerPage.emailLabel" [control]="form.controls.email" forId="reg-email">
       <app-input
         inputId="reg-email"

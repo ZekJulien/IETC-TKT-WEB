@@ -11,6 +11,7 @@ const SERVER_DOWN_STATUSES = [0, 502, 503, 504];
 
 const ERROR_CODE_KEYS: Record<string, TranslationKey> = {
   'comment.ticket_unassigned': 'ticketComments.errors.unassigned',
+  'auth.name.required': 'registerPage.nameRequired',
 };
 
 export const apiErrorInterceptor: HttpInterceptorFn = (req, next) => {

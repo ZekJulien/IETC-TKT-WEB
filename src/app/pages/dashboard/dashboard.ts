@@ -11,9 +11,8 @@ import {
 import { AppRoute } from '../../app-route';
 import { TranslatePipe } from '../../i18n/translate-pipe';
 import { TranslationKey } from '../../i18n/i18n-store';
-import { CompanyRole, directoryMemberName } from '../../models/companies';
+import { CompanyRole } from '../../models/companies';
 import { AccountStore } from '../../state/account';
-import { DirectoryStore } from '../../state/companies';
 import { TenantStore } from '../../state/tenant';
 import { TicketStatsStore } from '../../state/tickets';
 
@@ -42,7 +41,6 @@ export class Dashboard {
   protected readonly store = inject(TicketStatsStore);
   private readonly tenant = inject(TenantStore);
   private readonly account = inject(AccountStore);
-  private readonly directory = inject(DirectoryStore);
 
   protected readonly newTicketLink = '/' + AppRoute.CreateTicket;
 
@@ -51,14 +49,15 @@ export class Dashboard {
   );
 
   protected readonly welcomeName = computed(() => {
-    const email = this.account.me()?.email;
-    if (!email) {
+    const me = this.account.me();
+    if (!me) {
       return '';
     }
-    const member = this.directory
-      .members()
-      .find((m) => m.email.toLowerCase() === email.toLowerCase());
-    return member ? directoryMemberName(member) : email;
+    const name = [me.firstName, me.lastName]
+      .filter((part) => part && part.trim())
+      .join(' ')
+      .trim();
+    return name || me.email;
   });
 
   protected readonly cards = computed<KpiCard[]>(() => {
@@ -77,10 +76,8 @@ export class Dashboard {
 
   constructor() {
     effect(() => {
-      const companyId = this.tenant.activeCompanyId();
-      this.store.load();
-      if (companyId) {
-        this.directory.ensure(companyId);
+      if (this.tenant.activeCompanyId()) {
+        this.store.load();
       }
     });
   }

@@ -31,10 +31,19 @@ export class Navbar {
 
   protected readonly menuOpen = signal(false);
 
-  protected readonly displayName = computed(() => this.account.me()?.email ?? '');
-  protected readonly initials = computed(
-    () => (this.account.me()?.email ?? '').charAt(0).toUpperCase() || '?',
-  );
+  protected readonly displayName = computed(() => {
+    const me = this.account.me();
+    if (!me) {
+      return '';
+    }
+    const name = [me.firstName, me.lastName]
+      .filter((part) => part && part.trim())
+      .join(' ')
+      .trim();
+    return name || me.email;
+  });
+
+  protected readonly initials = computed(() => this.displayName().charAt(0).toUpperCase() || '?');
 
   protected readonly canManageMembers = computed(() => {
     const role = this.tenant.activeRole();
