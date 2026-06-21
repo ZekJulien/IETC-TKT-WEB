@@ -89,17 +89,17 @@ cd IETC-TKT-WEB
 docker compose -f docker-compose.ghcr.yml up
 ```
 
-**Option B — backend dans Docker + front en local (`ng serve`)**
+**Option B — backend dans Docker + front en local (`npm start`)**
 
 Pour développer le front (rechargement à chaud) : DB + API en conteneur, puis le serveur Angular.
 
 ```bash
 docker compose -f docker-compose.ghcr.yml up -d db api   # PostgreSQL + API sur http://localhost:5083
 npm install
-ng serve                                                  # http://localhost:4200
+npm start                                                 # http://localhost:4200
 ```
 
-L'URL du backend est dans `src/environments/environment.development.ts` (utilisé par `ng serve`) :
+L'URL du backend est dans `src/environments/environment.development.ts` (utilisé par `npm start`) :
 
 ```ts
 export const environment = {
