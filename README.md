@@ -70,11 +70,24 @@ Schéma, rôles et **comptes de démo** sont embarqués dans l'image DB. Mot de 
 
 Le compose est tiré directement de GitHub, les images de `ghcr.io` : rien à cloner, juste Docker.
 
+**Linux / macOS** (bash) — pipe direct, aucun fichier laissé sur disque :
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/ZekJulien/IETC-TKT-WEB/main/docker-compose.ghcr.yml | docker compose -p tkt -f - up
 ```
 
-> Le même fichier existe dans [`IETC-TKT-API`](https://github.com/ZekJulien/IETC-TKT-API) : peu importe le dépôt, la stack est identique. Arrêter / repartir propre : remplacer `up` par `down -v`.
+**Windows** (PowerShell) — sous PowerShell `curl` est un alias d'`Invoke-WebRequest` (il ne comprend pas `-fsSL`) : on appelle `curl.exe`, on télécharge le compose, puis on le lance.
+
+```powershell
+curl.exe -fsSL https://raw.githubusercontent.com/ZekJulien/IETC-TKT-WEB/main/docker-compose.ghcr.yml -o docker-compose.ghcr.yml
+docker compose -p tkt -f docker-compose.ghcr.yml up
+```
+
+> Le même fichier existe dans [`IETC-TKT-API`](https://github.com/ZekJulien/IETC-TKT-API) : peu importe le dépôt, la stack est identique.
+>
+> Arrêter / repartir propre :
+> - **Linux / macOS** : remplacer `up` par `down -v` dans la commande ci-dessus.
+> - **Windows** : `docker compose -p tkt -f docker-compose.ghcr.yml down -v`.
 
 ### Depuis le dépôt cloné
 
