@@ -60,45 +60,44 @@ Parcours : inscription / connexion → création ou sélection d'une entreprise 
 
 ---
 
-## Méthode A — Docker, prêt à l'emploi (recommandé)
+## Démarrage
 
-Toute la stack (PostgreSQL + API + frontend) démarre avec **une seule commande**, depuis le dépôt [`IETC-TKT-API`](https://github.com/ZekJulien/IETC-TKT-API) (voir son README, section « Méthode A »). Application sur **http://localhost:8080**.
+Prérequis : **Docker**. (L'option B ajoute **Node 20+** et l'**Angular CLI**.) Application sur **http://localhost:8080**.
+
+Schéma, rôles et **comptes de démo** sont embarqués dans l'image DB. Mot de passe commun : **`Demo1234`**.
+
+### Sans rien cloner — toute la stack en une commande
+
+Le compose est tiré directement de GitHub, les images de `ghcr.io` : rien à cloner, juste Docker.
 
 ```bash
-# build depuis le code source (les deux dépôts côte à côte)
-docker compose -f docker-compose.full.yml up --build
+curl -fsSL https://raw.githubusercontent.com/ZekJulien/IETC-TKT-WEB/main/docker-compose.ghcr.yml | docker compose -p tkt -f - up
+```
 
-# ou images pré-construites, aucun build
+> Le même fichier existe dans [`IETC-TKT-API`](https://github.com/ZekJulien/IETC-TKT-API) : peu importe le dépôt, la stack est identique. Arrêter / repartir propre : remplacer `up` par `down -v`.
+
+### Depuis le dépôt cloné
+
+```bash
+git clone https://github.com/ZekJulien/IETC-TKT-WEB.git
+cd IETC-TKT-WEB
+```
+
+**Option A — toute l'application dans Docker**
+
+```bash
 docker compose -f docker-compose.ghcr.yml up
 ```
 
-Comptes de démo chargés automatiquement — mot de passe commun **`Demo1234`**.
+**Option B — backend dans Docker + front en local (`ng serve`)**
 
-## Méthode B — Lancement manuel (étape par étape)
-
-### 1. Lancer le backend (API + base de données)
-
-Le frontend ne fonctionne qu'avec l'API démarrée. Voir le README de [`IETC-TKT-API`](https://github.com/ZekJulien/IETC-TKT-API), en résumé :
+Pour développer le front (rechargement à chaud) : DB + API en conteneur, puis le serveur Angular.
 
 ```bash
-# dans le dépôt IETC-TKT-API
-cp .env.example .env
-docker compose up -d                 # PostgreSQL 18 + schéma + comptes de démo (auto)
-dotnet run --project TKT.Api         # API sur http://localhost:5083
-```
-
-> Les données de démonstration (comptes de test ci-dessous) sont chargées **automatiquement** par Docker au premier démarrage — aucune commande manuelle à lancer.
-
-### 2. Lancer le frontend
-
-```bash
+docker compose -f docker-compose.ghcr.yml up -d db api   # PostgreSQL + API sur http://localhost:5083
 npm install
-ng serve
+ng serve                                                  # http://localhost:4200
 ```
-
-- Application : `http://localhost:4200`
-
-### 3. Configuration de l'URL de l'API
 
 L'URL du backend est dans `src/environments/environment.development.ts` (utilisé par `ng serve`) :
 
@@ -109,7 +108,7 @@ export const environment = {
 };
 ```
 
-> Le CORS est configuré côté API pour accepter les requêtes du frontend.
+> **Base propre** : `docker compose -f docker-compose.ghcr.yml down -v`. Le CORS est ouvert côté API en dev.
 
 ---
 
